@@ -1,0 +1,7 @@
+dist
+node_modules
+mysql
+nginx
+uploads
+
+jest.config.ts
