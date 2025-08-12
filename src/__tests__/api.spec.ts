@@ -10,8 +10,8 @@ describe('Api launch test', () => {
     const server = createServer(app);
 
     server.listen(appConfig.port, () => {
-        server.close();
-        done();
+      server.close();
+      done();
     });
   });
 

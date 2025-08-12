@@ -10,7 +10,7 @@
   },
   "type": "module",
   "scripts": {
-    "start": "tsx ./src/index.ts",
+    "start": "tsx --watch ./src/index.ts",
     "test:dev": "jest --config jest.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix"
@@ -49,7 +49,10 @@
     "express": "5.1.0",
     "helmet": "8.1.0",
     "jest-extended": "6.0.0",
+    "knex": "3.1.0",
     "node": "18",
+    "objection": "3.1.5",
+    "pg": "8.16.3",
     "zod": "3.25.75"
   }
 }

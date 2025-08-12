@@ -7,18 +7,46 @@ export default [
   ...tseslint.configs.recommended,
   {
     ignores: ['dist', 'build', 'node_modules'],
-    rules: {
-      // Estilo
-      'max-len': ['error', { code: 120 }],
-      'no-multiple-empty-lines': ['warn', { max: 1 }],
-      'no-console': 'warn',
 
-      // Qualidade de código
+    rules: {
+      // ========== FORMATAÇÃO E ESTILO ==========
+
+      // Linhas e espaçamento
+      'max-len': ['error', { code: 120 }],
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+      'eol-last': ['error', 'always'],
+      'no-trailing-spaces': 'error',
+
+      // Indentação e chaves
+      'indent': ['error', 2],
+      'brace-style': ['error', '1tbs', { allowSingleLine: true }],
+
+      // Aspas e ponto-vírgula
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'always'],
+
+      // Vírgulas e objetos
+      'comma-dangle': ['error', 'always-multiline'],
+      'comma-spacing': ['error', { before: false, after: true }],
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
+      'key-spacing': ['error', { beforeColon: false, afterColon: true }],
+
+      // ========== CONSISTÊNCIA ==========
+
+      // Preferências modernas
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'object-shorthand': 'error',
+      'prefer-template': 'error',
+
+      // Limpeza básica
       'no-duplicate-imports': 'error',
       'no-unused-vars': 'warn',
+      'no-console': 'warn',
 
-      // Import plugins (opcional, se quiser mais controle de imports)
-      'import/no-unresolved': 'off',
+      // ========== TYPESCRIPT ==========
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     }
   }
 ];
