@@ -7,8 +7,8 @@ const routes = Router();
 const isDevelopment = appConfig.local === 'development';
 
 if (isDevelopment) routes.get('/', async (_req: Request, res: Response) => {
-    const tests = await Test.query().select('*');
-    res.json(tests);
+  const tests = await Test.query().select('*');
+  res.json(tests);
 });
 
 export default routes;
