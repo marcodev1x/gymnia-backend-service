@@ -1,29 +1,33 @@
 {
   "name": "academIA-backend",
   "version": "1.0.0",
-  "main": "app.ts",
+  "main": "dist/src/index.js",
   "license": "MIT",
   "description": "Backend for the AcademIA platform",
   "author": "Z1 Group LTDA.",
   "bin": {
     "eslint": "./node_modules/.bin/eslint"
   },
-  "type": "module",
+  "type": "commonjs",
+  "_moduleAliases": {
+    "~": "./dist/src"
+  },
   "scripts": {
-    "start": "tsx --watch ./src/index.ts",
+    "build": "tsc",
+    "start:build": "node -r tsconfig-paths/register -r module-alias/register dist/src/index.js",
+    "start:dev": "tsx --watch ./src/index.ts",
     "test:dev": "jest --config jest.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },
   "devDependencies": {
     "@eslint/js": "9.30.1",
-    "@types/": "eslint/js",
     "@types/cors": "2.8.19",
     "@types/eslint": "9.6.1",
     "@types/express": "5.0.3",
     "@types/jest": "30.0.0",
+    "@types/module-alias": "2.0.4",
     "@types/node": "24.0.10",
-    "@types/typescript": "2.0.0",
     "@typescript-eslint/eslint-plugin": "8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "eslint": "9.30.1",
@@ -48,11 +52,11 @@
     "dotenv": "17.1.0",
     "express": "5.1.0",
     "helmet": "8.1.0",
-    "jest-extended": "6.0.0",
     "knex": "3.1.0",
-    "node": "18",
+    "module-alias": "2.2.3",
     "objection": "3.1.5",
     "pg": "8.16.3",
+    "tsconfig-paths": "4.2.0",
     "zod": "3.25.75"
   }
 }
