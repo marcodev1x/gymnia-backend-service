@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-      "target": "es2020",
-      "module": "commonjs",
-      "lib": [
-          "es2020"
-      ],
-      "jsx": "react",
-      "allowJs": true,
-      "checkJs": true,
-      "outDir": "./dist",
-      "rootDirs": [
+    "module": "commonjs",
+    "target": "ES2020",
+    "lib": [
+      "es2020"
+    ],
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./dist",
+    "rootDirs": [
           "./src",
           "./database"
       ],
+      "isolatedModules": true,
       "removeComments": true,
       "strict": false,
       "strictNullChecks": true,
@@ -27,10 +28,7 @@
       "moduleResolution": "node",
       "baseUrl": ".",
       "paths": {
-          "~/*": [
-              "./src/*",
-              "./database/*"
-          ]
+        "~/*": ["src/*"]
       },
       "typeRoots": [
           "./node_modules/@types",
@@ -42,13 +40,13 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
   },
   "exclude": [
       "./node_modules",
       "./uploads",
       "./mysql",
       "./mongo",
-      "./dist",
+      "./dist"
   ]
 }

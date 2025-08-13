@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import routes from '~/routes';
+import '~/knex';
 
 const app = express();
 
