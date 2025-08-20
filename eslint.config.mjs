@@ -12,7 +12,7 @@ export default [
       // ========== FORMATAÇÃO E ESTILO ==========
 
       // Linhas e espaçamento
-      'max-len': ['error', { code: 120 }],
+      'max-len': ['warn', { code: 120 }],
       'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
       'eol-last': ['error', 'always'],
       'no-trailing-spaces': 'error',
@@ -42,7 +42,6 @@ export default [
 
       // Limpeza básica
       'no-duplicate-imports': 'error',
-      'no-unused-vars': 'warn',
       'no-console': 'warn',
 
       // ========== TYPESCRIPT ==========
