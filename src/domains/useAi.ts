@@ -12,6 +12,29 @@ interface UseAiParams {
     headers?: Record<string, string>;
 }
 
+export interface UseAiResponse {
+    choices: {
+        finish_reason: string;
+        index: number;
+        message: {
+            content: string;
+            role: string;
+        };
+    }[];
+    created: number;
+    id: string;
+    model: string;
+    request_id: string;
+    usage: {
+        completion_tokens: number;
+        prompt_tokens: number;
+        prompt_tokens_details: {
+            cached_tokens: number;
+        };
+        total_tokens: number;
+    };
+}
+
 export async function useAi({
   url = appConfig.zaiApiUrl!,
   model = appConfig.zaiApiModel!,
@@ -19,7 +42,7 @@ export async function useAi({
   systemContent,
   userContent,
   headers,
-}: UseAiParams) {
+}: UseAiParams): Promise<UseAiResponse> {
   const request = await axios.post(url, {
     model,
     thinking,

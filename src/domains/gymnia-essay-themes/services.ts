@@ -36,6 +36,6 @@ export class GymniaEssayThemesService {
       userContent: essay,
     });
 
-    return essayCorrected;
+    return essayCorrected.choices[0].message.content || '';
   }
 }
