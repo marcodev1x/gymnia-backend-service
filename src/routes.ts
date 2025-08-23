@@ -1,14 +1,12 @@
-import { Router, Request, Response } from 'express';
-import { Test } from './domains/test/model';
-import { appConfig } from './config/app.config';
+import { Router } from 'express';
+import { gymniaRouter } from './domains/gymnia-config-params/routes';
+import { usersRoutes } from './domains/users/routes';
+import { essayThemesRoutes } from './domains/gymnia-essay-themes/routes';
 
 const routes = Router();
 
-const isDevelopment = appConfig.local === 'development';
-
-if (isDevelopment) routes.get('/', async (_req: Request, res: Response) => {
-  const tests = await Test.query().select('*');
-  res.json(tests);
-});
+routes.use('/gymnia-params', gymniaRouter);
+routes.use('/clients', usersRoutes);
+routes.use('/essay-themes', essayThemesRoutes);
 
 export default routes;
