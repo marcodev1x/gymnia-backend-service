@@ -9,7 +9,13 @@ export const getThemeByIdSchema = Joi.object({
     .min(1),
 });
 
-export const sendToAiSchema = Joi.object({
+export const correctEssaySchema = Joi.object({
+  try_id: Joi
+    .number()
+    .required()
+    .positive()
+    .integer()
+    .min(1),
   theme_id: Joi
     .number()
     .required()

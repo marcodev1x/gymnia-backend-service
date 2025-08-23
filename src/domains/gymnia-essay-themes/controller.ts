@@ -1,6 +1,8 @@
 import { GymniaEssayThemesImplementation } from '~/domains/gymnia-essay-themes/repository';
 import { GymniaEssayThemesService } from '~/domains/gymnia-essay-themes/services';
 import { NextFunction, Request, Response } from 'express';
+import { RequestMiddleware } from '~/types/RequestMiddleware';
+import { gymniaEssayUserTryService } from '../gymnia-essay-user-try/controller';
 
 const repository = new GymniaEssayThemesImplementation();
 const service = new GymniaEssayThemesService(repository);
@@ -15,22 +17,21 @@ export async function getThemesList(_req: Request, res: Response) {
   }
 }
 
-export async function getThemeById(request: Request, response: Response) {
+export async function getThemeById(request: Request, response: Response, next: NextFunction) {
   try {
     const { id } = request.body;
     const theme = await service.getThemeById(Number(id));
 
     response.status(200).json(theme);
   } catch (e) {
-    response
-      .status(e.status)
-      .json({ error: e.message });
+    next(e);
   }
 }
 
-export async function sendEssayToAi(request: Request, response: Response, next: NextFunction) {
+export async function correctEssay(request: RequestMiddleware, response: Response, next: NextFunction) {
   try {
     const {
+      try_id,
       theme_id,
       essay,
     } = request.body;
@@ -39,11 +40,14 @@ export async function sendEssayToAi(request: Request, response: Response, next: 
 
     const essayCorrected = await service.sendEssayToAi(essay, theme);
 
+    await gymniaEssayUserTryService.updateTry(
+      Number(try_id),
+      essay,
+      true,
+    );
+
     response.status(200).json(essayCorrected);
   } catch (e) {
-    response
-      .status(e.status)
-      .json({ error: e.message });
     next(e);
   }
 }

@@ -2,7 +2,7 @@ import { GymniaConfigParamsImplementation } from './repository';
 import { GymniaConfigParamsService } from './services';
 import { Request, Response, NextFunction } from 'express';
 
-export const gymniaConfigParamsRepository = new GymniaConfigParamsImplementation();
+const gymniaConfigParamsRepository = new GymniaConfigParamsImplementation();
 export const gymniaConfigParamsService = new GymniaConfigParamsService(gymniaConfigParamsRepository);
 
 // TODO: Remover, apenas teste.

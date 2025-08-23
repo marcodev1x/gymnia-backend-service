@@ -1,4 +1,4 @@
-enum GenericErrorsEnum {
+export enum GenericErrorsEnum {
     ALREADY_EXISTS = 'Element already exists',
     UNAUTHORIZED_INVALID_TOKEN = 'Unauthorized. Invalid token.',
     UNAUTHORIZED_TOKEN_NOT_FOUND = 'Unauthorized. Token not found.',
@@ -33,7 +33,7 @@ export const GenericErrors: GenericErrorsData = {
   GENERIC_INTERNAL_ERROR: { message: 'Internal Server Error', status: 500 },
 } as const;
 
-export const ThrowHttpError = (error: GenericErrorsEnum) => {
+export const ThrowHttpError = (error) => {
   const { message, status } = GenericErrors[error];
   throw new HttpError(message, status);
 };
