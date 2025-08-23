@@ -2,7 +2,7 @@ import { GymniaUser } from '~/domains/users/model';
 import { GymniaUserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import bcrypt from 'bcrypt';
-import { removeSensitiveData } from './users/helpers';
+import { removeSensitiveData } from './helpers';
 import { ThrowHttpError } from '~/generic-errors';
 
 export class GymniaUserService {

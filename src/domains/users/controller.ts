@@ -1,11 +1,11 @@
 import { GymniaUserImplementation } from './repository';
-import { GymniaUserService } from '../services';
-import { Request, Response } from 'express';
+import { GymniaUserService } from './services';
+import { Request, Response, NextFunction } from 'express';
 
 const repository = new GymniaUserImplementation();
 const service = new GymniaUserService(repository);
 
-export async function createUser(request: Request, response: Response) {
+export async function createUser(request: Request, response: Response, next: NextFunction) {
   try {
     const { user } = request.body;
 
@@ -13,7 +13,6 @@ export async function createUser(request: Request, response: Response) {
 
     response.status(201).json(userCreated);
   } catch (e) {
-    console.warn(e);
-    response.status(e.status).json({ error: e.message });
+    next(e);
   }
 }

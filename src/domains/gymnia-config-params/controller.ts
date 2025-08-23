@@ -1,18 +1,17 @@
 import { GymniaConfigParamsImplementation } from './repository';
 import { GymniaConfigParamsService } from './services';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-const repository = new GymniaConfigParamsImplementation();
-const service = new GymniaConfigParamsService(repository);
+export const gymniaConfigParamsRepository = new GymniaConfigParamsImplementation();
+export const gymniaConfigParamsService = new GymniaConfigParamsService(gymniaConfigParamsRepository);
 
 // TODO: Remover, apenas teste.
-export async function getConfigList(_req: Request, res: Response) {
+export async function getConfigList(_req: Request, res: Response, next: NextFunction) {
   try {
-    const configList = await service.getConfigParams();
+    const configList = await gymniaConfigParamsService.getConfigParams();
 
     res.status(200).json(configList);
   } catch (e) {
-    console.info(e);
-    res.status(500).json({ error: 'Internal server error' });
+    next(e);
   }
 }

@@ -49,8 +49,10 @@
     "typescript-eslint": "8.36.0"
   },
   "dependencies": {
+    "@types/axios": "^0.14.4",
     "@types/bcrypt": "6.0.0",
     "@types/joi": "17.2.3",
+    "axios": "^1.11.0",
     "bcrypt": "6.0.0",
     "cors": "2.8.5",
     "dotenv": "17.1.0",
