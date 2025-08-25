@@ -1,11 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { authConfig } from '~/config/auth.config';
 
-interface JwtPayload {
+export interface JwtPayload {
     id: number;
     name: string;
     email: string;
-    secret: string;
     deleted: boolean;
 }
 

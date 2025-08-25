@@ -7,13 +7,13 @@ export interface GymniaConfigParamsRepository {
 
 export class GymniaConfigParamsImplementation implements GymniaConfigParamsRepository {
   async getConfigParams(): Promise<GymniaConfigParams[]> {
-    return await GymniaConfigParams
+    return GymniaConfigParams
       .query()
       .select(['nome_parametro', 'valor_parametro']);
   }
 
   async getSpecificConfigParam(param: GymniaConfigParamsEnum): Promise<GymniaConfigParams | undefined> {
-    return await GymniaConfigParams
+    return GymniaConfigParams
       .query()
       .select(['nome_parametro', 'valor_parametro'])
       .where('nome_parametro', param)

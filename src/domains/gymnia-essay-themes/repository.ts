@@ -7,10 +7,12 @@ export interface GymniaEssayThemesRepository {
 
 export class GymniaEssayThemesImplementation implements GymniaEssayThemesRepository {
   async getThemes(): Promise<GymniaEssayThemes[] | []> {
-    return await GymniaEssayThemes.query();
+    return GymniaEssayThemes.query();
   }
 
   async getThemeById(id: number): Promise<GymniaEssayThemes | undefined> {
-    return await GymniaEssayThemes.query().findById(id);
+    return GymniaEssayThemes
+      .query()
+      .findById(id);
   }
 }

@@ -13,9 +13,8 @@ export function authentication(request: RequestMiddleware, _response: Response, 
   };
 
   try {
-    const user = verifyJwtToken(token) as Partial<GymniaUser>;
+    request.user = verifyJwtToken(token) as GymniaUser;
 
-    request.user = user;
     next();
   } catch (e) {
     if (e instanceof JsonWebTokenError) {

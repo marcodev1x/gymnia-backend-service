@@ -10,6 +10,8 @@ interface UseAiParams {
     systemContent: string;
     userContent: string;
     headers?: Record<string, string>;
+    retries?: number;
+    delay?: number; // ms
 }
 
 export interface UseAiResponse {
@@ -42,21 +44,48 @@ export async function useAi({
   systemContent,
   userContent,
   headers,
-}: UseAiParams): Promise<UseAiResponse> {
-  const request = await axios.post(url, {
-    model,
-    thinking,
-    messages: [
-      { role: 'system', content: systemContent },
-      { role: 'user', content: userContent },
-    ],
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${appConfig.zaiApiKey}`,
-      ...headers,
-    },
-  });
+  retries = 3,
+  delay = 1000,
+}: UseAiParams,
+): Promise<UseAiResponse | undefined> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const request = await axios.post<UseAiResponse>(
+        url,
+        {
+          model,
+          thinking,
+          messages: [
+            { role: 'system', content: systemContent },
+            { role: 'user', content: userContent },
+          ],
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${appConfig.zaiApiKey}`,
+            ...headers,
+          },
+        },
+      );
 
-  return request.data;
+      const data = request.data;
+
+      if (data?.choices?.[0]?.message?.content) {
+        return data;
+      }
+
+      console.warn(`Resposta inválida na tentativa ${attempt}.`);
+
+    } catch (error) {
+      console.warn(`Erro na tentativa ${attempt}:`, error);
+    }
+
+    if (attempt < retries) {
+      await new Promise(res => setTimeout(res, delay * attempt)); // Backoff exponencial
+    }
+  }
+
+  console.error('Falha após todas as tentativas.');
+  return undefined;
 }

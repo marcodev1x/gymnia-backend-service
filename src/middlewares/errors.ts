@@ -11,8 +11,8 @@ export function errorMiddlewareSent(
   console.error(err);
 
   let code = 'GENERIC_INTERNAL_ERROR';
-  let statusCode = GenericErrors.GENERIC_INTERNAL_ERROR.status;
-  let message = GenericErrors.GENERIC_INTERNAL_ERROR.message;
+  let statusCode = GenericErrors().GENERIC_INTERNAL_ERROR.status;
+  let message = GenericErrors().GENERIC_INTERNAL_ERROR.message;
   let exception: string | undefined;
 
   if (err instanceof HttpError) {
@@ -20,8 +20,8 @@ export function errorMiddlewareSent(
     message = err.message;
     exception = isDevelopment ? err.stack : undefined;
 
-    const match = Object.keys(GenericErrors).find(
-      key => GenericErrors[key as keyof typeof GenericErrors].message === err.message,
+    const match = Object.keys(GenericErrors()).find(
+      key => GenericErrors()[key as keyof typeof GenericErrors].message === err.message,
     );
     if (match) {
       code = match;
