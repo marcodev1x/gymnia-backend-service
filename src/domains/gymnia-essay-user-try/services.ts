@@ -20,7 +20,7 @@ export class GymniaEssayUserTryService {
     const createTry = await this.repository.createTry(tryData);
 
     if (!createTry) {
-      throw ThrowHttpError('NOT_CREATED');
+      throw ThrowHttpError({ element: 'Try', error: 'NOT_CREATED' });
     }
 
     return createTry;
@@ -30,7 +30,7 @@ export class GymniaEssayUserTryService {
     const tryById = await this.repository.getTryById(id);
 
     if (!tryById) {
-      throw ThrowHttpError('NOT_FOUND');
+      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
     }
 
     return tryById;
@@ -52,7 +52,7 @@ export class GymniaEssayUserTryService {
     const updateTry = await this.repository.updateTry(id, tryData, completion);
 
     if (!updateTry) {
-      throw ThrowHttpError('NOT_FOUND');
+      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
     }
 
     return updateTry;
@@ -62,7 +62,7 @@ export class GymniaEssayUserTryService {
     const deleteTry = await this.repository.deleteTry(id);
 
     if (!deleteTry) {
-      throw ThrowHttpError('NOT_FOUND');
+      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
     }
   }
 
@@ -72,10 +72,10 @@ export class GymniaEssayUserTryService {
 
     const { theme_description: themeDescription } = theme;
 
-    if (!essayRule) throw ThrowHttpError('NOT_FOUND');
+    if (!essayRule) throw ThrowHttpError({ element: 'Essay', error: 'NOT_FOUND' });
 
     const essayCorrected = await useAi({
-      systemContent: `${essayRule}\nTema realizado: \n${themeDescription}`,
+      systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
       userContent: essay,
     });
 

@@ -8,6 +8,7 @@ const {
   ZAI_API_KEY,
   ZAI_API_URL,
   ZAI_API_MODEL,
+  BCRYPT_HASH_QUANTITY,
 } = process.env;
 
 export const appConfig = {
@@ -16,4 +17,5 @@ export const appConfig = {
   zaiApiKey: ZAI_API_KEY,
   zaiApiUrl: ZAI_API_URL,
   zaiApiModel: ZAI_API_MODEL,
+  bcryptHashQuantity: Number(BCRYPT_HASH_QUANTITY),
 };

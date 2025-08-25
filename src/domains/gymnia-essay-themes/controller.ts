@@ -5,11 +5,11 @@ import { NextFunction, Request, Response } from 'express';
 const repository = new GymniaEssayThemesImplementation();
 export const gymniaEssayThemesService = new GymniaEssayThemesService(repository);
 
-export async function getThemesList(_req: Request, res: Response, next: NextFunction) {
+export async function getThemesList(_request: Request, response: Response, next: NextFunction) {
   try {
     const themesList = await gymniaEssayThemesService.getThemes();
 
-    res.status(200).json(themesList);
+    response.json(themesList);
   } catch (e) {
     next(e);
   }

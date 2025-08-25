@@ -11,6 +11,8 @@ export class GymniaEssayThemesImplementation implements GymniaEssayThemesReposit
   }
 
   async getThemeById(id: number): Promise<GymniaEssayThemes | undefined> {
-    return GymniaEssayThemes.query().findById(id);
+    return GymniaEssayThemes
+      .query()
+      .findById(id);
   }
 }

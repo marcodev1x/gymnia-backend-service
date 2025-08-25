@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import { GymniaEssayUserTry } from '~/domains/gymnia-essay-user-try/model';
 
 export class GymniaEssayResults extends Model {
   static get tableName() {
@@ -23,5 +24,18 @@ export class GymniaEssayResults extends Model {
 
   $beforeUpdate() {
     this.updated_at = new Date();
+  }
+
+  static get relationMappings() {
+    return {
+      essay_try: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: GymniaEssayUserTry,
+        join: {
+          from: 'gymnia_essay_results.essay_try_id',
+          to: 'gymnia_essay_user_try.id',
+        },
+      },
+    };
   }
 }

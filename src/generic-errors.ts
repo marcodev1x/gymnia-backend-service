@@ -24,16 +24,22 @@ export class HttpError extends Error {
   }
 }
 
-export const GenericErrors: GenericErrorsData = {
-  ALREADY_EXISTS: { message: 'Element already exists', status: 409 },
+export const GenericErrors = (element?: string): GenericErrorsData => ({
+  ALREADY_EXISTS: { message: `${element} already exists`, status: 409 },
   UNAUTHORIZED_INVALID_TOKEN: { message: 'Unauthorized. Invalid token.', status: 401 },
   UNAUTHORIZED_TOKEN_NOT_FOUND: { message: 'Unauthorized. Token not found.', status: 401 },
-  NOT_CREATED: { message: 'Element not created', status: 500 },
-  NOT_FOUND: { message: 'Element not found', status: 404 },
+  NOT_CREATED: { message: `${element} not created`, status: 500 },
+  NOT_FOUND: { message: `${element} not found`, status: 404 },
   GENERIC_INTERNAL_ERROR: { message: 'Internal Server Error', status: 500 },
-} as const;
+});
 
-export const ThrowHttpError = (error) => {
-  const { message, status } = GenericErrors[error];
+export const ThrowHttpError = ({
+  element,
+  error,
+}: {
+    element?: string;
+    error: keyof GenericErrorsData;
+}) => {
+  const { message, status } = GenericErrors(element || 'Element')[error];
   throw new HttpError(message, status);
 };

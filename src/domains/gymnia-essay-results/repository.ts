@@ -10,10 +10,12 @@ export class GymniaEssayResultsRepositoryImplementation implements GymniaEssayRe
     score: number,
     ia_result: JSON,
   ) {
-    return GymniaEssayResults.query().insertAndFetch({
-      essay_try_id,
-      score,
-      ia_result,
-    });
+    return GymniaEssayResults
+      .query()
+      .insertAndFetch({
+        essay_try_id,
+        score,
+        ia_result,
+      });
   }
 }
