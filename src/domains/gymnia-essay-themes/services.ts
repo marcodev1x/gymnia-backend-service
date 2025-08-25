@@ -12,7 +12,7 @@ export class GymniaEssayThemesService {
     const theme = await this.gymniaEssayThemesRepository.getThemeById(id);
 
     if (!theme) {
-      throw ThrowHttpError('NOT_FOUND');
+      throw ThrowHttpError({ element: 'Theme', error: 'NOT_FOUND' });
     }
 
     return theme;
