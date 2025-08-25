@@ -2,6 +2,11 @@ import { ThrowHttpError } from '~/generic-errors';
 import { GymniaEssayUserTry, GymniaEssayUserTryStatus } from './model';
 import { GymniaEssayUserTryImplementation } from './repository';
 import { ThrowGymniaTryError } from '~/errors/gymnia-try-errors';
+import { GymniaEssayThemes } from '~/domains/gymnia-essay-themes/model';
+import { gymniaConfigParamsService } from '~/domains/gymnia-config-params/controller';
+import { GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
+import { useAi } from '~/domains/useAi';
+import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
 
 export type EssayAsyncData = {
     content: string;
@@ -59,5 +64,23 @@ export class GymniaEssayUserTryService {
     if (!deleteTry) {
       throw ThrowHttpError('NOT_FOUND');
     }
+  }
+
+  async sendEssayToAi(essay: string, theme: GymniaEssayThemes) {
+    const { valor_parametro: essayRule } = await gymniaConfigParamsService
+      .getSpecificConfigParam(GymniaConfigParamsEnum.REDACAO);
+
+    const { theme_description: themeDescription } = theme;
+
+    if (!essayRule) throw ThrowHttpError('NOT_FOUND');
+
+    const essayCorrected = await useAi({
+      systemContent: `${essayRule}\nTema realizado: \n${themeDescription}`,
+      userContent: essay,
+    });
+
+    if (!essayCorrected) throw ThrowGymniaTryError('ERROR_AT_CORRECT_ESSAY');
+
+    return safeJsonParse(essayCorrected.choices[0].message.content) || '';
   }
 }

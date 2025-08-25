@@ -11,13 +11,13 @@ export interface GymniaEssayUserTryRepository {
 
 export class GymniaEssayUserTryImplementation implements GymniaEssayUserTryRepository {
   async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
-    return await GymniaEssayUserTry
+    return GymniaEssayUserTry
       .query()
       .insertAndFetch({ ...tryData, status: GymniaEssayUserTryStatus.PENDING });
   }
 
   async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
-    return await GymniaEssayUserTry
+    return GymniaEssayUserTry
       .query()
       .findById(id);
   }
@@ -26,15 +26,15 @@ export class GymniaEssayUserTryImplementation implements GymniaEssayUserTryRepos
     userId: number,
     status?: GymniaEssayUserTryStatus,
   ): Promise<GymniaEssayUserTry[]> {
-    const promise = GymniaEssayUserTry
+    const query = GymniaEssayUserTry
       .query()
       .where('user_id', userId);
 
     if (status) {
-      promise.where('status', status);
+      query.where('status', status);
     }
 
-    return await promise;
+    return query;
   }
 
   async updateTry(
@@ -54,7 +54,7 @@ export class GymniaEssayUserTryImplementation implements GymniaEssayUserTryRepos
       updateValues.status = GymniaEssayUserTryStatus.PENDING;
     }
 
-    return await GymniaEssayUserTry
+    return GymniaEssayUserTry
       .query()
       .updateAndFetchById(id, updateValues);
   }

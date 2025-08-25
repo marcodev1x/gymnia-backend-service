@@ -8,8 +8,10 @@ import { ThrowHttpError } from '~/generic-errors';
 export class GymniaUserService {
   constructor(private gymniaUserRepository: GymniaUserRepository) {}
 
-  async createUser(user: GymniaUser): Promise<{ userCreated: Partial<GymniaUser>} | null> {
-    const userAlwaysExists = await this.gymniaUserRepository.findByEmail(user.email);
+  async createUser(user: GymniaUser): Promise<{ user: Partial<GymniaUser>} | null> {
+    const userAlwaysExists = await this.gymniaUserRepository.findByEmail({
+      userEmail: user.email,
+    });
 
     if (userAlwaysExists) {
       throw ThrowHttpError('ALREADY_EXISTS');
@@ -24,7 +26,7 @@ export class GymniaUserService {
 
     const token = generateJwtToken({ ...userCreated });
 
-    return { userCreated: removeSensitiveData(userCreated, token) };
+    return { user: removeSensitiveData(userCreated, token) };
   }
 
   async hashSecret(secret: string): Promise<string> {

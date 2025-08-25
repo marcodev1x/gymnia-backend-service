@@ -16,4 +16,4 @@ export class GymniaConfigParams extends Model {
   id: number;
   nome_parametro: string;
   valor_parametro: string;
-};
+}

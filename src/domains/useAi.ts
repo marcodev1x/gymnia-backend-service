@@ -42,21 +42,26 @@ export async function useAi({
   systemContent,
   userContent,
   headers,
-}: UseAiParams): Promise<UseAiResponse> {
-  const request = await axios.post(url, {
-    model,
-    thinking,
-    messages: [
-      { role: 'system', content: systemContent },
-      { role: 'user', content: userContent },
-    ],
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${appConfig.zaiApiKey}`,
-      ...headers,
-    },
-  });
+}: UseAiParams): Promise<UseAiResponse | undefined> {
+  try {
+    const request = await axios.post(url, {
+      model,
+      thinking,
+      messages: [
+        { role: 'system', content: systemContent },
+        { role: 'user', content: userContent },
+      ],
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${appConfig.zaiApiKey}`,
+        ...headers,
+      },
+    });
 
-  return request.data;
+    return request.data;
+  } catch (e) {
+    console.warn(e);
+    return;
+  }
 }
