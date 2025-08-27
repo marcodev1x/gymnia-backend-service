@@ -1,6 +1,4 @@
-import {
-    GymniaEssayResultsRepository,
-} from '~/domains/gymnia-essay-results/repository';
+import { GymniaEssayResultsRepository } from '~/domains/gymnia-essay-results/repository';
 import { ThrowHttpError } from '~/generic-errors';
 
 export class GymniaEssayResultsService {

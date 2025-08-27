@@ -1,4 +1,3 @@
-
 export enum GenericErrorsEnum {
     ALREADY_EXISTS = 'Element already exists',
     UNAUTHORIZED_INVALID_TOKEN = 'Unauthorized. Invalid token.',
