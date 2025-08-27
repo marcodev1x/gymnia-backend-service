@@ -1,10 +1,10 @@
 {
-  "name": "academIA-backend",
+  "name": "gymnia-backend-service",
   "version": "1.0.0",
   "main": "dist/src/index.js",
   "license": "MIT",
-  "description": "Backend for the AcademIA platform",
-  "author": "Z1 Group LTDA.",
+  "description": "Backend for the Gymnia platform",
+  "author": "Marco Antônio",
   "bin": {
     "eslint": "./node_modules/.bin/eslint"
   },
