@@ -7,11 +7,11 @@ export const gymniaConfigParamsService = new GymniaConfigParamsService(gymniaCon
 
 // TODO: Remover, apenas teste.
 export async function getConfigList(_request: Request, response: Response, next: NextFunction) {
-  try {
-    const configList = await gymniaConfigParamsService.getConfigParams();
+    try {
+        const configList = await gymniaConfigParamsService.getConfigParams();
 
-    response.json(configList);
-  } catch (e) {
-    next(e);
-  }
+        response.json(configList);
+    } catch (e) {
+        next(e);
+    }
 }

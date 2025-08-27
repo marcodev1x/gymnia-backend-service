@@ -8,10 +8,10 @@ import { Router } from 'express';
 const essayTryRoutes = Router();
 
 essayTryRoutes.post(
-  '/correct-essay',
-  authentication,
-  validateBodyRequest(correctEssaySchema),
-  correctEssay,
+    '/correct-essay',
+    authentication,
+    validateBodyRequest(correctEssaySchema),
+    correctEssay,
 );
 
 export default essayTryRoutes;

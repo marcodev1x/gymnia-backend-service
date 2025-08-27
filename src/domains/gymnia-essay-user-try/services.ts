@@ -14,73 +14,73 @@ export type EssayAsyncData = {
 }
 
 export class GymniaEssayUserTryService {
-  constructor(private readonly repository: GymniaEssayUserTryImplementation) {}
+    constructor(private readonly repository: GymniaEssayUserTryImplementation) {}
 
-  async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
-    const createTry = await this.repository.createTry(tryData);
+    async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
+        const createTry = await this.repository.createTry(tryData);
 
-    if (!createTry) {
-      throw ThrowHttpError({ element: 'Try', error: 'NOT_CREATED' });
+        if (!createTry) {
+            throw ThrowHttpError({ element: 'Try', error: 'NOT_CREATED' });
+        }
+
+        return createTry;
     }
 
-    return createTry;
-  }
+    async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
+        const tryById = await this.repository.getTryById(id);
 
-  async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
-    const tryById = await this.repository.getTryById(id);
+        if (!tryById) {
+            throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        }
 
-    if (!tryById) {
-      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        return tryById;
     }
 
-    return tryById;
-  }
-
-  async getTryListByUserId(userId: number, status?: GymniaEssayUserTryStatus): Promise<GymniaEssayUserTry[]> {
-    return await this.repository.getTryListByUserId(userId, status);
-  }
-
-  async updateTry(
-    id: number,
-    tryData: EssayAsyncData,
-    completion?: boolean,
-  ): Promise<GymniaEssayUserTry> {
-    if (!tryData.content) {
-      throw ThrowGymniaTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
+    async getTryListByUserId(userId: number, status?: GymniaEssayUserTryStatus): Promise<GymniaEssayUserTry[]> {
+        return await this.repository.getTryListByUserId(userId, status);
     }
 
-    const updateTry = await this.repository.updateTry(id, tryData, completion);
+    async updateTry(
+        id: number,
+        tryData: EssayAsyncData,
+        completion?: boolean,
+    ): Promise<GymniaEssayUserTry> {
+        if (!tryData.content) {
+            throw ThrowGymniaTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
+        }
 
-    if (!updateTry) {
-      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        const updateTry = await this.repository.updateTry(id, tryData, completion);
+
+        if (!updateTry) {
+            throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        }
+
+        return updateTry;
     }
 
-    return updateTry;
-  }
+    async deleteTry(id: number): Promise<void> {
+        const deleteTry = await this.repository.deleteTry(id);
 
-  async deleteTry(id: number): Promise<void> {
-    const deleteTry = await this.repository.deleteTry(id);
-
-    if (!deleteTry) {
-      throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        if (!deleteTry) {
+            throw ThrowHttpError({ element: 'Try', error: 'NOT_FOUND' });
+        }
     }
-  }
 
-  async sendEssayToAi(essay: string, theme: GymniaEssayThemes) {
-    const { valor_parametro: essayRule } = await gymniaConfigParamsService
-      .getSpecificConfigParam(GymniaConfigParamsEnum.REDACAO);
+    async sendEssayToAi(essay: string, theme: GymniaEssayThemes) {
+        const { valor_parametro: essayRule } = await gymniaConfigParamsService
+            .getSpecificConfigParam(GymniaConfigParamsEnum.REDACAO);
 
-    const { theme_description: themeDescription } = theme;
+        const { theme_description: themeDescription } = theme;
 
-    if (!essayRule) throw ThrowHttpError({ element: 'Essay', error: 'NOT_FOUND' });
+        if (!essayRule) throw ThrowHttpError({ element: 'Essay', error: 'NOT_FOUND' });
 
-    const essayCorrected = await useAi({
-      systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
-      userContent: essay,
-    });
+        const essayCorrected = await useAi({
+            systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
+            userContent: essay,
+        });
 
-    if (!essayCorrected) throw ThrowGymniaTryError('ERROR_AT_CORRECT_ESSAY');
+        if (!essayCorrected) throw ThrowGymniaTryError('ERROR_AT_CORRECT_ESSAY');
 
-    return safeJsonParse(essayCorrected.choices[0].message.content) || '';
-  }
+        return safeJsonParse(essayCorrected.choices[0].message.content) || '';
+    }
 }

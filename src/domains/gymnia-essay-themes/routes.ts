@@ -8,12 +8,12 @@ export const essayThemesRoutes = Router();
 
 // Routes
 essayThemesRoutes.get('/get-themes-list',
-  authentication,
-  getThemesList,
+    authentication,
+    getThemesList,
 );
 
 essayThemesRoutes.get('/get-theme',
-  authentication,
-  validateBodyRequest(getThemeByIdSchema),
-  getThemeById,
+    authentication,
+    validateBodyRequest(getThemeByIdSchema),
+    getThemeById,
 );

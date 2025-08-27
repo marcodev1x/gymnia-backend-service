@@ -11,40 +11,40 @@ export interface GymniaUserRepository {
 };
 
 export class GymniaUserImplementation implements GymniaUserRepository {
-  async findByEmail({
-    userEmail,
-    getSensitiveData,
-  }: findByEmailParams): Promise<GymniaUser | undefined> {
-    let user = await GymniaUser
-      .query()
-      .select('*')
-      .where('email', userEmail)
-      .first();
+    async findByEmail({
+        userEmail,
+        getSensitiveData,
+    }: findByEmailParams): Promise<GymniaUser | undefined> {
+        let user = await GymniaUser
+            .query()
+            .select('*')
+            .where('email', userEmail)
+            .first();
 
-    if (!getSensitiveData && user) user = removeSensitiveData(GymniaUser.fromJson(user));
+        if (!getSensitiveData && user) user = removeSensitiveData(GymniaUser.fromJson(user));
 
-    return user;
-  }
+        return user;
+    }
 
-  async userExists(userEmail: string): Promise<boolean | undefined> {
-    return !!await GymniaUser
-      .query()
-      .select('email')
-      .where('email', userEmail)
-      .first();
-  }
+    async userExists(userEmail: string): Promise<boolean | undefined> {
+        return !!await GymniaUser
+            .query()
+            .select('email')
+            .where('email', userEmail)
+            .first();
+    }
 
-  async createUser(user: Partial<GymniaUser>): Promise<GymniaUser | null> {
-    return GymniaUser
-      .query()
-      .insertAndFetch(user);
-  }
+    async createUser(user: Partial<GymniaUser>): Promise<GymniaUser | null> {
+        return GymniaUser
+            .query()
+            .insertAndFetch(user);
+    }
 
-  async getUserSecret(userEmail: string): Promise<GymniaUser | undefined> {
-    return GymniaUser
-      .query()
-      .select(['secret'])
-      .where('email', userEmail)
-      .first();
-  }
+    async getUserSecret(userEmail: string): Promise<GymniaUser | undefined> {
+        return GymniaUser
+            .query()
+            .select(['secret'])
+            .where('email', userEmail)
+            .first();
+    }
 }
