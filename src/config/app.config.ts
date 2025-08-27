@@ -1,6 +1,11 @@
 import dotenv from 'dotenv';
 
-dotenv.config();
+const isDevelopment = process.env.LOCAL === 'development';
+
+dotenv.config({
+    path: '.env',
+    quiet: !isDevelopment,
+});
 
 const {
     DEFAULT_PORT,

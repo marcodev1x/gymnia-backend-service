@@ -16,7 +16,7 @@
     "build": "tsc",
     "start:build": "node -r tsconfig-paths/register -r module-alias/register dist/src/index.js",
     "start:dev": "tsx --watch ./src/index.ts",
-    "test:dev": "jest --config jest.config.ts",
+    "test:dev": "jest --config jest.config.ts --watchAll --cache",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix"
   },

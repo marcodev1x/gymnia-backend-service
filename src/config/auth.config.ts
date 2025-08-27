@@ -1,6 +1,10 @@
 import dotenv from 'dotenv';
+import { isDevelopment } from '~/global';
 
-dotenv.config();
+dotenv.config({
+    path: '.env',
+    quiet: !isDevelopment,
+});
 
 const {
     JWT_SECRET_KEY,
