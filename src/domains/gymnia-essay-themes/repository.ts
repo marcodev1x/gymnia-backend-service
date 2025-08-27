@@ -6,13 +6,13 @@ export interface GymniaEssayThemesRepository {
 }
 
 export class GymniaEssayThemesImplementation implements GymniaEssayThemesRepository {
-  async getThemes(): Promise<GymniaEssayThemes[] | []> {
-    return GymniaEssayThemes.query();
-  }
+    async getThemes(): Promise<GymniaEssayThemes[] | []> {
+        return GymniaEssayThemes.query();
+    }
 
-  async getThemeById(id: number): Promise<GymniaEssayThemes | undefined> {
-    return GymniaEssayThemes
-      .query()
-      .findById(id);
-  }
+    async getThemeById(id: number): Promise<GymniaEssayThemes | undefined> {
+        return GymniaEssayThemes
+            .query()
+            .findById(id);
+    }
 }

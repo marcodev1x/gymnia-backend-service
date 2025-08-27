@@ -5,17 +5,17 @@ export interface GymniaEssayResultsRepository {
 }
 
 export class GymniaEssayResultsRepositoryImplementation implements GymniaEssayResultsRepository {
-  async createResult(
-    essay_try_id: number,
-    score: number,
-    ia_result: JSON,
-  ) {
-    return GymniaEssayResults
-      .query()
-      .insertAndFetch({
-        essay_try_id,
-        score,
-        ia_result,
-      });
-  }
+    async createResult(
+        essay_try_id: number,
+        score: number,
+        ia_result: JSON,
+    ) {
+        return GymniaEssayResults
+            .query()
+            .insertAndFetch({
+                essay_try_id,
+                score,
+                ia_result,
+            });
+    }
 }

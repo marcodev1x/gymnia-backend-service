@@ -10,58 +10,58 @@ export interface GymniaEssayUserTryRepository {
 }
 
 export class GymniaEssayUserTryImplementation implements GymniaEssayUserTryRepository {
-  async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
-    return GymniaEssayUserTry
-      .query()
-      .insertAndFetch({ ...tryData, status: GymniaEssayUserTryStatus.PENDING });
-  }
-
-  async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
-    return GymniaEssayUserTry
-      .query()
-      .findById(id);
-  }
-
-  async getTryListByUserId(
-    userId: number,
-    status?: GymniaEssayUserTryStatus,
-  ): Promise<GymniaEssayUserTry[]> {
-    const query = GymniaEssayUserTry
-      .query()
-      .where('user_id', userId);
-
-    if (status) {
-      query.where('status', status);
+    async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
+        return GymniaEssayUserTry
+            .query()
+            .insertAndFetch({ ...tryData, status: GymniaEssayUserTryStatus.PENDING });
     }
 
-    return query;
-  }
-
-  async updateTry(
-    id: number,
-    tryData: EssayAsyncData,
-    completion?: boolean,
-  ): Promise<GymniaEssayUserTry> {
-    const updateValues: Partial<GymniaEssayUserTry> = {};
-
-    if ('content' in tryData) {
-      updateValues.essay = tryData.content;
+    async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
+        return GymniaEssayUserTry
+            .query()
+            .findById(id);
     }
 
-    if (completion && !tryData.setAsPending) {
-      updateValues.status = GymniaEssayUserTryStatus.COMPLETED;
-    } else {
-      updateValues.status = GymniaEssayUserTryStatus.PENDING;
+    async getTryListByUserId(
+        userId: number,
+        status?: GymniaEssayUserTryStatus,
+    ): Promise<GymniaEssayUserTry[]> {
+        const query = GymniaEssayUserTry
+            .query()
+            .where('user_id', userId);
+
+        if (status) {
+            query.where('status', status);
+        }
+
+        return query;
     }
 
-    return GymniaEssayUserTry
-      .query()
-      .updateAndFetchById(id, updateValues);
-  }
+    async updateTry(
+        id: number,
+        tryData: EssayAsyncData,
+        completion?: boolean,
+    ): Promise<GymniaEssayUserTry> {
+        const updateValues: Partial<GymniaEssayUserTry> = {};
 
-  async deleteTry(id: number): Promise<void | Error> {
-    await GymniaEssayUserTry
-      .query()
-      .deleteById(id);
-  }
+        if ('content' in tryData) {
+            updateValues.essay = tryData.content;
+        }
+
+        if (completion && !tryData.setAsPending) {
+            updateValues.status = GymniaEssayUserTryStatus.COMPLETED;
+        } else {
+            updateValues.status = GymniaEssayUserTryStatus.PENDING;
+        }
+
+        return GymniaEssayUserTry
+            .query()
+            .updateAndFetchById(id, updateValues);
+    }
+
+    async deleteTry(id: number): Promise<void | Error> {
+        await GymniaEssayUserTry
+            .query()
+            .deleteById(id);
+    }
 }

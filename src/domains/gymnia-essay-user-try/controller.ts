@@ -9,31 +9,31 @@ const repository = new GymniaEssayUserTryImplementation();
 export const gymniaEssayUserTryService = new GymniaEssayUserTryService(repository);
 
 export async function correctEssay(request: RequestMiddleware, response: Response, next: NextFunction) {
-  try {
-    const {
-      try_id,
-      theme_id,
-      essay,
-    } = request.body;
+    try {
+        const {
+            try_id,
+            theme_id,
+            essay,
+        } = request.body;
 
-    const theme = await gymniaEssayThemesService.getThemeById(Number(theme_id));
+        const theme = await gymniaEssayThemesService.getThemeById(Number(theme_id));
 
-    const essayCorrected = await gymniaEssayUserTryService.sendEssayToAi(essay, theme);
+        const essayCorrected = await gymniaEssayUserTryService.sendEssayToAi(essay, theme);
 
-    await gymniaEssayUserTryService.updateTry(
-      try_id,
-      essay,
-      true,
-    );
+        await gymniaEssayUserTryService.updateTry(
+            try_id,
+            essay,
+            true,
+        );
 
-    await gymniaEssayResultsService.createResult(
-      try_id,
-      essayCorrected.resultado_final.nota_total,
-      essayCorrected,
-    );
+        await gymniaEssayResultsService.createResult(
+            try_id,
+            essayCorrected.resultado_final.nota_total,
+            essayCorrected,
+        );
 
-    response.json(essayCorrected);
-  } catch (e) {
-    next(e);
-  }
+        response.json(essayCorrected);
+    } catch (e) {
+        next(e);
+    }
 }
