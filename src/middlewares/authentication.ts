@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
 import { verifyJwtToken } from './utils/jwt.utils';
-import { GymniaUser } from '~/domains/users/model';
+import { GymniaUserWithPermissions } from '~/domains/users/model';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { ThrowHttpError } from '~/generic-errors';
 
@@ -13,7 +13,7 @@ export function authentication(request: RequestMiddleware, _response: Response, 
     };
 
     try {
-        request.user = verifyJwtToken(token) as GymniaUser;
+        request.user = verifyJwtToken(token) as GymniaUserWithPermissions;
 
         next();
     } catch (e) {
