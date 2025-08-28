@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Gymnia API
+  version: 1.0.0
+  description: Gymnia API documentation
+servers:
+  - url: http://localhost:3000
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /essay-try/correct-essay:
+    post:
+      summary: Correct essay
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                try_id:
+                  type: integer
+                theme_id:
+                  type: integer
+                essay:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    content:
+                      type: string
+      responses:
+        '200':
+          description: Correct essay
+  
+  
