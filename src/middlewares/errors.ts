@@ -29,7 +29,7 @@ export function errorMiddlewareSent(
         error: {
             code,
             message,
-            exception: isDevelopment ? exception : undefined,  // Apenas em dev
+            exception: isDevelopment ? exception : undefined,
         },
     });
     return;

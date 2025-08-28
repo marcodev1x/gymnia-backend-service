@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { GymniaUser } from '~/domains/users/model';
+import { GymniaUserWithPermissions } from '~/domains/users/model';
 
 export type RequestMiddleware = Request & {
-    user?: GymniaUser
+    user?: GymniaUserWithPermissions
 }

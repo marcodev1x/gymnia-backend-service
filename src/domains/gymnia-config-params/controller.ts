@@ -1,11 +1,11 @@
 import { GymniaConfigParamsImplementation } from './repository';
 import { GymniaConfigParamsService } from './services';
-import { Request, Response, NextFunction } from 'express';
+/*import { Request, Response, NextFunction } from 'express';*/ // Removido pois no momento é useless
 
 const gymniaConfigParamsRepository = new GymniaConfigParamsImplementation();
 export const gymniaConfigParamsService = new GymniaConfigParamsService(gymniaConfigParamsRepository);
 
-// TODO: Remover, apenas teste.
+/*
 export async function getConfigList(_request: Request, response: Response, next: NextFunction) {
     try {
         const configList = await gymniaConfigParamsService.getConfigParams();
@@ -15,3 +15,4 @@ export async function getConfigList(_request: Request, response: Response, next:
         next(e);
     }
 }
+*/

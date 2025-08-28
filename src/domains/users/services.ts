@@ -4,18 +4,23 @@ import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
 import { ThrowHttpError } from '~/generic-errors';
 
+interface CreateUserAsync {
+    user: GymniaUser;
+    token: string;
+}
+
 export class GymniaUserService {
     constructor(private gymniaUserRepository: GymniaUserRepository) {}
 
-    async createUser(user: GymniaUser): Promise<{ user: Partial<GymniaUser>, token: string} | null> {
+    async createUser(user: GymniaUser): Promise<CreateUserAsync | null> {
         const userAlwaysExists = await this.gymniaUserRepository.userExists(user.email);
-        console.log(userAlwaysExists);
 
         if (userAlwaysExists) {
             throw ThrowHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
         }
 
         const secretHashed = await GymniaUser.hashSecret(user.secret);
+
         const userCreated = await this
             .gymniaUserRepository
             .createUser({ ...user, secret: secretHashed });
@@ -24,11 +29,9 @@ export class GymniaUserService {
             throw ThrowHttpError({ element: 'User', error: 'NOT_CREATED' });
         }
 
-        const token = generateJwtToken({ ...userCreated });
-
         return {
             user: removeSensitiveData(userCreated),
-            token,
+            token: generateJwtToken({ ...userCreated }),
         };
     }
 
@@ -45,8 +48,16 @@ export class GymniaUserService {
             throw ThrowHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
         }
 
+        const payload = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            deleted: user.deleted,
+            user_role: user.permissions?.role_name,
+        };
+
         return {
-            token: generateJwtToken(user),
+            token: generateJwtToken(payload),
         };
     }
 }

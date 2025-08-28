@@ -143,8 +143,7 @@ export const isRetryableError = (error: HttpError): boolean => {
 export const createValidationError = (field: string, value?: unknown) => {
     return new HttpError(
         `Validation failed for field: ${field}${value ? ` (value: ${value})` : ''}`,
-        422,
+        400,
         'VALIDATION_ERROR',
-        false,
     );
 };
