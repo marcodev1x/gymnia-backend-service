@@ -20,7 +20,7 @@ app.use(express.static('public'));
 app.use(routes);
 
 // Swagger
-const yml = yaml.load(`swagger.yml`);
+const yml = yaml.load('swagger.yml');
 if (isDevelopment) app.use('/docs', swaggerUi.serve, swaggerUi.setup(yml));
 
 app.use((_request: Request, response: Response) => {
