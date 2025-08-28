@@ -1,26 +1,19 @@
 import { Router } from 'express';
-import { getThemesList, getThemeById, sendEssayToAi } from './controller';
+import { getThemesList, getThemeById } from './controller';
 import { validateBodyRequest } from '~/middlewares/joi';
 import { authentication } from '~/middlewares/authentication';
-import { getThemeByIdSchema, sendToAiSchema } from './schemas';
+import { getThemeByIdSchema } from './schemas';
 
 export const essayThemesRoutes = Router();
 
 // Routes
 essayThemesRoutes.get('/get-themes-list',
-  authentication,
-  getThemesList,
+    authentication,
+    getThemesList,
 );
 
 essayThemesRoutes.get('/get-theme',
-  authentication,
-  validateBodyRequest(getThemeByIdSchema),
-  getThemeById,
-);
-
-essayThemesRoutes.post(
-  '/send-essay-to-ai',
-  authentication,
-  validateBodyRequest(sendToAiSchema),
-  sendEssayToAi,
+    authentication,
+    validateBodyRequest(getThemeByIdSchema),
+    getThemeById,
 );

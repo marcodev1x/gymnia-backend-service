@@ -1,7 +1,7 @@
-export const removeSensitiveData = (model, token: string) => {
-  const removeSensitive = model.$hiddenFields(); // do model do objection
+export const removeSensitiveData = (model) => {
+    const removeSensitive = model.$hiddenFields(); // do model do objection
 
-  removeSensitive.forEach((field: string) => delete model[field]);
+    removeSensitive.forEach((field: string) => delete model[field]);
 
-  return { ...model, token };
+    return { ...model };
 };

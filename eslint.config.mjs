@@ -18,7 +18,7 @@ export default [
       'no-trailing-spaces': 'error',
 
       // Indentação e chaves
-      'indent': ['error', 2],
+      'indent': ['error', 4],
       'brace-style': ['error', '1tbs', { allowSingleLine: true }],
 
       // Aspas e ponto-vírgula
@@ -46,6 +46,6 @@ export default [
 
       // ========== TYPESCRIPT ==========
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    }
-  }
+    },
+  },
 ];

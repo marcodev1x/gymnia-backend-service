@@ -1,28 +1,27 @@
 import { NextFunction, Response } from 'express';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
 import { verifyJwtToken } from './utils/jwt.utils';
-import { GymniaUser } from '~/domains/users/model';
+import { GymniaUserWithPermissions } from '~/domains/users/model';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { ThrowHttpError } from '~/generic-errors';
 
 export function authentication(request: RequestMiddleware, _response: Response, next: NextFunction) {
-  const token = request.headers.authorization?.split(' ')[1];
+    const token = request.headers.authorization?.split(' ')[1];
 
-  if (!token) {
-    throw ThrowHttpError('UNAUTHORIZED_TOKEN_NOT_FOUND');
-  };
+    if (!token) {
+        throw ThrowHttpError({ error: 'UNAUTHORIZED_TOKEN_NOT_FOUND' });
+    };
 
-  try {
-    const user = verifyJwtToken(token) as Partial<GymniaUser>;
+    try {
+        request.user = verifyJwtToken(token) as GymniaUserWithPermissions;
 
-    request.user = user;
-    next();
-  } catch (e) {
-    if (e instanceof JsonWebTokenError) {
-      throw ThrowHttpError('UNAUTHORIZED_INVALID_TOKEN');
+        next();
+    } catch (e) {
+        if (e instanceof JsonWebTokenError) {
+            throw ThrowHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
+        }
+
+        throw e;
     }
-
-    throw e;
-  }
 
 }

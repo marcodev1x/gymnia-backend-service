@@ -1,30 +1,29 @@
 import jwt from 'jsonwebtoken';
 import { authConfig } from '~/config/auth.config';
 
-interface JwtPayload {
+export interface JwtPayload {
     id: number;
     name: string;
     email: string;
-    secret: string;
     deleted: boolean;
 }
 
 export const generateJwtToken = (payload: JwtPayload) => {
-  if (!authConfig.jwtSecretKey) {
-    throw new Error('JWT secret key not found');
-  }
+    if (!authConfig.jwtSecretKey) {
+        throw new Error('JWT secret key not found');
+    }
 
-  return jwt.sign(payload, authConfig.jwtSecretKey,
-    {
-      expiresIn: authConfig.jwtExpiresIn || '1h',
-    },
-  );
+    return jwt.sign(payload, authConfig.jwtSecretKey,
+        {
+            expiresIn: authConfig.jwtExpiresIn || '1h',
+        },
+    );
 };
 
 export const verifyJwtToken = (token: string) => {
-  if (!token) {
-    throw new Error('Token not found');
-  }
+    if (!token) {
+        throw new Error('Token not found');
+    }
 
-  return jwt.verify(token, authConfig.jwtSecretKey);
+    return jwt.verify(token, authConfig.jwtSecretKey);
 };
