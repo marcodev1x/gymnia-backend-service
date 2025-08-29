@@ -1,16 +1,25 @@
 import { Router } from 'express';
-/*import { getConfigList } from '~/domains/gymnia-config-params/controller';
+import { getConfigList } from '~/domains/gymnia-config-params/controller';
 import { authentication } from '~/middlewares/authentication';
 import { GymniaUserRoles } from '../gymnia-permissions/model';
-import { permissionMiddleware } from '~/middlewares/permission';*/
+import { permissionMiddleware } from '~/middlewares/permission';
+import { AppRouter } from '~/types/Router';
+import { getConfigListSwagger } from './swagger';
 
-export const gymniaRouter = Router();
+export const gymniaConfigParamsRouter = Router();
 
-/* Routes
-gymniaRouter.get(
-    '/get-config-list',
-    permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
-    authentication,
-    getConfigList,
-);
-*/
+// Routes
+const routes: AppRouter[] = [
+    {
+        method: 'get',
+        path: '/get-config-list',
+        handler: getConfigList,
+        middlewares: [
+            authentication,
+            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+        ],
+        swagger: getConfigListSwagger,
+    },
+];
+
+export default routes;

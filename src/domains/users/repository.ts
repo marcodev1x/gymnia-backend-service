@@ -69,6 +69,6 @@ export class GymniaUserImplementation implements GymniaUserRepository {
 
         if (!user) return undefined;
 
-        return user.permissions?.role_name;
+        return user.permissions?.role_name || 'NOT_DEFINED_ROLE';
     }
 }

@@ -3,17 +3,30 @@ import { getThemesList, getThemeById } from './controller';
 import { validateBodyRequest } from '~/middlewares/joi';
 import { authentication } from '~/middlewares/authentication';
 import { getThemeByIdSchema } from './schemas';
+import { AppRouter } from '~/types/Router';
+import { getEssayThemesSwagger } from './swagger';
 
-export const essayThemesRoutes = Router();
+export const essayThemesRouter = Router();
 
-// Routes
-essayThemesRoutes.get('/get-themes-list',
-    authentication,
-    getThemesList,
-);
+export const routes: AppRouter[] = [
+    {
+        method: 'get',
+        path: '/get-themes-list',
+        handler: getThemesList,
+        middlewares: [
+            authentication,
+        ],
+        swagger: getEssayThemesSwagger,
+    },
+    {
+        method: 'get',
+        path: '/get-theme',
+        handler: getThemeById,
+        middlewares: [
+            authentication,
+            validateBodyRequest(getThemeByIdSchema),
+        ],
+    },
+];
 
-essayThemesRoutes.get('/get-theme',
-    authentication,
-    validateBodyRequest(getThemeByIdSchema),
-    getThemeById,
-);
+export default routes;
