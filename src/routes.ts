@@ -7,6 +7,8 @@ import usersRoutes, { usersRouter } from './domains/users/routes';
 import essayTryRoutes, { essayTryRouter } from './domains/gymnia-essay-user-try/routes';
 
 import { AppRouter, UseRoute } from './types/Router';
+import { OpenAPIV3 } from 'openapi-types';
+import { appConfig } from './config/app.config';
 
 // ==== ROUTES REGISTER ====
 
@@ -49,7 +51,7 @@ useRoutes.forEach((u) => {
 
 // ==== SWAGGER ====
 
-const swaggerDoc = {
+const swaggerDoc: OpenAPIV3.Document = {
     openapi: '3.0.0',
     info: { title: 'Gymnia API', version: '1.0.0' },
     components: {
@@ -63,7 +65,10 @@ const swaggerDoc = {
     },
     servers: [
         {
-            url: 'http://localhost:3000/',
+            url: `http://localhost:${appConfig.port}/`,
+        },
+        {
+            url: appConfig.renderBackendUrl!,
         },
     ],
     paths: swaggerPaths,
