@@ -5,16 +5,22 @@ import { correctEssay } from '~/domains/gymnia-essay-user-try/controller';
 import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { GymniaUserRoles } from '~/domains/gymnia-permissions/model';
+import { AppRouter } from '~/types/Router';
 
 // Routes
-const essayTryRoutes = Router();
+export const essayTryRouter = Router();
 
-essayTryRoutes.post(
-    '/correct-essay',
-    authentication,
-    permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
-    validateBodyRequest(correctEssaySchema),
-    correctEssay,
-);
+const routes: AppRouter[] = [
+    {
+        method: 'post',
+        path: '/correct-essay',
+        handler: correctEssay,
+        middlewares: [
+            authentication,
+            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+            validateBodyRequest(correctEssaySchema),
+        ],
+    },
+];
 
-export default essayTryRoutes;
+export default routes;

@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc",
     "start:build": "node -r tsconfig-paths/register -r module-alias/register dist/src/index.js",
-    "start:dev": "tsx --watch ./src/index.ts",
+    "start:dev": "npx nodemon --watch .env --ext env,ts --exec \"tsx --watch ./src/index.ts\"",
     "test:dev": "jest --config jest.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix"
@@ -35,7 +35,6 @@
     "@types/swagger-ui-express": "4.1.8",
     "@typescript-eslint/eslint-plugin": "8.36.0",
     "@typescript-eslint/parser": "8.36.0",
-    "@types/yamljs": "0.2.34",
     "eslint": "9.30.1",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-airbnb-typescript": "12.3.1",
@@ -47,6 +46,7 @@
     "eslint-plugin-unused-imports": "4.1.4",
     "jest": "30.0.4",
     "jest-extended": "6.0.0",
+    "nodemon": "3.1.10",
     "ts-jest": "29.4.0",
     "ts-node": "10.9.2",
     "tsx": "4.20.3",
@@ -65,11 +65,11 @@
     "knex": "3.1.0",
     "module-alias": "2.2.3",
     "objection": "3.1.5",
+    "openapi-types": "12.1.3",
     "pg": "8.16.3",
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1",
-    "tsconfig-paths": "4.2.0",
-    "yamljs": "0.3.0"
+    "tsconfig-paths": "4.2.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
