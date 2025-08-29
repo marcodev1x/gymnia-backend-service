@@ -1,4 +1,5 @@
-import { Router } from 'express';
+import { RequestHandler, Router } from 'express';
+import { OpenAPIV3 } from 'openapi-types';
 
 export interface UseRoute {
     prefix: string;
@@ -8,7 +9,7 @@ export interface UseRoute {
 export interface AppRouter {
     method: 'get' | 'post' | 'put' | 'delete' | 'patch';
     path: string;
-    middlewares?: (() => any)[];
-    handler: (() => any);
-    swagger?: any;
+    middlewares?: RequestHandler[];
+    handler: RequestHandler;
+    swagger?: OpenAPIV3.OperationObject;
 }
