@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { appConfig } from '~/config/app.config';
+import logger from '~/logger';
 import { UseAiParams, UseAiResponse } from '~/types/UseAi';
 
 export async function useAi({
@@ -40,10 +41,10 @@ export async function useAi({
                 return data;
             }
 
-            console.warn(`Resposta inválida na tentativa ${attempt}.`);
+            logger.warn(`Resposta inválida na tentativa ${attempt}.`);
 
         } catch (error) {
-            console.warn(`Erro na tentativa ${attempt}:`, error);
+            logger.warn(`Erro na tentativa ${attempt}:`, error);
         }
 
         if (attempt < retries) {
@@ -51,6 +52,6 @@ export async function useAi({
         }
     }
 
-    console.error('Falha após todas as tentativas.');
+    logger.error('Falha após todas as tentativas.');
     return undefined;
 }

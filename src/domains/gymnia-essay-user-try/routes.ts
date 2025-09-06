@@ -1,5 +1,5 @@
 import { authentication } from '~/middlewares/authentication';
-import { validateBodyRequest } from '~/middlewares/joi';
+import { validateRequest } from '~/middlewares/joi';
 import { correctEssaySchema } from '~/domains/gymnia-essay-themes/schemas';
 import { correctEssay } from '~/domains/gymnia-essay-user-try/controller';
 import { Router } from 'express';
@@ -18,7 +18,7 @@ const routes: AppRouter[] = [
         middlewares: [
             authentication,
             permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
-            validateBodyRequest(correctEssaySchema),
+            validateRequest(correctEssaySchema, 'body'),
         ],
     },
 ];
