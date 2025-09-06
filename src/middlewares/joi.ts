@@ -30,8 +30,8 @@ export const validateRequest = ({
             stripUnknown,
             allowUnknown,
             convert,
-        }
-    );
+        },
+        );
 
         if (error || !value) {
             logger.warn(error);
