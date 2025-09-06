@@ -3,6 +3,7 @@ import { GymniaEssayThemes } from './model';
 export interface GymniaEssayThemesRepository {
     getThemes(): Promise<GymniaEssayThemes[]>;
     getThemeById(id: number): Promise<GymniaEssayThemes | undefined>;
+    createTheme(theme: GymniaEssayThemes): Promise<GymniaEssayThemes>;
 }
 
 export class GymniaEssayThemesImplementation implements GymniaEssayThemesRepository {
@@ -14,5 +15,11 @@ export class GymniaEssayThemesImplementation implements GymniaEssayThemesReposit
         return GymniaEssayThemes
             .query()
             .findById(id);
+    }
+
+    async createTheme(theme: GymniaEssayThemes): Promise<GymniaEssayThemes> {
+        return GymniaEssayThemes
+            .query()
+            .insertAndFetch(theme);
     }
 }

@@ -13,7 +13,7 @@ export class GymniaConfigParamsService {
         const configParam = await this.gymniaConfigParamsRepository.getSpecificConfigParam(param);
 
         if (!configParam) {
-            throw ThrowHttpError({ element: 'ConfigParam', error: 'NOT_FOUND' });
+            throw ThrowHttpError({ element: 'Config param', error: 'NOT_FOUND' });
         }
 
         return configParam;

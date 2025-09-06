@@ -1,6 +1,7 @@
 import { GenericErrors, isHttpError } from '~/generic-errors';
 import { isDevelopment } from '~/global';
 import { NextFunction, Request, Response } from 'express';
+import logger from '~/logger';
 
 export function errorMiddlewareSent(
     err: unknown,
@@ -8,7 +9,7 @@ export function errorMiddlewareSent(
     res: Response,
     _next: NextFunction,
 ) {
-    console.error(err);
+    logger.error(err);
 
     const code = 'GENERIC_INTERNAL_ERROR';
     const statusCode = GenericErrors().GENERIC_INTERNAL_ERROR.status;

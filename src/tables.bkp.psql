@@ -1,0 +1,75 @@
+
+-- Results
+CREATE TABLE gymnia_essay_results (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    essay_try_id INT NOT NULL,
+    ia_result json NOT NULL,
+    score integer not null,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_essay_try FOREIGN KEY (essay_try_id) REFERENCES gymnia_essay_user_try(id) ON DELETE CASCADE
+);
+
+-- Try
+CREATE TABLE gymnia_essay_user_try (
+    id SERIAL PRIMARY KEY,
+    essay_theme_id INT NOT NULL,
+    user_id INT NOT NULL,
+    essay TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES gymnia_users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_essay FOREIGN KEY (essay_theme_id) REFERENCES gymnia_essay_themes(id) ON DELETE CASCADE
+);
+
+-- Types user_roles
+create type user_roles as enum (
+    'gymnia:adm',
+    'gymnia:user',
+    'gymnia:trial',
+    'gymnia:pedagogico',
+    'gymnia:finished_trial'
+);
+
+-- Permissions based on user_roles
+CREATE TABLE gymnia_permissions (
+    id INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
+    role_name varchar(32)
+)
+
+-- Users
+CREATE TABLE gymnia_users (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY                     ,
+    name TEXT NOT NULL                                                       ,
+    email TEXT NOT NULL UNIQUE,
+    secret TEXT NOT NULL,
+    deleted BOOLEAN default false,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now(),
+    deleted_at TIMESTAMP,
+    user_role_id INTEGER NOT NULL,
+
+    CONSTRAINT fk_user_role FOREIGN KEY (user_role_id) REFERENCES gymnia_user_roles(id);
+)
+
+-- Themes
+CREATE TABLE gymnia_essay_themes (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY                     ,
+    theme_title VARCHAR(120) NOT NULL,
+    theme_description TEXT NOT NULL,
+    is_active boolean default true not null,
+    limit_lines integer not null default 30,
+    difficulty_level varchar(20),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Config params
+CREATE TABLE gymnia_config_params (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    nome_parametro TEXT NOT NULL,
+    valor_parametro TEXT
+);

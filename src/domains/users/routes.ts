@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createUser } from './controller';
-import { validateBodyRequest } from '~/middlewares/joi';
+import { validateRequest } from '~/middlewares/joi';
 import { createUserSchema } from './schemas';
 import { AppRouter } from '~/types/Router';
 
@@ -13,7 +13,10 @@ const routes: AppRouter[] = [
         path: '/create-user',
         handler: createUser,
         middlewares: [
-            validateBodyRequest(createUserSchema),
+            validateRequest({
+                schema: createUserSchema,
+                type: 'body',
+            }),
         ],
     },
 ];

@@ -1,9 +1,11 @@
+import logger from '~/logger';
+
 export function safeJsonParse(str) {
     if (str && typeof str === 'string') {
         try {
             return JSON.parse(str.replace(/```[a-z]*|```/gi, '').trim());
         } catch (e) {
-            console.warn(e);
+            logger.warn(e);
             return null;
         }
     }

@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { getThemesList, getThemeById } from './controller';
-import { validateBodyRequest } from '~/middlewares/joi';
 import { authentication } from '~/middlewares/authentication';
 import { getThemeByIdSchema } from './schemas';
 import { AppRouter } from '~/types/Router';
 import { getEssayThemesSwagger } from './swagger';
+import { validateRequest } from '~/middlewares/joi';
 
 export const essayThemesRouter = Router();
 
@@ -24,7 +24,10 @@ export const routes: AppRouter[] = [
         handler: getThemeById,
         middlewares: [
             authentication,
-            validateBodyRequest(getThemeByIdSchema),
+            validateRequest({
+                schema: getThemeByIdSchema,
+                type: 'body',
+            }),
         ],
     },
 ];

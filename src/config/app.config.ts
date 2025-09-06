@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 const {
     DEFAULT_PORT,
     LOCAL,
