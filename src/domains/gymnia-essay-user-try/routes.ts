@@ -18,7 +18,10 @@ const routes: AppRouter[] = [
         middlewares: [
             authentication,
             permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
-            validateRequest(correctEssaySchema, 'body'),
+            validateRequest({
+                schema: correctEssaySchema,
+                type: 'body',
+            }),
         ],
     },
 ];

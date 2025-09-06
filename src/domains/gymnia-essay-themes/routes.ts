@@ -24,7 +24,10 @@ export const routes: AppRouter[] = [
         handler: getThemeById,
         middlewares: [
             authentication,
-            validateRequest(getThemeByIdSchema, 'body'),
+            validateRequest({
+                schema: getThemeByIdSchema,
+                type: 'body',
+            }),
         ],
     },
 ];

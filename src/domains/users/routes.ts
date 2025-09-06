@@ -13,7 +13,10 @@ const routes: AppRouter[] = [
         path: '/create-user',
         handler: createUser,
         middlewares: [
-            validateRequest(createUserSchema, 'body'),
+            validateRequest({
+                schema: createUserSchema,
+                type: 'body',
+            }),
         ],
     },
 ];
