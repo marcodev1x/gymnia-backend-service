@@ -6,7 +6,7 @@ import logger from '~/logger';
 
 interface JoiValidator {
     schema: Joi.ObjectSchema;
-    type: 'body' | 'query';
+    type: 'body' | 'query' | 'file';
     abortEarly?: boolean;
     stripUnknown?: boolean;
     allowUnknown?: boolean;
@@ -46,3 +46,29 @@ export const validateRequest = ({
         next();
     };
 };
+
+export function validateRequestAndFile({
+    required = false,
+    schema,
+    type,
+    nameBody,
+}: {
+    required?: boolean;
+    schema: Joi.ObjectSchema;
+    type: 'body' | 'query' | 'file';
+    nameBody: string;
+}) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (required && !req.file) {
+            res.status(400).json({ error: 'Arquivo é obrigatório' });
+            return;
+        }
+
+        if (req.body[nameBody]) {
+            req.body[nameBody] = JSON.parse(req.body[nameBody]);
+
+            return validateRequest({ schema, type })(req, res, next);
+        }
+        next();
+    };
+}

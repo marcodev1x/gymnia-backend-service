@@ -31,3 +31,20 @@ export const correctEssaySchema = Joi.object({
             .required(),
     }),
 });
+
+export const createThemaSchema = Joi.object({
+    theme: Joi.object({
+        theme_title: Joi
+            .string()
+            .required(),
+        theme_description: Joi
+            .string()
+            .required(),
+        limit_lines: Joi
+            .number()
+            .required(),
+        difficulty_level: Joi
+            .string()
+            .required(),
+    }).required(),
+});

@@ -7,6 +7,7 @@ import { gymniaConfigParamsService } from '~/domains/gymnia-config-params/contro
 import { GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
 import { useAi } from '~/domains/useAi';
 import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
+import logger from '~/logger';
 
 export type EssayAsyncData = {
     content: string;
@@ -80,6 +81,8 @@ export class GymniaEssayUserTryService {
         });
 
         if (!essayCorrected) throw ThrowGymniaTryError('ERROR_AT_CORRECT_ESSAY');
+
+        logger.warn(essayCorrected.choices[0].message.content);
 
         return safeJsonParse(essayCorrected.choices[0].message.content) || '';
     }
