@@ -5,7 +5,7 @@ import { OpenAI } from 'openai';
 import axios from 'axios';
 import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
 
-export async function useAi({
+export async function useAi<T>({
     model = appConfig.zaiApiModel!,
     systemContent,
     thinking = { type: 'disabled' },
@@ -14,7 +14,7 @@ export async function useAi({
     retries = 3,
     delay = 1000,
 }: UseAiParams,
-): Promise<UseAiResponse | undefined> {
+): Promise<T | undefined> {
 
     const headers = {
         'Content-Type': 'application/json',
@@ -36,14 +36,16 @@ export async function useAi({
 
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
-            const request = await axios.post<UseAiResponse>(
+            const request = await axios.post<UseAiResponse<T>>(
                 appConfig.zaiApiUrl!,
                 body,
                 { headers },
             );
 
-            if (request.data.choices?.[0]?.message.content) {
-                return safeJsonParse(request.data.choices[0].message.content);
+            const result = request.data;
+
+            if (result.choices[0].message.content) {
+                return safeJsonParse(result.choices[0].message.content) as T;
             }
 
             logger.warn(`Resposta inválida na tentativa ${attempt}.`);

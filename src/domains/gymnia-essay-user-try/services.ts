@@ -6,6 +6,7 @@ import { GymniaEssayThemes } from '~/domains/gymnia-essay-themes/model';
 import { gymniaConfigParamsService } from '~/domains/gymnia-config-params/controller';
 import { GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
 import { useAi } from '~/domains/useAi';
+import { AiJsonResult } from '~/types/UseAi';
 
 export type EssayAsyncData = {
     content: string;
@@ -73,7 +74,7 @@ export class GymniaEssayUserTryService {
 
         if (!essayRule) throw ThrowHttpError({ element: 'Essay', error: 'NOT_FOUND' });
 
-        const essayCorrected = await useAi({
+        const essayCorrected = await useAi<AiJsonResult>({
             systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
             userContent: JSON.stringify(essay),
             jsonFormat: true,

@@ -3,7 +3,7 @@ import { GymniaConfigParams, GymniaConfigParamsEnum } from '~/domains/gymnia-con
 export interface GymniaConfigParamsRepository {
     getConfigParams(): Promise<GymniaConfigParams[]>;
     getSpecificConfigParam(param: GymniaConfigParamsEnum): Promise<GymniaConfigParams | undefined>;
-};
+}
 
 export class GymniaConfigParamsImplementation implements GymniaConfigParamsRepository {
     async getConfigParams(): Promise<GymniaConfigParams[]> {

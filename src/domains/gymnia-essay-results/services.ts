@@ -1,11 +1,12 @@
 import { GymniaEssayResultsRepository } from '~/domains/gymnia-essay-results/repository';
 import { ThrowHttpError } from '~/generic-errors';
+import { AiJsonResult } from '~/types/UseAi';
 
 export class GymniaEssayResultsService {
     constructor(private readonly repository: GymniaEssayResultsRepository) {}
 
-    async createResult(essay_try_id: number, score: number, ia_result: JSON) {
-        const createdResult = await this.repository.createResult(essay_try_id, score, ia_result);
+    async createResult(essayTryId: number, userScore: number, iaResult: AiJsonResult) {
+        const createdResult = await this.repository.createResult(essayTryId, userScore, iaResult);
 
         if (!createdResult) throw ThrowHttpError({ element: 'Result', error: 'NOT_CREATED' });
 

@@ -32,9 +32,7 @@ export async function getFile(key: string) {
         Key: key,
     });
 
-    const signedUrl = await getSignedUrl(useS3, command, { expiresIn: 3600 });
-
-    return signedUrl;
+    return await getSignedUrl(useS3, command, { expiresIn: 3600 });
 }
 
 export default useS3;
