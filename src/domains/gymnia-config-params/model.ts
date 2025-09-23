@@ -2,6 +2,7 @@ import { Model } from 'objection';
 
 export enum GymniaConfigParamsEnum {
     REDACAO = 'validate_essay',
+    ESSAY_JSON_FORMAT = 'json_essay_format',
 }
 
 export class GymniaConfigParams extends Model {

@@ -2,7 +2,6 @@ import { GymniaEssayThemesImplementation } from '~/domains/gymnia-essay-themes/r
 import { GymniaEssayThemesService } from '~/domains/gymnia-essay-themes/services';
 import { NextFunction, Request, Response } from 'express';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
-import logger from '~/logger';
 
 const repository = new GymniaEssayThemesImplementation();
 export const gymniaEssayThemesService = new GymniaEssayThemesService(repository);

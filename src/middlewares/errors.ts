@@ -1,7 +1,6 @@
 import { GenericErrors, isHttpError } from '~/generic-errors';
 import { isDevelopment } from '~/global';
 import { NextFunction, Request, Response } from 'express';
-import logger from '~/logger';
 
 export function errorMiddlewareSent(
     err: unknown,

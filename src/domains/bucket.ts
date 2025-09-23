@@ -1,6 +1,6 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { s3Config } from '~/config/s3.config';
-import { formatThemeTitle } from './gymnia-essay-themes/helpers';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 const useS3 = new S3Client({
     region: s3Config.region,
@@ -29,18 +29,12 @@ export const createThemeFileZip = (bucketName: string, key: string, file: Expres
 export async function getFile(key: string) {
     const command = new GetObjectCommand({
         Bucket: s3Config.bucketEssayHelpersDocsName,
-        Key: formatThemeTitle(key),
+        Key: key,
     });
 
-    console.log(command);
+    const signedUrl = await getSignedUrl(useS3, command, { expiresIn: 3600 });
 
-    const response = await useS3.send(command);
-
-    if (!response.Body) {
-        throw new Error('Arquivo não encontrado');
-    }
-
-    return response.Body as NodeJS.ReadableStream;
+    return signedUrl;
 }
 
 export default useS3;

@@ -3,10 +3,11 @@ const {
     BACKBLAZEB2_SECRET_ACCESS_KEY,
     BACKBLAZEB2_REGION,
     BACKBLAZEB2_ENDPOINT,
+    BACKBLAZEB2_BUCKET_ESSAY_HELPERS_DOCS_NAME,
 } = process.env;
 
 export const s3Config = {
-    bucketEssayHelpersDocsName: 'themes-helpers-docs',
+    bucketEssayHelpersDocsName: BACKBLAZEB2_BUCKET_ESSAY_HELPERS_DOCS_NAME,
     accessKeyId: BACKBLAZEB2_ACCESS_KEY_ID,
     secretAccessKey: BACKBLAZEB2_SECRET_ACCESS_KEY,
     region: BACKBLAZEB2_REGION,

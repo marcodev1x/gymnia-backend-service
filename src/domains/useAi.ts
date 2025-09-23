@@ -1,44 +1,49 @@
-import axios from 'axios';
 import { appConfig } from '~/config/app.config';
 import logger from '~/logger';
 import { UseAiParams, UseAiResponse } from '~/types/UseAi';
+import { OpenAI } from 'openai';
+import axios from 'axios';
+import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
 
 export async function useAi({
-    url = appConfig.zaiApiUrl!,
     model = appConfig.zaiApiModel!,
-    thinking = { type: 'disabled' },
     systemContent,
+    thinking = { type: 'disabled' },
     userContent,
-    headers,
+    jsonFormat,
     retries = 3,
     delay = 1000,
 }: UseAiParams,
 ): Promise<UseAiResponse | undefined> {
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${appConfig.zaiApiKey!}`,
+    };
+
+    const body = {
+        model,
+        messages: [
+            systemContent ? { role: 'system', content: systemContent } : undefined,
+            userContent ? { role: 'user', content: userContent } : undefined,
+        ].filter(Boolean),
+        thinking,
+    } as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming;
+
+    if (jsonFormat) {
+        body.response_format = { type: 'json_object' };
+    }
+
     for (let attempt = 1; attempt <= retries; attempt++) {
         try {
             const request = await axios.post<UseAiResponse>(
-                url,
-                {
-                    model,
-                    thinking,
-                    messages: [
-                        { role: 'system', content: systemContent },
-                        { role: 'user', content: userContent },
-                    ],
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${appConfig.zaiApiKey}`,
-                        ...headers,
-                    },
-                },
+                appConfig.zaiApiUrl!,
+                body,
+                { headers },
             );
 
-            const data = request.data;
-
-            if (data?.choices?.[0]?.message?.content) {
-                return data;
+            if (request.data.choices?.[0]?.message.content) {
+                return safeJsonParse(request.data.choices[0].message.content);
             }
 
             logger.warn(`Resposta inválida na tentativa ${attempt}.`);

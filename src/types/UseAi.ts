@@ -1,10 +1,11 @@
 export interface UseAiParams {
  url?: string;
  model?: string;
+ systemContent: string;
  thinking?: {
      type: 'disabled' | 'enabled';
  };
- systemContent: string;
+ jsonFormat: boolean;
  userContent: string;
  headers?: Record<string, string>;
  retries?: number;

@@ -6,8 +6,6 @@ import { GymniaEssayThemes } from '~/domains/gymnia-essay-themes/model';
 import { gymniaConfigParamsService } from '~/domains/gymnia-config-params/controller';
 import { GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
 import { useAi } from '~/domains/useAi';
-import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
-import logger from '~/logger';
 
 export type EssayAsyncData = {
     content: string;
@@ -77,13 +75,12 @@ export class GymniaEssayUserTryService {
 
         const essayCorrected = await useAi({
             systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
-            userContent: essay,
+            userContent: JSON.stringify(essay),
+            jsonFormat: true,
         });
 
         if (!essayCorrected) throw ThrowGymniaTryError('ERROR_AT_CORRECT_ESSAY');
 
-        logger.warn(essayCorrected.choices[0].message.content);
-
-        return safeJsonParse(essayCorrected.choices[0].message.content) || '';
+        return essayCorrected;
     }
 }

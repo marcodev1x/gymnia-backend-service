@@ -1,7 +1,8 @@
 import Knex from 'knex';
 import { Model } from 'objection';
-import db from './db';
+import db, { baseConfigSpro } from './db';
 
 export const knex = Knex(db);
+export const sproKnex = Knex(baseConfigSpro);
 
-Model.knex(knex);
+Model.knex(knex); // padrão do model
