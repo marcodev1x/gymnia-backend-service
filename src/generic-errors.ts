@@ -1,15 +1,3 @@
-export enum GenericErrorsEnum {
-    ALREADY_EXISTS = 'Element already exists',
-    UNAUTHORIZED_INVALID_TOKEN = 'Unauthorized. Invalid token.',
-    UNAUTHORIZED_TOKEN_NOT_FOUND = 'Unauthorized. Token not found.',
-    NOT_CREATED = 'Element not created',
-    NOT_FOUND = 'Element not found',
-    GENERIC_INTERNAL_ERROR = 'Internal Server Error',
-    // Pequenas adições úteis
-    VALIDATION_ERROR = 'Validation failed',
-    FORBIDDEN = 'Forbidden access',
-}
-
 export interface GenericErrorsData {
     [key: string]: {
         message: string;
