@@ -35,5 +35,4 @@ if (!isDevelopment) {
 }
 
 globalThis.logger = logger;
-
 export default logger;

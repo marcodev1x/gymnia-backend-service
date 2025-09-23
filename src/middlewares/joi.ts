@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { NextFunction, Request, Response } from 'express';
 import { isDevelopment } from '~/global';
 import { createValidationError } from '~/generic-errors';
+import logger from '~/logger';
 
 interface JoiValidator {
     schema: Joi.ObjectSchema;
