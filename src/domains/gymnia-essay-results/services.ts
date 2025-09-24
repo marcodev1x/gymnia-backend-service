@@ -1,5 +1,5 @@
 import { GymniaEssayResultsRepository } from '~/domains/gymnia-essay-results/repository';
-import { ThrowHttpError } from '~/generic-errors';
+import { SendHttpError } from '~/generic-errors';
 import { AiJsonResult } from '~/types/UseAi';
 
 export class GymniaEssayResultsService {
@@ -8,7 +8,7 @@ export class GymniaEssayResultsService {
     async createResult(essayTryId: number, userScore: number, iaResult: AiJsonResult) {
         const createdResult = await this.repository.createResult(essayTryId, userScore, iaResult);
 
-        if (!createdResult) throw ThrowHttpError({ element: 'Result', error: 'NOT_CREATED' });
+        if (!createdResult) throw SendHttpError({ element: 'Result', error: 'NOT_CREATED' });
 
         return createdResult;
     }

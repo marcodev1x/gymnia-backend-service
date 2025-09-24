@@ -3,24 +3,25 @@ import { GymniaEssayThemes } from './model';
 import { createThemeFileZip, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
 import { formatThemeTitle, getKeyFromBackblazeUrl } from './helpers';
-import { ThrowHttpError } from '~/generic-errors';
+import { SendHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
-import { ThrowGymniaThemesError } from '~/errors/gymnia-themes-errors';
+import { SendGymniaThemesError } from '~/errors/gymnia-themes-errors';
+import { Pagination } from '~/types/Pagination';
 
 export class GymniaEssayThemesService {
     constructor(private gymniaEssayThemesRepository: GymniaEssayThemesRepository) {}
 
-    async getThemes() {
-        return await this.gymniaEssayThemesRepository.getThemes();
+    async getThemes(pagination: Pagination) {
+        return await this.gymniaEssayThemesRepository.getThemes(pagination);
     }
 
     async getThemeById(id: number) {
         const theme = await this.gymniaEssayThemesRepository.getThemeById(id);
 
-        if (!theme) throw ThrowHttpError({ element: 'Theme', error: 'NOT_FOUND' });
+        if (!theme) throw SendHttpError({ element: 'Theme', error: 'NOT_FOUND' });
 
-        if (!theme.is_active) throw ThrowGymniaThemesError('THEME_NOT_ACTIVE');
+        if (!theme.is_active) throw SendGymniaThemesError('THEME_NOT_ACTIVE');
 
         return theme;
     }
@@ -46,7 +47,7 @@ export class GymniaEssayThemesService {
         const theme = await this.getThemeById(Number(id));
 
         if (!theme.bucket_essay_docs) {
-            throw ThrowHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
 
         const fileKey = getKeyFromBackblazeUrl(theme.bucket_essay_docs);

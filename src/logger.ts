@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import { isDevelopment } from './global';
+import { isDevelopment } from '~/global';
 
 const { combine, timestamp, printf, colorize, errors } = format;
 

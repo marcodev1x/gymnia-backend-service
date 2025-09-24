@@ -28,7 +28,7 @@ export async function useAi<T>({
             userContent ? { role: 'user', content: userContent } : undefined,
         ].filter(Boolean),
         thinking,
-    } as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming;
+    } as OpenAI.Chat.Completions.ChatCompletionCreateParams;
 
     if (jsonFormat) {
         body.response_format = { type: 'json_object' };

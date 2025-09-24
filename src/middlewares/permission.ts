@@ -1,4 +1,4 @@
-import { ThrowHttpError } from '~/generic-errors';
+import { SendHttpError } from '~/generic-errors';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
 import { NextFunction, Response } from 'express';
 import { includesPermission } from './utils/includes-permission.utils';
@@ -8,7 +8,7 @@ export const permissionMiddleware = (role_permission: GymniaUserRoles | GymniaUs
     return (req: RequestMiddleware, _res: Response, next: NextFunction) => {
 
         if (!req.user) {
-            throw ThrowHttpError({ error: 'UNAUTHORIZED_TOKEN_NOT_FOUND' });
+            throw SendHttpError({ error: 'UNAUTHORIZED_TOKEN_NOT_FOUND' });
         }
 
         if (Array.isArray(role_permission)) {
@@ -21,6 +21,6 @@ export const permissionMiddleware = (role_permission: GymniaUserRoles | GymniaUs
             return next();
         }
 
-        throw ThrowHttpError({ error: 'FORBIDDEN' });
+        throw SendHttpError({ error: 'FORBIDDEN' });
     };
 };

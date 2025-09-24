@@ -9,6 +9,7 @@ import essayTryRoutes, { essayTryRouter } from './domains/gymnia-essay-user-try/
 import { AppRouter, UseRoute } from './types/Router';
 import { OpenAPIV3 } from 'openapi-types';
 import { appConfig } from './config/app.config';
+import { authentication } from './middlewares/authentication';
 
 // ==== ROUTES REGISTER ====
 
@@ -16,8 +17,14 @@ const defaultRoutes = Router();
 export const swaggerPaths: Record<string, any> = {};
 
 export function registerRoute(router: Router, routes: AppRouter[]) {
-    routes.forEach(({ method, path, middlewares = [], handler, swagger }) => {
-        (router as any)[method](path, ...middlewares, handler);
+    routes.forEach(({ toAuthenticated, method, path, middlewares = [], handler, swagger }) => {
+        const middlewaresGroup = [...middlewares];
+
+        if (toAuthenticated) {
+            middlewaresGroup.push(authentication);
+        }
+
+        router[method](path, ...middlewaresGroup, handler);
 
         if (swagger) {
             const fullPath = path.replace(/\/+/g, '/');

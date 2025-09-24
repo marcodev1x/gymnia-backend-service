@@ -1,6 +1,6 @@
 import { GymniaConfigParamsRepository } from '~/domains/gymnia-config-params/repository';
 import { GymniaConfigParams, GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
-import { ThrowHttpError } from '~/generic-errors';
+import { SendHttpError } from '~/generic-errors';
 
 export class GymniaConfigParamsService {
     constructor(private gymniaConfigParamsRepository: GymniaConfigParamsRepository) {}
@@ -13,7 +13,7 @@ export class GymniaConfigParamsService {
         const configParam = await this.gymniaConfigParamsRepository.getSpecificConfigParam(param);
 
         if (!configParam) {
-            throw ThrowHttpError({ element: 'Config param', error: 'NOT_FOUND' });
+            throw SendHttpError({ element: 'Config param', error: 'NOT_FOUND' });
         }
 
         return configParam;

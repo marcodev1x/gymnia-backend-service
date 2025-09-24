@@ -6,11 +6,15 @@ import { RequestMiddleware } from '~/types/RequestMiddleware';
 const repository = new GymniaEssayThemesImplementation();
 export const gymniaEssayThemesService = new GymniaEssayThemesService(repository);
 
-export async function getThemesList(_request: Request, response: Response, next: NextFunction) {
+export async function getThemesList(request: Request, response: Response, next: NextFunction) {
     try {
-        const themesList = await gymniaEssayThemesService.getThemes();
+        const { pagination } = request;
+        const themesList = await gymniaEssayThemesService.getThemes(pagination);
 
-        response.json(themesList);
+        response.json({
+            pagination,
+            data: themesList,
+        });
     } catch (e) {
         next(e);
     }

@@ -11,7 +11,7 @@ export const GymniaThemesErrorsData = {
     },
 };
 
-export const ThrowGymniaThemesError = (error: keyof typeof GymniaThemesErrors): never => {
+export const SendGymniaThemesError = (error: keyof typeof GymniaThemesErrors): never => {
     const { message, status } = GymniaThemesErrorsData[error];
     throw new HttpError(message, status);
 };

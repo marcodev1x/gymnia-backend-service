@@ -2,7 +2,7 @@ import { GymniaUser } from '~/domains/users/model';
 import { GymniaUserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
-import { ThrowHttpError } from '~/generic-errors';
+import { SendHttpError } from '~/generic-errors';
 
 interface CreateUserAsync {
     user: GymniaUser;
@@ -16,7 +16,7 @@ export class GymniaUserService {
         const userAlwaysExists = await this.gymniaUserRepository.userExists(user.email);
 
         if (userAlwaysExists) {
-            throw ThrowHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
+            throw SendHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
         }
 
         const secretHashed = await GymniaUser.hashSecret(user.secret);
@@ -26,7 +26,7 @@ export class GymniaUserService {
             .createUser({ ...user, secret: secretHashed });
 
         if (!userCreated) {
-            throw ThrowHttpError({ element: 'User', error: 'NOT_CREATED' });
+            throw SendHttpError({ element: 'User', error: 'NOT_CREATED' });
         }
 
         return {
@@ -39,13 +39,13 @@ export class GymniaUserService {
         const user = await this.gymniaUserRepository.findByEmail({ userEmail: email, getSensitiveData: true });
 
         if (!user) {
-            throw ThrowHttpError({ element: 'User', error: 'NOT_FOUND' });
+            throw SendHttpError({ element: 'User', error: 'NOT_FOUND' });
         }
 
         const secretValid = await GymniaUser.confirmSecret(password, user.secret);
 
         if (!secretValid) {
-            throw ThrowHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
+            throw SendHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
         }
 
         const payload = {

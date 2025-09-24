@@ -1,4 +1,3 @@
-import { authentication } from '~/middlewares/authentication';
 import { validateRequest } from '~/middlewares/joi';
 import { correctEssaySchema } from '~/domains/gymnia-essay-themes/schemas';
 import { correctEssay } from '~/domains/gymnia-essay-user-try/controller';
@@ -12,11 +11,11 @@ export const essayTryRouter = Router();
 
 const routes: AppRouter[] = [
     {
+        toAuthenticated: true,
         method: 'post',
         path: '/correct-essay',
         handler: correctEssay,
         middlewares: [
-            authentication,
             permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
             validateRequest({
                 schema: correctEssaySchema,

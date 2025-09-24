@@ -90,7 +90,7 @@ export const GenericErrors = (element?: string): GenericErrorsData => ({
     },
 });
 
-export const ThrowHttpError = ({
+export const SendHttpError = ({
     element,
     error,
     customMessage,
