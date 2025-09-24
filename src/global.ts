@@ -1,3 +1,5 @@
-import { appConfig } from '~/config/app.config';
+import dotenv from 'dotenv';
 
-export const isDevelopment = appConfig.local === 'development';
+dotenv.config();
+
+export const isDevelopment = process.env.LOCAL === 'development';

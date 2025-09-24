@@ -15,12 +15,12 @@ import { appConfig } from './config/app.config';
 const defaultRoutes = Router();
 export const swaggerPaths: Record<string, any> = {};
 
-export function registerRoute(router: Router, routes: AppRouter[], basePath = '') {
+export function registerRoute(router: Router, routes: AppRouter[]) {
     routes.forEach(({ method, path, middlewares = [], handler, swagger }) => {
         (router as any)[method](path, ...middlewares, handler);
 
         if (swagger) {
-            const fullPath = (basePath + path).replace(/\/+/g, '/');
+            const fullPath = path.replace(/\/+/g, '/');
             swaggerPaths[fullPath] = {
                 ...(swaggerPaths[fullPath] || {}),
                 [method]: {
@@ -36,15 +36,17 @@ export function registerRoute(router: Router, routes: AppRouter[], basePath = ''
 // ==== ROUTES ====
 
 const useRoutes: Array<UseRoute & { routes?: AppRouter[] }> = [
-    { prefix: '/gymnia-params', router: gymniaConfigParamsRouter, routes: gymniaConfigRoutes },
-    { prefix: '/gymnia-essay-themes', router: essayThemesRouter, routes: essayThemesRoutes },
-    { prefix: '/clients', router: usersRouter, routes: usersRoutes },
-    { prefix: '/essay-try', router: essayTryRouter, routes: essayTryRoutes },
+    { router: gymniaConfigParamsRouter, routes: gymniaConfigRoutes },
+    { router: essayThemesRouter, routes: essayThemesRoutes },
+    { router: usersRouter, routes: usersRoutes },
+    { router: essayTryRouter, routes: essayTryRoutes },
 ];
 
 useRoutes.forEach((u) => {
-    if (u.routes) registerRoute(u.router, u.routes, u.prefix);
-    defaultRoutes.use(u.prefix, u.router);
+    if (u.routes) {
+        registerRoute(u.router, u.routes);
+        defaultRoutes.use('/api', u.router);
+    }
 });
 
 // ==== END ROUTES ====

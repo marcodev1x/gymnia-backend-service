@@ -37,10 +37,7 @@ export class GymniaUser extends Model {
     $beforeInsert() {
         this.created_at = new Date();
         this.updated_at = new Date();
-
-        if (!this.user_role_id) {
-            this.user_role_id = GymniaUserRolesByIds.TRIAL;
-        }
+        this.user_role_id = GymniaUserRolesByIds.TRIAL;
     }
 
     $beforeUpdate() {

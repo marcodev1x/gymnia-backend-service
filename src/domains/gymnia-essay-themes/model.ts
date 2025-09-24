@@ -17,10 +17,12 @@ export class GymniaEssayThemes extends Model {
     difficulty_level: string;
     created_at: Date;
     updated_at: Date;
+    bucket_essay_docs?: string;
 
     $beforeInsert() {
         this.created_at = new Date();
         this.updated_at = new Date();
+        this.is_active = true;
     }
 
     $beforeUpdate() {

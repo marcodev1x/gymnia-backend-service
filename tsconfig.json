@@ -34,6 +34,7 @@
           "./node_modules/@types",
           "./src/@types"
       ],
+      "types": ["node", "jest"],
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "resolveJsonModule": true,

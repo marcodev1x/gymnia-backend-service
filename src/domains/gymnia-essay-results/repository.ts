@@ -1,21 +1,24 @@
 import { GymniaEssayResults } from '~/domains/gymnia-essay-results/model';
+import { AiJsonResult } from '~/types/UseAi';
 
 export interface GymniaEssayResultsRepository {
-    createResult(essay_try_id: number, score: number, ia_result: JSON): Promise<GymniaEssayResults>;
+    createResult(essayTryId: number, userScore: number, iaResult: AiJsonResult): Promise<GymniaEssayResults>;
 }
 
 export class GymniaEssayResultsRepositoryImplementation implements GymniaEssayResultsRepository {
     async createResult(
-        essay_try_id: number,
-        score: number,
-        ia_result: JSON,
-    ) {
+        essayTryId: number,
+        userScore: number,
+        iaResult: AiJsonResult,
+    ): Promise<GymniaEssayResults> {
+        const resultData = {
+            essay_try_id: essayTryId,
+            score: userScore,
+            ia_result: iaResult,
+        };
+
         return GymniaEssayResults
             .query()
-            .insertAndFetch({
-                essay_try_id,
-                score,
-                ia_result,
-            });
+            .insertAndFetch(resultData);
     }
 }

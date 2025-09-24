@@ -7,6 +7,14 @@ const {
     DB_NAME,
     DB_CHANNEL_BINDING,
     DB_SSL_MODE,
+    DB_SPRO_NAME,
+    DB_SPRO_USER,
+    DB_SPRO_PASS,
+    DB_SPRO_HOST,
+    DB_SPRO_PORT,
+    DB_SPRO_SSL_CA,
+    DB_SPRO_SSL_CERT,
+    DB_SPRO_SSL_KEY,
 } = process.env;
 
 export const dbConfig = {
@@ -18,4 +26,14 @@ export const dbConfig = {
     name: DB_NAME,
     channelBinding: DB_CHANNEL_BINDING,
     sslMode: DB_SSL_MODE,
+    spro: {
+        name: DB_SPRO_NAME,
+        accessUser: DB_SPRO_USER,
+        accessPassword: DB_SPRO_PASS,
+        host: DB_SPRO_HOST,
+        port: Number(DB_SPRO_PORT),
+        sslCa: DB_SPRO_SSL_CA,
+        sslCert: DB_SPRO_SSL_CERT,
+        sslKey: DB_SPRO_SSL_KEY,
+    },
 };

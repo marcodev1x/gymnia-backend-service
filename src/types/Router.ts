@@ -2,8 +2,8 @@ import { RequestHandler, Router } from 'express';
 import { OpenAPIV3 } from 'openapi-types';
 
 export interface UseRoute {
-    prefix: string;
     router: Router;
+    routes?: AppRouter[];
 }
 
 export interface AppRouter {

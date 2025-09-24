@@ -3,7 +3,7 @@ import { GymniaEssayThemes } from './model';
 export interface GymniaEssayThemesRepository {
     getThemes(): Promise<GymniaEssayThemes[]>;
     getThemeById(id: number): Promise<GymniaEssayThemes | undefined>;
-    createTheme(theme: GymniaEssayThemes): Promise<GymniaEssayThemes>;
+    createTheme(theme: GymniaEssayThemes, file?: Express.Multer.File): Promise<GymniaEssayThemes>;
 }
 
 export class GymniaEssayThemesImplementation implements GymniaEssayThemesRepository {
