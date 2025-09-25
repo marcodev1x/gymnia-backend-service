@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { RequestHandler, Router } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import gymniaConfigRoutes, { gymniaConfigParamsRouter } from './domains/gymnia-config-params/routes';
-import essayThemesRoutes, { essayThemesRouter } from './domains/gymnia-essay-themes/routes';
+import configParamsRoutes, { configParamsRouter } from './domains/config-params/routes';
+import essayThemesRoutes, { essayThemesRouter } from './domains/essay-themes/routes';
 import usersRoutes, { usersRouter } from './domains/users/routes';
-import essayTryRoutes, { essayTryRouter } from './domains/gymnia-essay-user-try/routes';
+import essayTryRoutes, { essayTryRouter } from './domains/essay-user-try/routes';
 
 import { AppRouter, UseRoute } from './types/Router';
 import { OpenAPIV3 } from 'openapi-types';
@@ -18,11 +18,13 @@ export const swaggerPaths: Record<string, any> = {};
 
 export function registerRoute(router: Router, routes: AppRouter[]) {
     routes.forEach(({ toAuthenticated, method, path, middlewares = [], handler, swagger }) => {
-        const middlewaresGroup = [...middlewares];
+        const middlewaresGroup: RequestHandler[] = [];
 
         if (toAuthenticated) {
             middlewaresGroup.push(authentication);
         }
+
+        middlewaresGroup.push(...middlewares);
 
         router[method](path, ...middlewaresGroup, handler);
 
@@ -43,7 +45,7 @@ export function registerRoute(router: Router, routes: AppRouter[]) {
 // ==== ROUTES ====
 
 const useRoutes: Array<UseRoute & { routes?: AppRouter[] }> = [
-    { router: gymniaConfigParamsRouter, routes: gymniaConfigRoutes },
+    { router: configParamsRouter, routes: configParamsRoutes },
     { router: essayThemesRouter, routes: essayThemesRoutes },
     { router: usersRouter, routes: usersRoutes },
     { router: essayTryRouter, routes: essayTryRoutes },

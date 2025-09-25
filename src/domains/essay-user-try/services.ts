@@ -1,12 +1,12 @@
 import { SendHttpError } from '~/generic-errors';
 import { GymniaEssayUserTry, GymniaEssayUserTryStatus } from './model';
-import { GymniaEssayUserTryImplementation } from './repository';
-import { SendGymniaTryError } from '~/errors/gymnia-try-errors';
-import { GymniaEssayThemes } from '~/domains/gymnia-essay-themes/model';
-import { gymniaConfigParamsService } from '~/domains/gymnia-config-params/controller';
-import { GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
+import GymniaEssayUserTryImplementation from './repository';
+import { SendTryError } from '~/errors/gymnia-try-errors';
+import { GymniaEssayThemes } from '~/domains/essay-themes/model';
+import { configParamsService } from '~/domains/config-params/controller';
+import { ConfigParamsEnum } from '~/domains/config-params/model';
 import { useAi } from '~/domains/useAi';
-import { AiJsonResult } from '~/types/UseAi';
+import { EssayJsonResult } from '~/types/UseAi';
 
 export type EssayAsyncData = {
     content: string;
@@ -46,7 +46,7 @@ export class GymniaEssayUserTryService {
         completion?: boolean,
     ): Promise<GymniaEssayUserTry> {
         if (!tryData.content) {
-            throw SendGymniaTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
+            throw SendTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
         }
 
         const updateTry = await this.repository.updateTry(id, tryData, completion);
@@ -67,20 +67,20 @@ export class GymniaEssayUserTryService {
     }
 
     async sendEssayToAi(essay: string, theme: GymniaEssayThemes) {
-        const { valor_parametro: essayRule } = await gymniaConfigParamsService
-            .getSpecificConfigParam(GymniaConfigParamsEnum.REDACAO);
+        const { valor_parametro: essayRule } = await configParamsService
+            .getSpecificConfigParam(ConfigParamsEnum.REDACAO);
 
         const { theme_description: themeDescription } = theme;
 
         if (!essayRule) throw SendHttpError({ element: 'Essay', error: 'NOT_FOUND' });
 
-        const essayCorrected = await useAi<AiJsonResult>({
+        const essayCorrected = await useAi<EssayJsonResult>({
             systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
             userContent: JSON.stringify(essay),
             jsonFormat: true,
         });
 
-        if (!essayCorrected) throw SendGymniaTryError('ERROR_TO_CORRECT_ESSAY');
+        if (!essayCorrected) throw SendTryError('ERROR_TO_CORRECT_ESSAY');
 
         return essayCorrected;
     }

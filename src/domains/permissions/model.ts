@@ -1,7 +1,7 @@
 import { Model } from 'objection';
 import { GymniaUser } from '../users/model';
 
-export enum GymniaUserRoles {
+export enum UserRoles {
     ADMIN = 'gymnia:adm',
     USER = 'gymnia:user',
     TRIAL = 'gymnia:trial',
@@ -19,7 +19,7 @@ export class GymniaPermissions extends Model {
     }
 
     id: number;
-    role_name: GymniaUserRoles;
+    role_name: UserRoles;
 
     static get relationMappings() {
         return {

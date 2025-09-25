@@ -1,6 +1,6 @@
 import { Model } from 'objection';
 import { GymniaUser } from '../users/model';
-import { GymniaEssayThemes } from '../gymnia-essay-themes/model';
+import { GymniaEssayThemes } from '../essay-themes/model';
 
 export enum GymniaEssayUserTryStatus {
     PENDING = 'pending',

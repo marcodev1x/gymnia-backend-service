@@ -1,6 +1,6 @@
 import { Model } from 'objection';
-import { GymniaEssayUserTry } from '~/domains/gymnia-essay-user-try/model';
-import { AiJsonResult } from '~/types/UseAi';
+import { GymniaEssayUserTry } from '~/domains/essay-user-try/model';
+import { EssayJsonResult } from '~/types/UseAi';
 
 export class GymniaEssayResults extends Model {
     static get tableName() {
@@ -14,7 +14,7 @@ export class GymniaEssayResults extends Model {
     id: number;
     essay_try_id: number;
     score: number;
-    ia_result: AiJsonResult;
+    ia_result: EssayJsonResult;
     created_at: Date;
     updated_at: Date;
 

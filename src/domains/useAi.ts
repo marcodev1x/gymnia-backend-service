@@ -3,7 +3,7 @@ import logger from '~/logger';
 import { UseAiParams, UseAiResponse } from '~/types/UseAi';
 import { OpenAI } from 'openai';
 import axios from 'axios';
-import { safeJsonParse } from '~/domains/gymnia-essay-user-try/helpers';
+import { safeJsonParse } from '~/domains/essay-user-try/helpers';
 
 export async function useAi<T>({
     model = appConfig.zaiApiModel!,

@@ -1,11 +1,11 @@
-import { GymniaConfigParams, GymniaConfigParamsEnum } from '~/domains/gymnia-config-params/model';
+import { GymniaConfigParams, GymniaConfigParamsEnum } from '~/domains/config-params/model';
 
-export interface GymniaConfigParamsRepository {
+export interface ConfigParamsRepository {
     getConfigParams(): Promise<GymniaConfigParams[]>;
     getSpecificConfigParam(param: GymniaConfigParamsEnum): Promise<GymniaConfigParams | undefined>;
 }
 
-export class GymniaConfigParamsImplementation implements GymniaConfigParamsRepository {
+export class ConfigParamsImplementation implements ConfigParamsRepository {
     async getConfigParams(): Promise<GymniaConfigParams[]> {
         return GymniaConfigParams
             .query()

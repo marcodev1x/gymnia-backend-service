@@ -1,7 +1,7 @@
 import { GymniaEssayUserTry, GymniaEssayUserTryStatus } from './model';
 import { EssayAsyncData } from './services';
 
-export interface GymniaEssayUserTryRepository {
+export interface EssayUserTryRepository {
     createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry>;
     getTryById(id: number): Promise<GymniaEssayUserTry | undefined>;
     getTryListByUserId(userId: number, status?: GymniaEssayUserTryStatus): Promise<GymniaEssayUserTry[]>;
@@ -9,7 +9,7 @@ export interface GymniaEssayUserTryRepository {
     deleteTry(id: number): Promise<void | Error>;
 }
 
-export class GymniaEssayUserTryImplementation implements GymniaEssayUserTryRepository {
+export default class EssayUserTryImplementation implements EssayUserTryRepository {
     async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
         return GymniaEssayUserTry
             .query()

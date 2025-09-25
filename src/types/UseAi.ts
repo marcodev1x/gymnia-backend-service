@@ -12,9 +12,9 @@ export interface UseAiParams {
  delay?: number; // ms
 }
 
-export interface AiJsonResult {
+export interface EssayJsonResult {
     verificacao_inicial: {
-        casos_eliminatorios: string,
+        casos_eliminatorios: boolean,
         observacao: string,
     },
     pontos_a_melhorar: [
@@ -59,7 +59,6 @@ export interface AiJsonResult {
     resultado_final: {
         nota_total: number,
         classificacao: string,
-        percentil_aproximado: string,
     },
     feedback: {
         pontos_fortes: Array<string>,

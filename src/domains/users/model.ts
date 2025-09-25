@@ -1,13 +1,13 @@
 import { Model } from 'objection';
 import bcrypt from 'bcrypt';
 import { appConfig } from '~/config/app.config';
-import { GymniaPermissions } from '../gymnia-permissions/model';
+import { GymniaPermissions } from '../permissions/model';
 
-export type GymniaUserWithPermissions = GymniaUser & {
+export type UserWithPermissions = GymniaUser & {
     permissions: GymniaPermissions;
 };
 
-export enum GymniaUserRolesByIds  {
+export enum UserRolesByIds  {
     TRIAL = 1,
     USER = 2,
     ADMIN = 3,
@@ -37,7 +37,7 @@ export class GymniaUser extends Model {
     $beforeInsert() {
         this.created_at = new Date();
         this.updated_at = new Date();
-        this.user_role_id = GymniaUserRolesByIds.TRIAL;
+        this.user_role_id = UserRolesByIds.TRIAL;
     }
 
     $beforeUpdate() {

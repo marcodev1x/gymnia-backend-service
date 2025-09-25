@@ -1,9 +1,9 @@
 import { validateRequest } from '~/middlewares/joi';
-import { correctEssaySchema } from '~/domains/gymnia-essay-themes/schemas';
-import { correctEssay } from '~/domains/gymnia-essay-user-try/controller';
+import { correctEssaySchema } from '~/domains/essay-themes/schemas';
+import { correctEssay } from '~/domains/essay-user-try/controller';
 import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
-import { GymniaUserRoles } from '~/domains/gymnia-permissions/model';
+import { UserRoles } from '~/domains/permissions/model';
 import { AppRouter } from '~/types/Router';
 
 // Routes
@@ -16,7 +16,7 @@ const routes: AppRouter[] = [
         path: '/correct-essay',
         handler: correctEssay,
         middlewares: [
-            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: correctEssaySchema,
                 type: 'body',

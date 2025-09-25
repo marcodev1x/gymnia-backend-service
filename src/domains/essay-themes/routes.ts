@@ -5,7 +5,7 @@ import { AppRouter } from '~/types/Router';
 import { getEssayThemesSwagger } from './swagger';
 import { validateRequestAndFile, validateRequest } from '~/middlewares/joi';
 import multer from 'multer';
-import { GymniaUserRoles } from '../gymnia-permissions/model';
+import { UserRoles } from '../permissions/model';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { paginationMiddleware } from '~/middlewares/pagination';
 
@@ -56,7 +56,7 @@ export const routes: AppRouter[] = [
         path: '/download-theme-content',
         handler: downloadThemeContent,
         middlewares: [
-            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: getThemeByIdSchema,
                 type: 'body',

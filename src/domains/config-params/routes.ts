@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { getConfigList } from '~/domains/gymnia-config-params/controller';
-import { GymniaUserRoles } from '../gymnia-permissions/model';
+import { getConfigList } from '~/domains/config-params/controller';
+import { UserRoles } from '../permissions/model';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { AppRouter } from '~/types/Router';
 import { getConfigListSwagger } from './swagger';
 
-export const gymniaConfigParamsRouter = Router();
+export const configParamsRouter = Router();
 
 // Routes
 const routes: AppRouter[] = [
@@ -15,7 +15,7 @@ const routes: AppRouter[] = [
         path: '/get-config-list',
         handler: getConfigList,
         middlewares: [
-            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
         ],
         swagger: getConfigListSwagger,
     },

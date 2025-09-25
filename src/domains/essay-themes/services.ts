@@ -1,4 +1,4 @@
-import { GymniaEssayThemesRepository } from './repository';
+import { EssayThemesRepository } from './repository';
 import { GymniaEssayThemes } from './model';
 import { createThemeFileZip, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
@@ -6,22 +6,22 @@ import { formatThemeTitle, getKeyFromBackblazeUrl } from './helpers';
 import { SendHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
-import { SendGymniaThemesError } from '~/errors/gymnia-themes-errors';
+import { SendThemesError } from '~/errors/gymnia-themes-errors';
 import { Pagination } from '~/types/Pagination';
 
-export class GymniaEssayThemesService {
-    constructor(private gymniaEssayThemesRepository: GymniaEssayThemesRepository) {}
+export class EssayThemesService {
+    constructor(private essayThemesRepository: EssayThemesRepository) {}
 
     async getThemes(pagination: Pagination) {
-        return await this.gymniaEssayThemesRepository.getThemes(pagination);
+        return await this.essayThemesRepository.getThemes(pagination);
     }
 
     async getThemeById(id: number) {
-        const theme = await this.gymniaEssayThemesRepository.getThemeById(id);
+        const theme = await this.essayThemesRepository.getThemeById(id);
 
         if (!theme) throw SendHttpError({ element: 'Theme', error: 'NOT_FOUND' });
 
-        if (!theme.is_active) throw SendGymniaThemesError('THEME_NOT_ACTIVE');
+        if (!theme.is_active) throw SendThemesError('THEME_NOT_ACTIVE');
 
         return theme;
     }
@@ -40,7 +40,7 @@ export class GymniaEssayThemesService {
             `/${formatThemeTitle(theme.theme_title)}`;
         }
 
-        return await this.gymniaEssayThemesRepository.createTheme(formatNewTheme);
+        return await this.essayThemesRepository.createTheme(formatNewTheme);
     }
 
     async downloadThemeWithSignedUrl(id: number, response: Response) {

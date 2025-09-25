@@ -1,9 +1,9 @@
-import { GymniaEssayUserTryImplementation } from './repository';
+import GymniaEssayUserTryImplementation from './repository';
 import { GymniaEssayUserTryService } from './services';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
 import { NextFunction, Response } from 'express';
-import { gymniaEssayThemesService } from '~/domains/gymnia-essay-themes/controller';
-import { gymniaEssayResultsService } from '~/domains/gymnia-essay-results/controller';
+import { essayThemesService } from '~/domains/essay-themes/controller';
+import { essayResultsService } from '~/domains/essay-results/controller';
 
 const repository = new GymniaEssayUserTryImplementation();
 export const gymniaEssayUserTryService = new GymniaEssayUserTryService(repository);
@@ -16,7 +16,7 @@ export async function correctEssay(request: RequestMiddleware, response: Respons
             essay,
         } = request.body;
 
-        const theme = await gymniaEssayThemesService.getThemeById(Number(theme_id));
+        const theme = await essayThemesService.getThemeById(Number(theme_id));
 
         const essayCorrected = await gymniaEssayUserTryService.sendEssayToAi(essay, theme);
 
@@ -26,7 +26,7 @@ export async function correctEssay(request: RequestMiddleware, response: Respons
             true,
         );
 
-        await gymniaEssayResultsService.createResult(
+        await essayResultsService.createResult(
             try_id,
             essayCorrected.resultado_final.nota_total,
             essayCorrected,

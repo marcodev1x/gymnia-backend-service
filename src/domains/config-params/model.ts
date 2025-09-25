@@ -1,6 +1,6 @@
 import { Model } from 'objection';
 
-export enum GymniaConfigParamsEnum {
+export enum ConfigParamsEnum {
     REDACAO = 'validate_essay',
 }
 
