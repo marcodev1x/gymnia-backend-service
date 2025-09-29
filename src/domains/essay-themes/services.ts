@@ -36,8 +36,9 @@ export class EssayThemesService {
         );
 
         if (uploadFile) {
-            formatNewTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}`+
-            `/${formatThemeTitle(theme.theme_title)}`;
+            formatNewTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
+          + `${s3Config.endpoint?.split('://')[1]}`
+          + `/${formatThemeTitle(theme.theme_title)}`;
         }
 
         return await this.essayThemesRepository.createTheme(formatNewTheme);

@@ -1,8 +1,8 @@
-import { GymniaConfigParams, GymniaConfigParamsEnum } from '~/domains/config-params/model';
+import { GymniaConfigParams, ConfigParamsEnum } from '~/domains/config-params/model';
 
 export interface ConfigParamsRepository {
     getConfigParams(): Promise<GymniaConfigParams[]>;
-    getSpecificConfigParam(param: GymniaConfigParamsEnum): Promise<GymniaConfigParams | undefined>;
+    getSpecificConfigParam(param: ConfigParamsEnum): Promise<GymniaConfigParams | undefined>;
 }
 
 export class ConfigParamsImplementation implements ConfigParamsRepository {
@@ -12,7 +12,7 @@ export class ConfigParamsImplementation implements ConfigParamsRepository {
             .select(['nome_parametro', 'valor_parametro']);
     }
 
-    async getSpecificConfigParam(param: GymniaConfigParamsEnum): Promise<GymniaConfigParams | undefined> {
+    async getSpecificConfigParam(param: ConfigParamsEnum): Promise<GymniaConfigParams | undefined> {
         return GymniaConfigParams
             .query()
             .select(['nome_parametro', 'valor_parametro'])

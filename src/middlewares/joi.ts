@@ -48,18 +48,18 @@ export const validateRequest = ({
 };
 
 export function validateRequestAndFile({
-    required = false,
+    requiredFile = false,
     schema,
     type,
     nameBody,
 }: {
-    required?: boolean;
+    requiredFile?: boolean;
     schema: Joi.ObjectSchema;
     type: 'body' | 'query' | 'file';
     nameBody: string;
 }) {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (required && !req.file) {
+        if (requiredFile && !req.file) {
             res.status(400).json({ error: 'Arquivo é obrigatório' });
             return;
         }

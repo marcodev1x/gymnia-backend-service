@@ -43,7 +43,7 @@ export const routes: AppRouter[] = [
         middlewares: [
             upload.single('file'),
             validateRequestAndFile({
-                required: false,
+                requiredFile: false,
                 schema: createThemaSchema,
                 type: 'body',
                 nameBody: 'theme',
