@@ -9,6 +9,5 @@ export type Pagination = {
 
 declare module 'express-serve-static-core' {
     interface Request {
-      pagination?: Pagination;
-    }
+      pagination: Pagination;
   }
