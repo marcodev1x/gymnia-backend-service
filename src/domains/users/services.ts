@@ -1,4 +1,4 @@
-import { User } from '~/domains/users/model';
+import { User, UserWithPermissions } from '~/domains/users/model';
 import { UserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
@@ -25,14 +25,20 @@ export class UserService {
             .userRepository
             .createUser({ ...user, secret: secretHashed });
 
+        const sendUserToJwt = { ...userCreated };
+
         if (!userCreated) {
             throw SendHttpError({ element: 'User', error: 'NOT_CREATED' });
         }
 
         return {
             user: removeSensitiveData(userCreated),
-            token: generateJwtToken({ ...userCreated }),
+            token: generateJwtToken({ id: sendUserToJwt.id! }),
         };
+    }
+
+    async findById(id: number): Promise<UserWithPermissions | undefined> {
+        return this.userRepository.findById(id);
     }
 
     async loginUser(email: string, password: string): Promise<{ token: string }> {
@@ -50,10 +56,6 @@ export class UserService {
 
         const payload = {
             id: user.id,
-            name: user.name,
-            email: user.email,
-            deleted: user.deleted,
-            user_role: user.permissions?.role_name,
         };
 
         return {

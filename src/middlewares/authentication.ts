@@ -1,11 +1,11 @@
 import { NextFunction, Response } from 'express';
 import { RequestMiddleware } from '~/types/RequestMiddleware';
-import { verifyJwtToken } from './utils/jwt.utils';
-import { UserWithPermissions } from '~/domains/users/model';
+import { JwtPayload, verifyJwtToken } from './utils/jwt.utils';
 import { JsonWebTokenError } from 'jsonwebtoken';
 import { SendHttpError } from '~/generic-errors';
+import { userService } from '~/domains/users/controller';
 
-export function authentication(request: RequestMiddleware, _response: Response, next: NextFunction) {
+export async function authentication(request: RequestMiddleware, _response: Response, next: NextFunction) {
     const token = request.headers.authorization?.split(' ')[1];
 
     if (!token) {
@@ -13,7 +13,11 @@ export function authentication(request: RequestMiddleware, _response: Response, 
     };
 
     try {
-        request.user = verifyJwtToken(token) as UserWithPermissions;
+        const user = verifyJwtToken(token) as JwtPayload;
+
+        const userFound = await userService.findById(user.id);
+
+        request.user = userFound;
 
         next();
     } catch (e) {

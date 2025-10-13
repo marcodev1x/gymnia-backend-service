@@ -3,9 +3,6 @@ import { authConfig } from '~/config/auth.config';
 
 export interface JwtPayload {
     id: number;
-    name: string;
-    email: string;
-    deleted: boolean;
 }
 
 export const generateJwtToken = (payload: JwtPayload) => {
