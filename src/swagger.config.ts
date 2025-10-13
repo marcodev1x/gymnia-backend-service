@@ -4,9 +4,9 @@ export const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Gymnia API',
+            title: 'Redaciona API',
             version: '1.0.0',
-            description: 'Gymnia API documentation',
+            description: 'Redaciona API documentation',
         },
     },
     servers: [

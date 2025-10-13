@@ -1,8 +1,8 @@
 import { Model } from 'objection';
 
-export class GymniaEssayThemes extends Model {
+export class EssayThemes extends Model {
     static get tableName() {
-        return 'gymnia_essay_themes';
+        return 'essay_themes';
     }
 
     static get idColumn() {

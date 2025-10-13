@@ -1,15 +1,15 @@
 import { Pagination } from '~/types/Pagination';
-import { GymniaEssayThemes } from './model';
+import { EssayThemes } from './model';
 
 export interface EssayThemesRepository {
-    getThemes(pagination: Pagination): Promise<GymniaEssayThemes[]>;
-    getThemeById(id: number): Promise<GymniaEssayThemes | undefined>;
-    createTheme(theme: GymniaEssayThemes, file?: Express.Multer.File): Promise<GymniaEssayThemes>;
+    getThemes(pagination: Pagination): Promise<EssayThemes[]>;
+    getThemeById(id: number): Promise<EssayThemes | undefined>;
+    createTheme(theme: EssayThemes): Promise<EssayThemes>;
 }
 
 export class EssayThemesImplementation implements EssayThemesRepository {
-    async getThemes(pagination: Pagination): Promise<GymniaEssayThemes[] | []> {
-        const query = GymniaEssayThemes.query();
+    async getThemes(pagination: Pagination): Promise<EssayThemes[] | []> {
+        const query = EssayThemes.query();
 
         query.offset(pagination.offset);
         query.limit(pagination.limit);
@@ -17,14 +17,14 @@ export class EssayThemesImplementation implements EssayThemesRepository {
         return query;
     }
 
-    async getThemeById(id: number): Promise<GymniaEssayThemes | undefined> {
-        return GymniaEssayThemes
+    async getThemeById(id: number): Promise<EssayThemes | undefined> {
+        return EssayThemes
             .query()
             .findById(id);
     }
 
-    async createTheme(theme: GymniaEssayThemes): Promise<GymniaEssayThemes> {
-        return GymniaEssayThemes
+    async createTheme(theme: EssayThemes): Promise<EssayThemes> {
+        return EssayThemes
             .query()
             .insertAndFetch(theme);
     }

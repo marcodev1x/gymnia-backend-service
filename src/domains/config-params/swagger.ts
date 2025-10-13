@@ -3,7 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 export const getConfigListSwagger: OpenAPIV3.OperationObject = {
     summary: 'Get config list',
     description: 'Get config list',
-    tags: ['Gymnia Config Params'],
+    tags: ['Config Params'],
     security: [
         {
             'Bearer': [],

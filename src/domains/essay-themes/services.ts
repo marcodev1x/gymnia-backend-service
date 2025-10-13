@@ -1,12 +1,12 @@
 import { EssayThemesRepository } from './repository';
-import { GymniaEssayThemes } from './model';
+import { EssayThemes } from './model';
 import { createThemeFileZip, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
 import { formatThemeTitle, getKeyFromBackblazeUrl } from './helpers';
 import { SendHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
-import { SendThemesError } from '~/errors/gymnia-themes-errors';
+import { SendThemesError } from '~/errors/themes-errors';
 import { Pagination } from '~/types/Pagination';
 
 export class EssayThemesService {
@@ -26,8 +26,8 @@ export class EssayThemesService {
         return theme;
     }
 
-    async createTheme(theme: GymniaEssayThemes, file: Express.Multer.File) {
-        const formatNewTheme = { ...theme } as GymniaEssayThemes;
+    async createTheme(theme: EssayThemes, file: Express.Multer.File) {
+        const formatNewTheme = { ...theme } as EssayThemes;
 
         const uploadFile = await createThemeFileZip(
             s3Config.bucketEssayHelpersDocsName!,

@@ -1,9 +1,9 @@
 const {
     DEFAULT_PORT,
     LOCAL,
-    ZAI_API_KEY,
-    ZAI_API_URL,
-    ZAI_API_MODEL,
+    AI_API_KEY,
+    AI_API_URL,
+    AI_API_MODEL,
     BCRYPT_HASH_QUANTITY,
     RENDER_BACKEND_URL,
 } = process.env;
@@ -11,9 +11,9 @@ const {
 export const appConfig = {
     local: LOCAL,
     port: DEFAULT_PORT,
-    zaiApiKey: ZAI_API_KEY,
-    zaiApiUrl: ZAI_API_URL,
-    zaiApiModel: ZAI_API_MODEL,
+    aiApiKey: AI_API_KEY,
+    aiApiUrl: AI_API_URL,
+    aiApiModel: AI_API_MODEL,
     bcryptHashQuantity: Number(BCRYPT_HASH_QUANTITY),
     renderBackendUrl: RENDER_BACKEND_URL,
 };

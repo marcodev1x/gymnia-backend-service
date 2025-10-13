@@ -1,8 +1,8 @@
-import { GymniaEssayResults } from '~/domains/essay-results/model';
+import { EssayResults } from '~/domains/essay-results/model';
 import { EssayJsonResult } from '~/types/UseAi';
 
 export interface EssayResultsRepository {
-    createResult(essayTryId: number, userScore: number, iaResult: EssayJsonResult): Promise<GymniaEssayResults>;
+    createResult(essayTryId: number, userScore: number, iaResult: EssayJsonResult): Promise<EssayResults>;
 }
 
 export class EssayResultsRepositoryImplementation implements EssayResultsRepository {
@@ -10,14 +10,14 @@ export class EssayResultsRepositoryImplementation implements EssayResultsReposit
         essayTryId: number,
         userScore: number,
         iaResult: EssayJsonResult,
-    ): Promise<GymniaEssayResults> {
+    ): Promise<EssayResults> {
         const resultData = {
             essay_try_id: essayTryId,
             score: userScore,
             ia_result: iaResult,
         };
 
-        return GymniaEssayResults
+        return EssayResults
             .query()
             .insertAndFetch(resultData);
     }

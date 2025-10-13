@@ -1,10 +1,10 @@
 import { Model } from 'objection';
-import { GymniaEssayUserTry } from '~/domains/essay-user-try/model';
+import { EssayUserTry } from '~/domains/essay-user-try/model';
 import { EssayJsonResult } from '~/types/UseAi';
 
-export class GymniaEssayResults extends Model {
+export class EssayResults extends Model {
     static get tableName() {
-        return 'gymnia_essay_results';
+        return 'essay_results';
     }
 
     static get idColumn() {
@@ -31,10 +31,10 @@ export class GymniaEssayResults extends Model {
         return {
             essay_try: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: GymniaEssayUserTry,
+                modelClass: EssayUserTry,
                 join: {
-                    from: 'gymnia_essay_results.essay_try_id',
-                    to: 'gymnia_essay_user_try.id',
+                    from: 'essay_results.essay_try_id',
+                    to: 'essay_user_try.id',
                 },
             },
         };

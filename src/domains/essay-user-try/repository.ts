@@ -1,32 +1,32 @@
-import { GymniaEssayUserTry, GymniaEssayUserTryStatus } from './model';
+import { EssayUserTry, EssayUserTryStatus } from './model';
 import { EssayAsyncData } from './services';
 
 export interface EssayUserTryRepository {
-    createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry>;
-    getTryById(id: number): Promise<GymniaEssayUserTry | undefined>;
-    getTryListByUserId(userId: number, status?: GymniaEssayUserTryStatus): Promise<GymniaEssayUserTry[]>;
-    updateTry(id: number, tryData: EssayAsyncData, completion?: boolean): Promise<GymniaEssayUserTry>;
+    createTry(tryData: EssayUserTry): Promise<EssayUserTry>;
+    getTryById(id: number): Promise<EssayUserTry | undefined>;
+    getTryListByUserId(userId: number, status?: EssayUserTryStatus): Promise<EssayUserTry[]>;
+    updateTry(id: number, tryData: EssayAsyncData, completion?: boolean): Promise<EssayUserTry>;
     deleteTry(id: number): Promise<void | Error>;
 }
 
 export default class EssayUserTryImplementation implements EssayUserTryRepository {
-    async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
-        return GymniaEssayUserTry
+    async createTry(tryData: EssayUserTry): Promise<EssayUserTry> {
+        return EssayUserTry
             .query()
-            .insertAndFetch({ ...tryData, status: GymniaEssayUserTryStatus.PENDING });
+            .insertAndFetch({ ...tryData, status: EssayUserTryStatus.PENDING });
     }
 
-    async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
-        return GymniaEssayUserTry
+    async getTryById(id: number): Promise<EssayUserTry | undefined> {
+        return EssayUserTry
             .query()
             .findById(id);
     }
 
     async getTryListByUserId(
         userId: number,
-        status?: GymniaEssayUserTryStatus,
-    ): Promise<GymniaEssayUserTry[]> {
-        const query = GymniaEssayUserTry
+        status?: EssayUserTryStatus,
+    ): Promise<EssayUserTry[]> {
+        const query = EssayUserTry
             .query()
             .where('user_id', userId);
 
@@ -41,26 +41,26 @@ export default class EssayUserTryImplementation implements EssayUserTryRepositor
         id: number,
         tryData: EssayAsyncData,
         completion?: boolean,
-    ): Promise<GymniaEssayUserTry> {
-        const updateValues: Partial<GymniaEssayUserTry> = {};
+    ): Promise<EssayUserTry> {
+        const updateValues: Partial<EssayUserTry> = {};
 
         if ('content' in tryData) {
             updateValues.essay = tryData.content;
         }
 
         if (completion && !tryData.setAsPending) {
-            updateValues.status = GymniaEssayUserTryStatus.COMPLETED;
+            updateValues.status = EssayUserTryStatus.COMPLETED;
         } else {
-            updateValues.status = GymniaEssayUserTryStatus.PENDING;
+            updateValues.status = EssayUserTryStatus.PENDING;
         }
 
-        return GymniaEssayUserTry
+        return EssayUserTry
             .query()
             .updateAndFetchById(id, updateValues);
     }
 
     async deleteTry(id: number): Promise<void | Error> {
-        await GymniaEssayUserTry
+        await EssayUserTry
             .query()
             .deleteById(id);
     }

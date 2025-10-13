@@ -13,57 +13,57 @@ export interface UseAiParams {
 }
 
 export interface EssayJsonResult {
-    verificacao_inicial: {
-        casos_eliminatorios: boolean,
-        observacao: string,
+    initial_check: {
+        eliminatory_cases: boolean,
+        observation: string,
     },
-    pontos_a_melhorar: [
+    points_to_improve: [
         {
-            trecho: string,
-            problema: string,
-            sugestao: string,
+            excerpt: string,
+            problem: string,
+            suggestion: string,
         }
     ],
-    avaliacao: [
+    evaluation: [
         {
-            competencia: string,
-            nota: number,
-            nivel: string,
-            justificativa: string,
+            competence: string,
+            score: number,
+            level: string,
+            justification: string,
         },
         {
-            competencia: string,
-            nota: number,
-            nivel: string,
-            justificativa: string,
+            competence: string,
+            score: number,
+            level: string,
+            justification: string,
         },
         {
-            competencia: string,
-            nota: number,
-            nivel: string,
-            justificativa: string,
+            competence: string,
+            score: number,
+            level: string,
+            justification: string,
         },
         {
-            competencia: string,
-            nota: number,
-            nivel: string,
-            justificativa: string,
+            competence: string,
+            score: number,
+            level: string,
+            justification: string,
         },
         {
-            competencia: string,
-            nota: number,
-            nivel: string,
-            justificativa: string,
+            competence: string,
+            score: number,
+            level: string,
+            justification: string,
         }
     ],
-    resultado_final: {
-        nota_total: number,
-        classificacao: string,
+    final_result: {
+        total_score: number,
+        classification: string,
     },
     feedback: {
-        pontos_fortes: Array<string>,
-        principais_deficiencias: Array<string>,
-        prioridade_estudos: string,
+        strengths: Array<string>,
+        main_deficiencies: Array<string>,
+        study_priority: string,
     }
 }
 

@@ -1,17 +1,17 @@
 import { Model } from 'objection';
-import { GymniaUser } from '../users/model';
+import { User } from '../users/model';
 
 export enum UserRoles {
-    ADMIN = 'gymnia:adm',
-    USER = 'gymnia:user',
-    TRIAL = 'gymnia:trial',
-    FINISHED_TRIAL = 'gymnia:finished_trial',
-    PEDAGOGICO = 'gymnia:pedagogico'
+    ADMIN = 'ai:adm',
+    USER = 'ai:user',
+    TRIAL = 'ai:trial',
+    FINISHED_TRIAL = 'ai:finished_trial',
+    PEDAGOGICO = 'ai:pedagogico'
 }
 
-export class GymniaPermissions extends Model {
+export class Permissions extends Model {
     static get tableName() {
-        return 'gymnia_permissions';
+        return 'permissions';
     }
 
     static get idColumn() {
@@ -25,10 +25,10 @@ export class GymniaPermissions extends Model {
         return {
             permissions: {
                 relation: Model.HasManyRelation,
-                modelClass: GymniaUser,
+                modelClass: User,
                 join: {
-                    from: 'gymnia_permissions.id',
-                    to: 'gymnia_users.user_role_id',
+                    from: 'permissions.id',
+                    to: 'users.user_role_id',
                 },
             },
         };

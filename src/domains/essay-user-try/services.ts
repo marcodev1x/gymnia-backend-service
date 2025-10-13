@@ -1,10 +1,10 @@
 import { SendHttpError } from '~/generic-errors';
-import { GymniaEssayUserTry, GymniaEssayUserTryStatus } from './model';
-import GymniaEssayUserTryImplementation from './repository';
-import { SendTryError } from '~/errors/gymnia-try-errors';
-import { GymniaEssayThemes } from '~/domains/essay-themes/model';
+import { EssayUserTry, EssayUserTryStatus } from './model';
+import EssayUserTryImplementation from './repository';
+import { SendTryError } from '~/errors/try-errors';
+import { EssayThemes } from '~/domains/essay-themes/model';
 import { configParamsService } from '~/domains/config-params/controller';
-import { ConfigParamsEnum } from '~/domains/config-params/model';
+import { EssayConfigParamsEnum } from '~/domains/config-params/model';
 import { useAi } from '~/domains/useAi';
 import { EssayJsonResult } from '~/types/UseAi';
 
@@ -13,10 +13,10 @@ export type EssayAsyncData = {
     setAsPending?: boolean;
 }
 
-export class GymniaEssayUserTryService {
-    constructor(private readonly repository: GymniaEssayUserTryImplementation) {}
+export class EssayUserTryService {
+    constructor(private readonly repository: EssayUserTryImplementation) {}
 
-    async createTry(tryData: GymniaEssayUserTry): Promise<GymniaEssayUserTry> {
+    async createTry(tryData: EssayUserTry): Promise<EssayUserTry> {
         const createTry = await this.repository.createTry(tryData);
 
         if (!createTry) {
@@ -26,7 +26,7 @@ export class GymniaEssayUserTryService {
         return createTry;
     }
 
-    async getTryById(id: number): Promise<GymniaEssayUserTry | undefined> {
+    async getTryById(id: number): Promise<EssayUserTry | undefined> {
         const tryById = await this.repository.getTryById(id);
 
         if (!tryById) {
@@ -36,7 +36,7 @@ export class GymniaEssayUserTryService {
         return tryById;
     }
 
-    async getTryListByUserId(userId: number, status?: GymniaEssayUserTryStatus): Promise<GymniaEssayUserTry[]> {
+    async getTryListByUserId(userId: number, status?: EssayUserTryStatus): Promise<EssayUserTry[]> {
         return await this.repository.getTryListByUserId(userId, status);
     }
 
@@ -44,7 +44,7 @@ export class GymniaEssayUserTryService {
         id: number,
         tryData: EssayAsyncData,
         completion?: boolean,
-    ): Promise<GymniaEssayUserTry> {
+    ): Promise<EssayUserTry> {
         if (!tryData.content) {
             throw SendTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
         }
@@ -66,9 +66,9 @@ export class GymniaEssayUserTryService {
         }
     }
 
-    async sendEssayToAi(essay: string, theme: GymniaEssayThemes) {
+    async sendEssayToAi(essay: string, theme: EssayThemes) {
         const { valor_parametro: essayRule } = await configParamsService
-            .getSpecificConfigParam(ConfigParamsEnum.REDACAO);
+            .getSpecificConfigParam(EssayConfigParamsEnum.REDACAO);
 
         const { theme_description: themeDescription } = theme;
 

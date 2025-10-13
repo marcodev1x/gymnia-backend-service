@@ -1,10 +1,10 @@
 import { Model } from 'objection';
 import bcrypt from 'bcrypt';
 import { appConfig } from '~/config/app.config';
-import { GymniaPermissions } from '../permissions/model';
+import { Permissions } from '../permissions/model';
 
-export type UserWithPermissions = GymniaUser & {
-    permissions: GymniaPermissions;
+export type UserWithPermissions = User & {
+    permissions: Permissions;
 };
 
 export enum UserRolesByIds  {
@@ -15,9 +15,9 @@ export enum UserRolesByIds  {
     FINISHED_TRIAL = 6,
 }
 
-export class GymniaUser extends Model {
+export class User extends Model {
     static get tableName() {
-        return 'gymnia_users';
+        return 'users';
     }
 
     static get idColumn() {
@@ -60,10 +60,10 @@ export class GymniaUser extends Model {
         return {
             permissions: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: GymniaPermissions,
+                modelClass: Permissions,
                 join: {
-                    from: 'gymnia_users.user_role_id',
-                    to: 'gymnia_permissions.id',
+                    from: 'users.user_role_id',
+                    to: 'permissions.id',
                 },
             },
         };

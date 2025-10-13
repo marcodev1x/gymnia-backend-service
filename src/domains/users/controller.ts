@@ -1,9 +1,9 @@
-import { GymniaUserImplementation } from './repository';
-import { GymniaUserService } from './services';
+import { UserImplementation } from './repository';
+import { UserService } from './services';
 import { Request, Response, NextFunction } from 'express';
 
-const repository = new GymniaUserImplementation();
-const service = new GymniaUserService(repository);
+const repository = new UserImplementation();
+const service = new UserService(repository);
 
 export async function createUser(request: Request, response: Response, next: NextFunction) {
     try {

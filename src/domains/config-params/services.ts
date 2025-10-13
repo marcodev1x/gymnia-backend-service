@@ -1,15 +1,15 @@
 import { ConfigParamsRepository } from '~/domains/config-params/repository';
-import { GymniaConfigParams, ConfigParamsEnum } from '~/domains/config-params/model';
+import { EssayConfigParams, EssayConfigParamsEnum } from '~/domains/config-params/model';
 import { SendHttpError } from '~/generic-errors';
 
 export class ConfigParamsService {
     constructor(private configParamsRepository: ConfigParamsRepository) {}
 
-    async getConfigParams(): Promise<GymniaConfigParams[]> {
+    async getConfigParams(): Promise<EssayConfigParams[]> {
         return await this.configParamsRepository.getConfigParams();
     }
 
-    async getSpecificConfigParam(param: ConfigParamsEnum): Promise<GymniaConfigParams> {
+    async getSpecificConfigParam(param: EssayConfigParamsEnum): Promise<EssayConfigParams> {
         const configParam = await this.configParamsRepository.getSpecificConfigParam(param);
 
         if (!configParam) {
