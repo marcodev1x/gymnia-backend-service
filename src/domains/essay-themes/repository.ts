@@ -1,4 +1,4 @@
-import { Pagination } from '~/types/Pagination';
+import { Pagination } from '~/types/express';
 import { EssayThemes } from './model';
 
 export interface EssayThemesRepository {

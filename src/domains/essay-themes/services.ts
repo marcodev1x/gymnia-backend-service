@@ -7,7 +7,7 @@ import { SendHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
 import { SendThemesError } from '~/errors/themes-errors';
-import { Pagination } from '~/types/Pagination';
+import { Pagination } from '~/types/express';
 
 export class EssayThemesService {
     constructor(private essayThemesRepository: EssayThemesRepository) {}
