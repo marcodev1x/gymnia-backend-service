@@ -45,7 +45,7 @@ export class User extends Model {
     }
 
     $hiddenFields() {
-        return ['id', 'secret', 'created_at', 'updated_at', 'deleted_at', 'user_role_id'];
+        return ['id', 'secret', 'created_at', 'updated_at', 'deleted_at', 'user_role_id', 'deleted'];
     }
 
     static async hashSecret(secret: string) {

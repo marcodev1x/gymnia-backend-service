@@ -6,6 +6,7 @@ type findByEmailParams = { userEmail: string, needData?: boolean, getSensitiveDa
 export interface UserRepository {
     createUser(user: Partial<User>): Promise<UserWithPermissions | null>;
     findByEmail({ userEmail, needData }: findByEmailParams): Promise<UserWithPermissions | undefined>;
+    findById(id: number): Promise<UserWithPermissions | undefined>;
     userExists(userEmail: string): Promise<boolean | undefined>;
     getUserSecret(userEmail: string): Promise<User | undefined>;
     getUserRole(userEmail: string): Promise<string | undefined>;
@@ -28,6 +29,22 @@ export class UserImplementation implements UserRepository {
         if (!user) return undefined;
 
         return getSensitiveData ? user as UserWithPermissions : removeSensitiveData(user);
+    }
+
+    async findById(id: number): Promise<UserWithPermissions | undefined> {
+        const user = await User
+            .query()
+            .select('*')
+            .where('id', id)
+            .modifyGraph('permissions', builder => {
+                builder.select('role_name');
+            })
+            .withGraphFetched('permissions')
+            .first();
+
+        if (!user) return undefined;
+
+        return user as UserWithPermissions;
     }
 
     async userExists(userEmail: string): Promise<boolean | undefined> {
