@@ -46,7 +46,7 @@ export const routes: AppRouter[] = [
                 requiredFile: false,
                 schema: createThemaSchema,
                 type: 'body',
-                nameBody: 'theme',
+                jsonFields: ['theme', 'classification'],
             }),
         ],
     },

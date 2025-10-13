@@ -51,12 +51,12 @@ export function validateRequestAndFile({
     requiredFile = false,
     schema,
     type,
-    nameBody,
+    jsonFields = [],
 }: {
     requiredFile?: boolean;
     schema: Joi.ObjectSchema;
     type: 'body' | 'query' | 'file';
-    nameBody: string;
+    jsonFields?: string[];
 }) {
     return (req: Request, res: Response, next: NextFunction) => {
         if (requiredFile && !req.file) {
@@ -64,11 +64,16 @@ export function validateRequestAndFile({
             return;
         }
 
-        if (req.body[nameBody]) {
-            req.body[nameBody] = JSON.parse(req.body[nameBody]);
-
-            return validateRequest({ schema, type })(req, res, next);
+        for (const field of jsonFields) {
+            if (req.body[field]) {
+                try {
+                    req.body[field] = JSON.parse(req.body[field]);
+                } catch {
+                    return res.status(400).json({ error: `Campo ${field} está em formato inválido.` });
+                }
+            }
         }
-        next();
+
+        return validateRequest({ schema, type })(req, res, next);
     };
 }

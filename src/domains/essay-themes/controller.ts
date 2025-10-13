@@ -35,7 +35,7 @@ export async function getThemeById(request: Request, response: Response, next: N
 
 export async function createTheme(request: Request, response: Response, next: NextFunction) {
     try {
-        const { theme } = request.body;
+        const { theme, classification } = request.body;
 
         let file;
 
@@ -43,7 +43,10 @@ export async function createTheme(request: Request, response: Response, next: Ne
             file = request.file;
         }
 
-        const themeCreated = await essayThemesService.createTheme(theme, file);
+        const themeCreated = await essayThemesService.createTheme({
+            essayTheme: theme,
+            classification,
+        }, file);
 
         response.status(201).json(themeCreated);
     } catch (e) {
