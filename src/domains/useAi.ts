@@ -15,7 +15,7 @@ export async function useAi<T>({
     systemContent,
     userContent,
     jsonFormat,
-    retries = 2,
+    retries = 3,
     delay = 1000,
 }: UseAiParams): Promise<T | undefined> {
     if (!userContent && !systemContent) {
@@ -27,8 +27,9 @@ export async function useAi<T>({
     if (systemContent) messages.push({ role: 'system', content: systemContent });
     if (userContent) messages.push({ role: 'user', content: userContent });
 
-    const body: OpenAI.Chat.Completions.ChatCompletionCreateParams = {
+    const body: OpenAI.Chat.ChatCompletionCreateParamsNonStreaming = {
         model,
+        n: 1,
         messages,
         response_format: jsonFormat ? { type: 'json_object' } : undefined,
         temperature: 0.7,
