@@ -1,9 +1,9 @@
 {
-  "name": "gymnia-backend-service",
+  "name": "Redaciona",
   "version": "1.0.0",
   "main": "dist/src/index.js",
   "license": "MIT",
-  "description": "Backend for the Gymnia platform",
+  "description": "Backend for the Redaciona platform",
   "author": "Marco Antônio",
   "bin": {
     "eslint": "./node_modules/.bin/eslint"

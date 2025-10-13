@@ -1,0 +1,67 @@
+import { EssayThemesRepository } from './repository';
+import { EssayThemes } from './model';
+import { createThemeFileZip, getFile } from '../bucket';
+import { s3Config } from '~/config/s3.config';
+import { formatThemeTitle, getKeyFromBackblazeUrl } from './helpers';
+import { SendHttpError } from '~/generic-errors';
+import axios from 'axios';
+import { Response } from 'express';
+import { SendThemesError } from '~/errors/themes-errors';
+import { Pagination } from '~/types/Pagination';
+
+export class EssayThemesService {
+    constructor(private essayThemesRepository: EssayThemesRepository) {}
+
+    async getThemes(pagination: Pagination) {
+        return await this.essayThemesRepository.getThemes(pagination);
+    }
+
+    async getThemeById(id: number) {
+        const theme = await this.essayThemesRepository.getThemeById(id);
+
+        if (!theme) throw SendHttpError({ element: 'Theme', error: 'NOT_FOUND' });
+
+        if (!theme.is_active) throw SendThemesError('THEME_NOT_ACTIVE');
+
+        return theme;
+    }
+
+    async createTheme(theme: EssayThemes, file: Express.Multer.File) {
+        const formatNewTheme = { ...theme } as EssayThemes;
+
+        const uploadFile = await createThemeFileZip(
+            s3Config.bucketEssayHelpersDocsName!,
+            formatThemeTitle(theme.theme_title),
+            file,
+        );
+
+        if (uploadFile) {
+            formatNewTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
+          + `${s3Config.endpoint?.split('://')[1]}`
+          + `/${formatThemeTitle(theme.theme_title)}`;
+        }
+
+        return await this.essayThemesRepository.createTheme(formatNewTheme);
+    }
+
+    async downloadThemeWithSignedUrl(id: number, response: Response) {
+        const theme = await this.getThemeById(Number(id));
+
+        if (!theme.bucket_essay_docs) {
+            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+        }
+
+        const fileKey = getKeyFromBackblazeUrl(theme.bucket_essay_docs);
+
+        const signedUrl = await getFile(fileKey);
+
+        const fileResponse = await axios.get(signedUrl, {
+            responseType: 'stream',
+        });
+
+        response.setHeader('Content-Disposition', `attachment; filename="${theme.theme_title}.zip"`);
+        response.setHeader('Content-Type', 'application/zip');
+
+        fileResponse.data.pipe(response);
+    }
+}

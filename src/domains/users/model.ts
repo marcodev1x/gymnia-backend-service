@@ -1,13 +1,13 @@
 import { Model } from 'objection';
 import bcrypt from 'bcrypt';
 import { appConfig } from '~/config/app.config';
-import { GymniaPermissions } from '../gymnia-permissions/model';
+import { Permissions } from '../permissions/model';
 
-export type GymniaUserWithPermissions = GymniaUser & {
-    permissions: GymniaPermissions;
+export type UserWithPermissions = User & {
+    permissions: Permissions;
 };
 
-export enum GymniaUserRolesByIds  {
+export enum UserRolesByIds  {
     TRIAL = 1,
     USER = 2,
     ADMIN = 3,
@@ -15,9 +15,9 @@ export enum GymniaUserRolesByIds  {
     FINISHED_TRIAL = 6,
 }
 
-export class GymniaUser extends Model {
+export class User extends Model {
     static get tableName() {
-        return 'gymnia_users';
+        return 'users';
     }
 
     static get idColumn() {
@@ -37,7 +37,7 @@ export class GymniaUser extends Model {
     $beforeInsert() {
         this.created_at = new Date();
         this.updated_at = new Date();
-        this.user_role_id = GymniaUserRolesByIds.TRIAL;
+        this.user_role_id = UserRolesByIds.TRIAL;
     }
 
     $beforeUpdate() {
@@ -60,10 +60,10 @@ export class GymniaUser extends Model {
         return {
             permissions: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: GymniaPermissions,
+                modelClass: Permissions,
                 join: {
-                    from: 'gymnia_users.user_role_id',
-                    to: 'gymnia_permissions.id',
+                    from: 'users.user_role_id',
+                    to: 'permissions.id',
                 },
             },
         };

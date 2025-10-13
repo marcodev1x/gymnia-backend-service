@@ -1,10 +1,9 @@
-import { authentication } from '~/middlewares/authentication';
 import { validateRequest } from '~/middlewares/joi';
-import { correctEssaySchema } from '~/domains/gymnia-essay-themes/schemas';
-import { correctEssay } from '~/domains/gymnia-essay-user-try/controller';
+import { correctEssaySchema } from '~/domains/essay-themes/schemas';
+import { correctEssay } from '~/domains/essay-user-try/controller';
 import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
-import { GymniaUserRoles } from '~/domains/gymnia-permissions/model';
+import { UserRoles } from '~/domains/permissions/model';
 import { AppRouter } from '~/types/Router';
 
 // Routes
@@ -12,12 +11,12 @@ export const essayTryRouter = Router();
 
 const routes: AppRouter[] = [
     {
+        toAuthenticated: true,
         method: 'post',
         path: '/correct-essay',
         handler: correctEssay,
         middlewares: [
-            authentication,
-            permissionMiddleware([GymniaUserRoles.USER, GymniaUserRoles.TRIAL]),
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: correctEssaySchema,
                 type: 'body',

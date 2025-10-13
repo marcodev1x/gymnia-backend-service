@@ -1,22 +1,22 @@
-import { GymniaUser, GymniaUserWithPermissions } from './model';
+import { User, UserWithPermissions } from './model';
 import { removeSensitiveData } from '~/domains/users/helpers';
 
 type findByEmailParams = { userEmail: string, needData?: boolean, getSensitiveData?: boolean };
 
-export interface GymniaUserRepository {
-    createUser(user: Partial<GymniaUser>): Promise<GymniaUserWithPermissions | null>;
-    findByEmail({ userEmail, needData }: findByEmailParams): Promise<GymniaUserWithPermissions | undefined>;
+export interface UserRepository {
+    createUser(user: Partial<User>): Promise<UserWithPermissions | null>;
+    findByEmail({ userEmail, needData }: findByEmailParams): Promise<UserWithPermissions | undefined>;
     userExists(userEmail: string): Promise<boolean | undefined>;
-    getUserSecret(userEmail: string): Promise<GymniaUser | undefined>;
+    getUserSecret(userEmail: string): Promise<User | undefined>;
     getUserRole(userEmail: string): Promise<string | undefined>;
 };
 
-export class GymniaUserImplementation implements GymniaUserRepository {
+export class UserImplementation implements UserRepository {
     async findByEmail({
         userEmail,
         getSensitiveData,
-    }: findByEmailParams): Promise<GymniaUserWithPermissions | undefined> {
-        const user = await GymniaUser
+    }: findByEmailParams): Promise<UserWithPermissions | undefined> {
+        const user = await User
             .query()
             .select('*')
             .where('email', userEmail)
@@ -27,19 +27,19 @@ export class GymniaUserImplementation implements GymniaUserRepository {
 
         if (!user) return undefined;
 
-        return getSensitiveData ? user as GymniaUserWithPermissions : removeSensitiveData(user);
+        return getSensitiveData ? user as UserWithPermissions : removeSensitiveData(user);
     }
 
     async userExists(userEmail: string): Promise<boolean | undefined> {
-        return !!await GymniaUser
+        return !!await User
             .query()
             .select('email')
             .where('email', userEmail)
             .first();
     }
 
-    async createUser(user: Partial<GymniaUser>): Promise<GymniaUserWithPermissions | null> {
-        const query = await GymniaUser
+    async createUser(user: Partial<User>): Promise<UserWithPermissions | null> {
+        const query = await User
             .query()
             .modifyGraph('permissions', (builder) => {
                 builder.select('role_name');
@@ -47,11 +47,11 @@ export class GymniaUserImplementation implements GymniaUserRepository {
             .withGraphFetched('permissions')
             .insertGraphAndFetch(user);
 
-        return query as GymniaUserWithPermissions;
+        return query as UserWithPermissions;
     }
 
-    async getUserSecret(userEmail: string): Promise<GymniaUser | undefined> {
-        return GymniaUser
+    async getUserSecret(userEmail: string): Promise<User | undefined> {
+        return User
             .query()
             .select(['secret'])
             .where('email', userEmail)
@@ -59,13 +59,13 @@ export class GymniaUserImplementation implements GymniaUserRepository {
     }
 
     async getUserRole(userEmail: string): Promise<string | undefined> {
-        const user = await GymniaUser
+        const user = await User
             .query()
             .select('user_role_id')
             .modifyGraph('permissions', builder => {
                 builder.select('role_name');
             })
-            .findOne({ email: userEmail }) as GymniaUserWithPermissions;
+            .findOne({ email: userEmail }) as UserWithPermissions;
 
         if (!user) return undefined;
 

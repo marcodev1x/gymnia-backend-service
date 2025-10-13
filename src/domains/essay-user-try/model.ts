@@ -1,15 +1,15 @@
 import { Model } from 'objection';
-import { GymniaUser } from '../users/model';
-import { GymniaEssayThemes } from '../gymnia-essay-themes/model';
+import { User } from '../users/model';
+import { EssayThemes } from '../essay-themes/model';
 
-export enum GymniaEssayUserTryStatus {
+export enum EssayUserTryStatus {
     PENDING = 'pending',
     COMPLETED = 'completed',
 }
 
-export class GymniaEssayUserTry extends Model {
+export class EssayUserTry extends Model {
     static get tableName() {
-        return 'gymnia_essay_user_try';
+        return 'essay_user_try';
     }
 
     static get idColumn() {
@@ -20,7 +20,7 @@ export class GymniaEssayUserTry extends Model {
     essay_id: number;
     user_id: number;
     essay: string;
-    status: GymniaEssayUserTryStatus;
+    status: EssayUserTryStatus;
     created_at?: Date;
     updated_at?: Date;
 
@@ -37,18 +37,18 @@ export class GymniaEssayUserTry extends Model {
         return {
             user: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: GymniaUser,
+                modelClass: User,
                 join: {
-                    from: 'gymnia_essay_user_try.user_id',
-                    to: 'gymnia_users.id',
+                    from: 'essay_user_try.user_id',
+                    to: 'users.id',
                 },
             },
             theme: {
                 relation: Model.BelongsToOneRelation,
-                modelClass: GymniaEssayThemes,
+                modelClass: EssayThemes,
                 join: {
-                    from: 'gymnia_essay_user_try.essay_id',
-                    to: 'gymnia_essay_themes.id',
+                    from: 'essay_user_try.essay_id',
+                    to: 'essay_themes.id',
                 },
             },
         };

@@ -1,10 +1,10 @@
-import { GymniaUserRoles } from '~/domains/gymnia-permissions/model';
+import { UserRoles } from '~/domains/permissions/model';
 
 export const includesPermission = (
-    role_permission: GymniaUserRoles | GymniaUserRoles[],
-    permission: GymniaUserRoles,
+    role_permission: UserRoles | UserRoles[],
+    permission: UserRoles,
 ): boolean => {
-    if (permission === GymniaUserRoles.ADMIN) return true;
+    if (permission === UserRoles.ADMIN) return true;
 
     if (Array.isArray(role_permission)) {
         return role_permission.includes(permission);

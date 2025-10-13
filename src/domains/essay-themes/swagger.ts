@@ -3,7 +3,7 @@ import { OpenAPIV3 } from 'openapi-types';
 export const getEssayThemesSwagger: OpenAPIV3.OperationObject = {
     summary: 'Get essay themes list',
     description: 'Get essay themes list',
-    tags: ['Gymnia Essay Themes'],
+    tags: ['Essay Themes'],
     security: [
         {
             'Bearer': [],

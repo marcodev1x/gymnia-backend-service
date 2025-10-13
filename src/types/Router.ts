@@ -7,6 +7,7 @@ export interface UseRoute {
 }
 
 export interface AppRouter {
+    toAuthenticated?: boolean;
     method: 'get' | 'post' | 'put' | 'delete' | 'patch';
     path: string;
     middlewares?: RequestHandler[];

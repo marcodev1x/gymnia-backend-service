@@ -1,12 +1,12 @@
 import { Model } from 'objection';
 
-export enum GymniaConfigParamsEnum {
+export enum EssayConfigParamsEnum {
     REDACAO = 'validate_essay',
 }
 
-export class GymniaConfigParams extends Model {
+export class EssayConfigParams extends Model {
     static get tableName() {
-        return 'gymnia_config_params';
+        return 'essay_config_params';
     }
 
     static get idColumn() {

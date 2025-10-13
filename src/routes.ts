@@ -1,14 +1,15 @@
-import { Router } from 'express';
+import { RequestHandler, Router } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
-import gymniaConfigRoutes, { gymniaConfigParamsRouter } from './domains/gymnia-config-params/routes';
-import essayThemesRoutes, { essayThemesRouter } from './domains/gymnia-essay-themes/routes';
+import configParamsRoutes, { configParamsRouter } from './domains/config-params/routes';
+import essayThemesRoutes, { essayThemesRouter } from './domains/essay-themes/routes';
 import usersRoutes, { usersRouter } from './domains/users/routes';
-import essayTryRoutes, { essayTryRouter } from './domains/gymnia-essay-user-try/routes';
+import essayTryRoutes, { essayTryRouter } from './domains/essay-user-try/routes';
 
 import { AppRouter, UseRoute } from './types/Router';
 import { OpenAPIV3 } from 'openapi-types';
 import { appConfig } from './config/app.config';
+import { authentication } from './middlewares/authentication';
 
 // ==== ROUTES REGISTER ====
 
@@ -16,8 +17,16 @@ const defaultRoutes = Router();
 export const swaggerPaths: Record<string, any> = {};
 
 export function registerRoute(router: Router, routes: AppRouter[]) {
-    routes.forEach(({ method, path, middlewares = [], handler, swagger }) => {
-        (router as any)[method](path, ...middlewares, handler);
+    routes.forEach(({ toAuthenticated, method, path, middlewares = [], handler, swagger }) => {
+        const middlewaresGroup: RequestHandler[] = [];
+
+        if (toAuthenticated) {
+            middlewaresGroup.push(authentication);
+        }
+
+        middlewaresGroup.push(...middlewares);
+
+        router[method](path, ...middlewaresGroup, handler);
 
         if (swagger) {
             const fullPath = path.replace(/\/+/g, '/');
@@ -36,7 +45,7 @@ export function registerRoute(router: Router, routes: AppRouter[]) {
 // ==== ROUTES ====
 
 const useRoutes: Array<UseRoute & { routes?: AppRouter[] }> = [
-    { router: gymniaConfigParamsRouter, routes: gymniaConfigRoutes },
+    { router: configParamsRouter, routes: configParamsRoutes },
     { router: essayThemesRouter, routes: essayThemesRoutes },
     { router: usersRouter, routes: usersRoutes },
     { router: essayTryRouter, routes: essayTryRoutes },
@@ -55,7 +64,7 @@ useRoutes.forEach((u) => {
 
 const swaggerDoc: OpenAPIV3.Document = {
     openapi: '3.0.0',
-    info: { title: 'Gymnia API', version: '1.0.0' },
+    info: { title: 'Redaciona API', version: '1.0.0' },
     components: {
         securitySchemes: {
             Bearer: {

@@ -1,6 +1,6 @@
 
 -- Results
-CREATE TABLE gymnia_essay_results (
+CREATE TABLE essay_results (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     essay_try_id INT NOT NULL,
     ia_result json NOT NULL,
@@ -8,11 +8,11 @@ CREATE TABLE gymnia_essay_results (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-    CONSTRAINT fk_essay_try FOREIGN KEY (essay_try_id) REFERENCES gymnia_essay_user_try(id) ON DELETE CASCADE
+    CONSTRAINT fk_essay_try FOREIGN KEY (essay_try_id) REFERENCES essay_user_try(id) ON DELETE CASCADE
 );
 
 -- Try
-CREATE TABLE gymnia_essay_user_try (
+CREATE TABLE essay_user_try (
     id SERIAL PRIMARY KEY,
     essay_theme_id INT NOT NULL,
     user_id INT NOT NULL,
@@ -21,27 +21,27 @@ CREATE TABLE gymnia_essay_user_try (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 
-    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES gymnia_users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_essay FOREIGN KEY (essay_theme_id) REFERENCES gymnia_essay_themes(id) ON DELETE CASCADE
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_essay FOREIGN KEY (essay_theme_id) REFERENCES essay_themes(id) ON DELETE CASCADE
 );
 
 -- Types user_roles
 create type user_roles as enum (
-    'gymnia:adm',
-    'gymnia:user',
-    'gymnia:trial',
-    'gymnia:pedagogico',
-    'gymnia:finished_trial'
+    'ai:adm',
+    'ai:user',
+    'ai:trial',
+    'ai:pedagogico',
+    'ai:finished_trial'
 );
 
 -- Permissions based on user_roles
-CREATE TABLE gymnia_permissions (
+CREATE TABLE permissions (
     id INTEGER PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
     role_name varchar(32)
 )
 
 -- Users
-CREATE TABLE gymnia_users (
+CREATE TABLE users (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY                     ,
     name TEXT NOT NULL                                                       ,
     email TEXT NOT NULL UNIQUE,
@@ -52,11 +52,11 @@ CREATE TABLE gymnia_users (
     deleted_at TIMESTAMP,
     user_role_id INTEGER NOT NULL,
 
-    CONSTRAINT fk_user_role FOREIGN KEY (user_role_id) REFERENCES gymnia_user_roles(id);
+    CONSTRAINT fk_user_role FOREIGN KEY (user_role_id) REFERENCES user_roles(id);
 )
 
 -- Themes
-CREATE TABLE gymnia_essay_themes (
+CREATE TABLE essay_themes (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY                     ,
     theme_title VARCHAR(120) NOT NULL,
     theme_description TEXT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE gymnia_essay_themes (
 );
 
 -- Config params
-CREATE TABLE gymnia_config_params (
+CREATE TABLE essay_config_params (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     nome_parametro TEXT NOT NULL,
     valor_parametro TEXT
