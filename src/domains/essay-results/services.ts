@@ -12,4 +12,8 @@ export class EssayResultsService {
 
         return createdResult;
     }
+
+    async getUserAverageScore(userId: number) {
+        return await this.repository.getUserAverageScore(userId);
+    }
 }

@@ -1,13 +1,19 @@
 import { EssayThemesRepository } from './repository';
 import { EssayThemes } from './model';
-import { createThemeFileZip, getFile } from '../bucket';
+import { createThemeFile, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
-import { formatThemeTitle, getKeyFromBackblazeUrl } from './helpers';
+import { formatThemeTitle, getKeyFromS3Url } from './helpers';
 import { SendHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
 import { SendThemesError } from '~/errors/themes-errors';
 import { Pagination } from '~/types/express';
+import { EssayClassification } from '../essay-classification/model';
+
+export interface EssayThemesPossibleClassification {
+    essayTheme: EssayThemes;
+    classification?: EssayClassification;
+}
 
 export class EssayThemesService {
     constructor(private essayThemesRepository: EssayThemesRepository) {}
@@ -21,47 +27,57 @@ export class EssayThemesService {
 
         if (!theme) throw SendHttpError({ element: 'Theme', error: 'NOT_FOUND' });
 
-        if (!theme.is_active) throw SendThemesError('THEME_NOT_ACTIVE');
+        if (!theme.essayTheme.is_active) throw SendThemesError('THEME_NOT_ACTIVE');
 
         return theme;
     }
 
-    async createTheme(theme: EssayThemes, file: Express.Multer.File) {
-        const formatNewTheme = { ...theme } as EssayThemes;
+    async createTheme(theme: EssayThemesPossibleClassification, file: Express.Multer.File) {
+        const themeCreated = {
+            essayTheme: theme.essayTheme,
+            classification: theme.classification,
+        };
 
-        const uploadFile = await createThemeFileZip(
+        const hashDocId = Buffer.from(Math.random().toString()).toString('base64url');
+
+        const uploadFile = await createThemeFile(
             s3Config.bucketEssayHelpersDocsName!,
-            formatThemeTitle(theme.theme_title),
+            `${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`,
             file,
         );
 
         if (uploadFile) {
-            formatNewTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
+            themeCreated.essayTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
           + `${s3Config.endpoint?.split('://')[1]}`
-          + `/${formatThemeTitle(theme.theme_title)}`;
+          + `/${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`;
         }
 
-        return await this.essayThemesRepository.createTheme(formatNewTheme);
+        return await this.essayThemesRepository.createTheme(themeCreated);
     }
 
     async downloadThemeWithSignedUrl(id: number, response: Response) {
         const theme = await this.getThemeById(Number(id));
 
-        if (!theme.bucket_essay_docs) {
+        if (!theme.essayTheme.bucket_essay_docs) {
             throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
 
-        const fileKey = getKeyFromBackblazeUrl(theme.bucket_essay_docs);
+        const fileKey = getKeyFromS3Url(theme.essayTheme.bucket_essay_docs);
 
         const signedUrl = await getFile(fileKey);
 
-        const fileResponse = await axios.get(signedUrl, {
-            responseType: 'stream',
-        });
+        try {
+            const fileResponse = await axios.get(signedUrl, {
+                responseType: 'stream',
+            });
 
-        response.setHeader('Content-Disposition', `attachment; filename="${theme.theme_title}.zip"`);
-        response.setHeader('Content-Type', 'application/zip');
+            response.setHeader('Content-Disposition', `attachment; filename="${theme.essayTheme.theme_title}.pdf"`);
+            response.setHeader('Content-Type', 'application/pdf');
 
-        fileResponse.data.pipe(response);
+            fileResponse.data.pipe(response);
+        } catch (error) {
+            logger.error(error);
+            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+        }
     }
 }

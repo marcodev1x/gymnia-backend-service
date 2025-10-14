@@ -5,6 +5,7 @@ import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { UserRoles } from '~/domains/permissions/model';
 import { AppRouter } from '~/types/Router';
+import { correctEssaySwagger } from './swagger';
 
 // Routes
 export const essayTryRouter = Router();
@@ -22,6 +23,7 @@ const routes: AppRouter[] = [
                 type: 'body',
             }),
         ],
+        swagger: correctEssaySwagger,
     },
 ];
 

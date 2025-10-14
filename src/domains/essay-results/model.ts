@@ -29,7 +29,7 @@ export class EssayResults extends Model {
 
     static get relationMappings() {
         return {
-            essay_try: {
+            essay_user_try: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: EssayUserTry,
                 join: {

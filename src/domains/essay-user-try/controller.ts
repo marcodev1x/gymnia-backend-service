@@ -18,7 +18,7 @@ export async function correctEssay(request: RequestMiddleware, response: Respons
 
         const theme = await essayThemesService.getThemeById(Number(theme_id));
 
-        const essayCorrected = await essayUserTryService.sendEssayToAi(essay, theme);
+        const essayCorrected = await essayUserTryService.sendEssayToAi(essay, theme.essayTheme);
 
         await essayUserTryService.updateTry(
             try_id,

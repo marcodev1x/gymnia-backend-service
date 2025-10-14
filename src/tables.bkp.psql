@@ -62,7 +62,6 @@ CREATE TABLE essay_themes (
     theme_description TEXT NOT NULL,
     is_active boolean default true not null,
     limit_lines integer not null default 30,
-    difficulty_level varchar(20),
     bucket_essay_docs TEXT,
     bucket_uuid varchar(36),
     created_at TIMESTAMP DEFAULT NOW(),
@@ -74,4 +73,33 @@ CREATE TABLE essay_config_params (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     nome_parametro TEXT NOT NULL,
     valor_parametro TEXT
+);
+CREATE TABLE essay_difficulty_levels(
+    id SERIAL PRIMARY KEY,
+    level VARCHAR(255) NOT NULL,
+    can_be_used BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NULL,
+    deleted_at TIMESTAMP NULL
+);
+
+CREATE TABLE essay_pedagogical_origin(
+    id SERIAL PRIMARY KEY,
+    institution_name VARCHAR(255) NOT NULL,
+    can_be_used BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NULL,
+    deleted_at TIMESTAMP NULL
+);
+
+
+CREATE TABLE essay_classification(
+    id SERIAL PRIMARY KEY UNIQUE,
+    essay_Id INT NOT NULL UNIQUE,
+    pedagogical_origin_Id INT NOT NULL,
+    difficulty_level_Id INT NOT NULL,
+
+    constraint fk_essay FOREIGN KEY (essay_Id) REFERENCES essay_themes(id),
+    constraint fk_classification FOREIGN KEY (pedagogical_origin_Id) REFERENCES essay_pedagogical_origin(id),
+    constraint fk_difficulty_level FOREIGN KEY (difficulty_level_Id) REFERENCES essay_difficulty_levels(id)
 );

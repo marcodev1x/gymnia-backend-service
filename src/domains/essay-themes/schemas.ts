@@ -43,8 +43,22 @@ export const createThemaSchema = Joi.object({
         limit_lines: Joi
             .number()
             .required(),
-        difficulty_level: Joi
-            .string()
-            .required(),
     }).required(),
+    classification: Joi.object({
+        category_id: Joi
+            .number()
+            .optional()
+            .positive()
+            .min(1),
+        difficulty_level_id: Joi
+            .number()
+            .optional()
+            .positive()
+            .min(1),
+        pedagogical_origin_id: Joi
+            .number()
+            .optional()
+            .positive()
+            .min(1),
+    }).optional(),
 });
