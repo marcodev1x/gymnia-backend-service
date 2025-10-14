@@ -8,20 +8,38 @@ interface ThemeWithClassification {
     classification: EssayClassification[];
 }
 
+interface ListThemeWithClassification {
+    theme: EssayThemes;
+    classification: EssayClassification | null;
+}
 export interface EssayThemesRepository {
-    getThemes(pagination: Pagination): Promise<EssayThemes[]>;
+    getThemes(pagination: Pagination): Promise<ListThemeWithClassification[] | []>;
     getThemeById(id: number): Promise<ThemeWithClassification | undefined>;
     createTheme(theme: EssayThemesPossibleClassification): Promise<EssayThemesPossibleClassification>;
 }
 
 export class EssayThemesImplementation implements EssayThemesRepository {
-    async getThemes(pagination: Pagination): Promise<EssayThemes[] | []> {
-        const query = EssayThemes.query();
+    async getThemes(pagination: Pagination): Promise<ListThemeWithClassification[] | []> {
+        const query = EssayThemes
+            .query();
+
+        const essayClassification = await EssayClassification
+            .query()
+            .select()
+            .withGraphFetched('[category(baseCategory), pedagogical_origin(basePedagogicalOrigin),'
+                + 'difficulty_level(baseDifficultyLevel)]');
 
         query.offset(pagination.offset);
         query.limit(pagination.limit);
 
-        return query;
+        const result = await query;
+
+        if (!result ||!result.length) return [];
+
+        return result.map(theme => ({
+            theme,
+            classification: essayClassification.find(classification => classification.essay_id === theme.id) || null,
+        }));
     }
 
     async getThemeById(id: number): Promise<ThemeWithClassification | undefined> {

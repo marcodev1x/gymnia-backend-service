@@ -6,7 +6,7 @@ import { isDevelopment } from '~/global';
 
 interface JoiValidator {
     schema: Joi.ObjectSchema;
-    type: 'body' | 'query' | 'file';
+    type: 'body' | 'query' | 'file' | 'params';
     abortEarly?: boolean;
     stripUnknown?: boolean;
     allowUnknown?: boolean;
