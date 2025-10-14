@@ -1,6 +1,6 @@
 import { ConfigParamsRepository } from '~/domains/config-params/repository';
 import { EssayConfigParams, EssayConfigParamsEnum } from '~/domains/config-params/model';
-import { SendHttpError } from '~/generic-errors';
+import { DefaultHttpError } from '~/generic-errors';
 
 export class ConfigParamsService {
     constructor(private configParamsRepository: ConfigParamsRepository) {}
@@ -13,7 +13,7 @@ export class ConfigParamsService {
         const configParam = await this.configParamsRepository.getSpecificConfigParam(param);
 
         if (!configParam) {
-            throw SendHttpError({ element: 'Config param', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'Config param', error: 'NOT_FOUND' });
         }
 
         return configParam;

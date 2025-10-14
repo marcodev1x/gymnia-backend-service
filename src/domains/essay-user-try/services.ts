@@ -1,4 +1,4 @@
-import { SendHttpError } from '~/generic-errors';
+import { DefaultHttpError } from '~/generic-errors';
 import { EssayUserTry, EssayUserTryStatus } from './model';
 import EssayUserTryImplementation from './repository';
 import { SendTryError } from '~/errors/try-errors';
@@ -20,7 +20,7 @@ export class EssayUserTryService {
         const createTry = await this.repository.createTry(tryData);
 
         if (!createTry) {
-            throw SendHttpError({ element: 'Try', error: 'NOT_CREATED' });
+            throw DefaultHttpError({ element: 'Try', error: 'NOT_CREATED' });
         }
 
         return createTry;
@@ -30,7 +30,7 @@ export class EssayUserTryService {
         const tryById = await this.repository.getTryById(id);
 
         if (!tryById) {
-            throw SendHttpError({ element: 'Try', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
         }
 
         return tryById;
@@ -52,7 +52,7 @@ export class EssayUserTryService {
         const updateTry = await this.repository.updateTry(id, tryData, completion);
 
         if (!updateTry) {
-            throw SendHttpError({ element: 'Try', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
         }
 
         return updateTry;
@@ -62,7 +62,7 @@ export class EssayUserTryService {
         const deleteTry = await this.repository.deleteTry(id);
 
         if (!deleteTry) {
-            throw SendHttpError({ element: 'Try', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
         }
     }
 
@@ -72,7 +72,7 @@ export class EssayUserTryService {
 
         const { theme_description: themeDescription } = theme;
 
-        if (!essayRule) throw SendHttpError({ element: 'Essay', error: 'NOT_FOUND' });
+        if (!essayRule) throw DefaultHttpError({ element: 'Essay', error: 'NOT_FOUND' });
 
         const essayCorrected = await useAi<EssayJsonResult>({
             systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,

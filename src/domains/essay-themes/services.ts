@@ -3,7 +3,7 @@ import { EssayThemes } from './model';
 import { createThemeFile, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
 import { formatThemeTitle, getKeyFromS3Url } from './helpers';
-import { SendHttpError } from '~/generic-errors';
+import { DefaultHttpError } from '~/generic-errors';
 import axios from 'axios';
 import { Response } from 'express';
 import { SendThemesError } from '~/errors/themes-errors';
@@ -25,7 +25,7 @@ export class EssayThemesService {
     async getThemeById(id: number) {
         const theme = await this.essayThemesRepository.getThemeById(id);
 
-        if (!theme) throw SendHttpError({ element: 'Theme', error: 'NOT_FOUND' });
+        if (!theme) throw DefaultHttpError({ element: 'Theme', error: 'NOT_FOUND' });
 
         if (!theme.essayTheme.is_active) throw SendThemesError('THEME_NOT_ACTIVE');
 
@@ -59,7 +59,8 @@ export class EssayThemesService {
         const theme = await this.getThemeById(Number(id));
 
         if (!theme.essayTheme.bucket_essay_docs) {
-            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+
+            throw DefaultHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
 
         const fileKey = getKeyFromS3Url(theme.essayTheme.bucket_essay_docs);
@@ -77,7 +78,7 @@ export class EssayThemesService {
             fileResponse.data.pipe(response);
         } catch (error) {
             logger.error(error);
-            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
     }
 }
