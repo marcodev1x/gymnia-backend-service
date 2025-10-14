@@ -37,7 +37,7 @@ export class EssayThemesService {
             essayTheme: theme.essayTheme,
             classification: theme.classification,
         };
-
+      
         const hashDocId = Buffer.from(Math.random().toString()).toString('base64url');
 
         const uploadFile = await createThemeFile(
@@ -59,6 +59,7 @@ export class EssayThemesService {
         const theme = await this.getThemeById(Number(id));
 
         if (!theme.essayTheme.bucket_essay_docs) {
+
             throw DefaultHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
 
