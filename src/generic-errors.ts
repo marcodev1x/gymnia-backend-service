@@ -39,65 +39,81 @@ export class HttpError extends Error {
     }
 }
 
-export const GenericErrors = (element?: string): GenericErrorsData => ({
-    ALREADY_EXISTS: {
-        message: `${element || 'Element'} already exists`,
-        status: 409,
-        code: 'ALREADY_EXISTS',
-        retryable: false,
-    },
-    UNAUTHORIZED_INVALID_TOKEN: {
-        message: 'Unauthorized. Invalid token.',
-        status: 401,
-        code: 'UNAUTHORIZED_INVALID_TOKEN',
-        retryable: false,
-    },
-    UNAUTHORIZED_TOKEN_NOT_FOUND: {
-        message: 'Unauthorized. Token not found.',
-        status: 401,
-        code: 'UNAUTHORIZED_TOKEN_NOT_FOUND',
-        retryable: false,
-    },
-    NOT_CREATED: {
-        message: `${element || 'Element'} not created`,
-        status: 500,
-        code: 'NOT_CREATED',
-        retryable: true, // Erro de servidor pode ser tentado novamente
-    },
-    NOT_FOUND: {
-        message: `${element || 'Element'} not found`,
-        status: 404,
-        code: 'NOT_FOUND',
-        retryable: false,
-    },
-    GENERIC_INTERNAL_ERROR: {
-        message: 'Internal Server Error',
-        status: 500,
-        code: 'INTERNAL_ERROR',
-        retryable: true,
-    },
-    VALIDATION_ERROR: {
-        message: 'Validation failed',
-        status: 422,
-        code: 'VALIDATION_ERROR',
-        retryable: false,
-    },
-    FORBIDDEN: {
-        message: 'Forbidden access',
-        status: 403,
-        code: 'FORBIDDEN',
-        retryable: false,
-    },
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const TAGS_ERRORS = [
+    'ALREADY_EXISTS',
+    'UNAUTHORIZED_INVALID_TOKEN',
+    'UNAUTHORIZED_TOKEN_NOT_FOUND',
+    'NOT_CREATED',
+    'NOT_FOUND',
+    'GENERIC_INTERNAL_ERROR',
+    'VALIDATION_ERROR',
+    'FORBIDDEN',
+] as const;
 
-export const SendHttpError = ({
+export type GenericErrorKey = typeof TAGS_ERRORS[number];
+
+export const GenericErrors = (element: string = 'Element'): GenericErrorsData => {
+    return {
+        ALREADY_EXISTS: {
+            message: `${element} already exists`,
+            status: 409,
+            code: 'ALREADY_EXISTS',
+            retryable: false,
+        },
+        UNAUTHORIZED_INVALID_TOKEN: {
+            message: 'Unauthorized. Invalid token.',
+            status: 401,
+            code: 'UNAUTHORIZED_INVALID_TOKEN',
+            retryable: false,
+        },
+        UNAUTHORIZED_TOKEN_NOT_FOUND: {
+            message: 'Unauthorized. Token not found.',
+            status: 401,
+            code: 'UNAUTHORIZED_TOKEN_NOT_FOUND',
+            retryable: false,
+        },
+        NOT_CREATED: {
+            message: `${element} not created`,
+            status: 500,
+            code: 'NOT_CREATED',
+            retryable: true,
+        },
+        NOT_FOUND: {
+            message: `${element} not found`,
+            status: 404,
+            code: 'NOT_FOUND',
+            retryable: false,
+        },
+        GENERIC_INTERNAL_ERROR: {
+            message: 'Internal Server Error',
+            status: 500,
+            code: 'INTERNAL_ERROR',
+            retryable: true,
+        },
+        VALIDATION_ERROR: {
+            message: 'Validation failed',
+            status: 422,
+            code: 'VALIDATION_ERROR',
+            retryable: false,
+        },
+        FORBIDDEN: {
+            message: 'Forbidden access',
+            status: 403,
+            code: 'FORBIDDEN',
+            retryable: false,
+        },
+    };
+};
+
+export const DefaultHttpError = ({
     element,
     error,
     customMessage,
     metadata,
 }: {
     element?: string;
-    error: keyof GenericErrorsData;
+    error: GenericErrorKey;
     customMessage?: string;
     metadata?: Record<string, unknown>;
 }) => {

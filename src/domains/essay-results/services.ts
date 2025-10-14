@@ -1,5 +1,5 @@
 import { EssayResultsRepository } from '~/domains/essay-results/repository';
-import { SendHttpError } from '~/generic-errors';
+import { DefaultHttpError } from '~/generic-errors';
 import { EssayJsonResult } from '~/types/UseAi';
 
 export class EssayResultsService {
@@ -8,7 +8,7 @@ export class EssayResultsService {
     async createResult(essayTryId: number, userScore: number, iaResult: EssayJsonResult) {
         const createdResult = await this.repository.createResult(essayTryId, userScore, iaResult);
 
-        if (!createdResult) throw SendHttpError({ element: 'Result', error: 'NOT_CREATED' });
+        if (!createdResult) throw DefaultHttpError({ element: 'Result', error: 'NOT_CREATED' });
 
         return createdResult;
     }

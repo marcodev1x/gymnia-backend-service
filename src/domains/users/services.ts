@@ -2,7 +2,7 @@ import { User, UserWithPermissions } from '~/domains/users/model';
 import { UserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
-import { SendHttpError } from '~/generic-errors';
+import { DefaultHttpError } from '~/generic-errors';
 
 interface CreateUserAsync {
     user: User;
@@ -16,7 +16,7 @@ export class UserService {
         const userAlwaysExists = await this.userRepository.userExists(user.email);
 
         if (userAlwaysExists) {
-            throw SendHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
+            throw DefaultHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
         }
 
         const secretHashed = await User.hashSecret(user.secret);
@@ -28,7 +28,7 @@ export class UserService {
         const sendUserToJwt = { ...userCreated };
 
         if (!userCreated) {
-            throw SendHttpError({ element: 'User', error: 'NOT_CREATED' });
+            throw DefaultHttpError({ element: 'User', error: 'NOT_CREATED' });
         }
 
         return {
@@ -45,13 +45,13 @@ export class UserService {
         const user = await this.userRepository.findByEmail({ userEmail: email, getSensitiveData: true });
 
         if (!user) {
-            throw SendHttpError({ element: 'User', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ element: 'User', error: 'NOT_FOUND' });
         }
 
         const secretValid = await User.confirmSecret(password, user.secret);
 
         if (!secretValid) {
-            throw SendHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
+            throw DefaultHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
         }
 
         const payload = {
