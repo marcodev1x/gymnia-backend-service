@@ -37,7 +37,7 @@ export class EssayThemesService {
             essayTheme: theme.essayTheme,
             classification: theme.classification,
         };
-      
+
         const hashDocId = Buffer.from(Math.random().toString()).toString('base64url');
 
         const uploadFile = await createThemeFile(
