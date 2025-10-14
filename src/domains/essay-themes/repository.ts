@@ -21,7 +21,8 @@ export interface EssayThemesRepository {
 export class EssayThemesImplementation implements EssayThemesRepository {
     async getThemes(pagination: Pagination): Promise<ListThemeWithClassification[] | []> {
         const query = EssayThemes
-            .query();
+            .query()
+            .where('is_active', true);
 
         const essayClassification = await EssayClassification
             .query()

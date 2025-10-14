@@ -1,6 +1,6 @@
 import { EssayThemesRepository } from './repository';
 import { EssayThemes } from './model';
-import { createThemeFileZip, getFile } from '../bucket';
+import { createThemeFile, getFile } from '../bucket';
 import { s3Config } from '~/config/s3.config';
 import { formatThemeTitle, getKeyFromS3Url } from './helpers';
 import { SendHttpError } from '~/generic-errors';
@@ -38,16 +38,18 @@ export class EssayThemesService {
             classification: theme.classification,
         };
 
-        const uploadFile = await createThemeFileZip(
+        const hashDocId = Buffer.from(Math.random().toString()).toString('base64url');
+
+        const uploadFile = await createThemeFile(
             s3Config.bucketEssayHelpersDocsName!,
-            formatThemeTitle(themeCreated.essayTheme.theme_title),
+            `${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`,
             file,
         );
 
         if (uploadFile) {
             themeCreated.essayTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
           + `${s3Config.endpoint?.split('://')[1]}`
-          + `/${formatThemeTitle(themeCreated.essayTheme.theme_title)}`;
+          + `/${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`;
         }
 
         return await this.essayThemesRepository.createTheme(themeCreated);
@@ -64,13 +66,18 @@ export class EssayThemesService {
 
         const signedUrl = await getFile(fileKey);
 
-        const fileResponse = await axios.get(signedUrl, {
-            responseType: 'stream',
-        });
+        try {
+            const fileResponse = await axios.get(signedUrl, {
+                responseType: 'stream',
+            });
 
-        response.setHeader('Content-Disposition', `attachment; filename="${theme.essayTheme.theme_title}.zip"`);
-        response.setHeader('Content-Type', 'application/zip');
+            response.setHeader('Content-Disposition', `attachment; filename="${theme.essayTheme.theme_title}.pdf"`);
+            response.setHeader('Content-Type', 'application/pdf');
 
-        fileResponse.data.pipe(response);
+            fileResponse.data.pipe(response);
+        } catch (error) {
+            logger.error(error);
+            throw SendHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
+        }
     }
 }
