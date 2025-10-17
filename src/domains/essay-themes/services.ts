@@ -32,27 +32,27 @@ export class EssayThemesService {
         return theme;
     }
 
-    async createTheme(theme: EssayThemesPossibleClassification, file: Express.Multer.File) {
-        const themeCreated = {
-            essayTheme: theme.essayTheme,
-            classification: theme.classification,
-        };
+    async createTheme(theme: EssayThemesPossibleClassification, file: Express.Multer.File | null) {
+        if (file) {
+            const hashDocId = Buffer.from(Math
+                .random()
+                .toString())
+                .toString('base64url');
 
-        const hashDocId = Buffer.from(Math.random().toString()).toString('base64url');
+            const uploadFile = await createThemeFile(
+                s3Config.bucketEssayHelpersDocsName!,
+                `${formatThemeTitle(theme.essayTheme.theme_title)}_${hashDocId}`,
+                file,
+            );
 
-        const uploadFile = await createThemeFile(
-            s3Config.bucketEssayHelpersDocsName!,
-            `${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`,
-            file,
-        );
-
-        if (uploadFile) {
-            themeCreated.essayTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
-          + `${s3Config.endpoint?.split('://')[1]}`
-          + `/${formatThemeTitle(themeCreated.essayTheme.theme_title)}_${hashDocId}`;
+            if (uploadFile) {
+                theme.essayTheme.bucket_essay_docs = `https://${s3Config.bucketEssayHelpersDocsName}.`
+                    + `${s3Config.endpoint?.split('://')[1]}`
+                    + `/${formatThemeTitle(theme.essayTheme.theme_title)}_${hashDocId}`;
+            }
         }
 
-        return await this.essayThemesRepository.createTheme(themeCreated);
+        return await this.essayThemesRepository.createTheme(theme);
     }
 
     async downloadThemeWithSignedUrl(id: number, response: Response) {

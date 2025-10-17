@@ -37,7 +37,7 @@ export async function createTheme(request: Request, response: Response, next: Ne
     try {
         const { theme, classification } = request.body;
 
-        let file;
+        let file: Express.Multer.File | null = null;
 
         if (request.file) {
             file = request.file;
