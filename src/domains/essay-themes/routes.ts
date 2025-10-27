@@ -7,7 +7,7 @@ import { validateRequestAndFile, validateRequest } from '~/middlewares/joi';
 import multer from 'multer';
 import { UserRoles } from '../permissions/model';
 import { permissionMiddleware } from '~/middlewares/permission';
-import { paginationMiddleware } from '~/middlewares/pagination';
+import { pagination } from '~/middlewares/pagination';
 
 const upload = multer({ storage: multer.memoryStorage() });
 export const essayThemesRouter = Router();
@@ -20,7 +20,7 @@ export const routes: AppRouter[] = [
         handler: getThemesList,
         swagger: getEssayThemesSwagger,
         middlewares: [
-            paginationMiddleware,
+            pagination,
         ],
     },
     {

@@ -8,11 +8,7 @@ export interface EssayResultsRepository {
 }
 
 export class EssayResultsRepositoryImplementation implements EssayResultsRepository {
-    async createResult(
-        essayTryId: number,
-        userScore: number,
-        iaResult: EssayJsonResult,
-    ): Promise<EssayResults> {
+    async createResult(essayTryId: number, userScore: number, iaResult: EssayJsonResult): Promise<EssayResults> {
         const resultData = {
             essay_try_id: essayTryId,
             score: userScore,

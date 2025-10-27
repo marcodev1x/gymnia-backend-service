@@ -1,7 +1,6 @@
 import { EssayThemesImplementation } from '~/domains/essay-themes/repository';
 import { EssayThemesService } from '~/domains/essay-themes/services';
 import { NextFunction, Request, Response } from 'express';
-import { RequestMiddleware } from '~/types/RequestMiddleware';
 
 const repository = new EssayThemesImplementation();
 export const essayThemesService = new EssayThemesService(repository);
@@ -55,7 +54,7 @@ export async function createTheme(request: Request, response: Response, next: Ne
 }
 
 export async function downloadThemeContent(
-    request: RequestMiddleware,
+    request: Request,
     response: Response,
     next: NextFunction,
 ) {

@@ -34,5 +34,8 @@ if (!isDevelopment) {
     }));
 }
 
-globalThis.logger = logger;
+Object.defineProperty(globalThis, 'logger', {
+    value: logger,
+    writable: false,
+});
 export default logger;

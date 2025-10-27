@@ -59,7 +59,6 @@ export class EssayThemesService {
         const theme = await this.getThemeById(Number(id));
 
         if (!theme.essayTheme.bucket_essay_docs) {
-
             throw DefaultHttpError({ element: 'Theme document', error: 'NOT_FOUND' });
         }
 
