@@ -1,14 +1,13 @@
 import EssayUserTryImplementation from './repository';
 import { EssayUserTryService } from './services';
-import { RequestMiddleware } from '~/types/RequestMiddleware';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { essayThemesService } from '~/domains/essay-themes/controller';
 import { essayResultsService } from '~/domains/essay-results/controller';
 
 const repository = new EssayUserTryImplementation();
 export const essayUserTryService = new EssayUserTryService(repository);
 
-export async function correctEssay(request: RequestMiddleware, response: Response, next: NextFunction) {
+export async function correctEssay(request: Request, response: Response, next: NextFunction) {
     try {
         const {
             try_id,

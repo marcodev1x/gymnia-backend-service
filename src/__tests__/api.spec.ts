@@ -1,3 +1,4 @@
+import '../setup';
 import { createServer } from 'http';
 import { appConfig } from '~/config/app.config';
 import app from '~/app';

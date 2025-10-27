@@ -49,6 +49,7 @@ const TAGS_ERRORS = [
     'GENERIC_INTERNAL_ERROR',
     'VALIDATION_ERROR',
     'FORBIDDEN',
+    'INVALID_PAGINATION_PARAMS',
 ] as const;
 
 export type GenericErrorKey = typeof TAGS_ERRORS[number];
@@ -103,6 +104,12 @@ export const GenericErrors = (element: string = 'Element'): GenericErrorsData =>
             code: 'FORBIDDEN',
             retryable: false,
         },
+        INVALID_PAGINATION_PARAMS: {
+            message: 'Bad request using pagination params, probably invalid page or limit',
+            status: 400,
+            code: 'BAD_REQUEST',
+            retryable: false,
+        },
     };
 };
 
@@ -133,7 +140,7 @@ export const DefaultHttpError = ({
         Object.assign(httpError, metadata);
     }
 
-    throw httpError;
+    return httpError;
 };
 
 export const isHttpError = (error: unknown): error is HttpError => {
