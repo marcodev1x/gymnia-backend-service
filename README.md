@@ -1,1 +1,1 @@
-# academIA-backend
+# Redaciona
