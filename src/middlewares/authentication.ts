@@ -15,7 +15,7 @@ export async function authentication(request: Request, _response: Response, next
         const user = verifyJwtToken(token) as JwtPayload;
 
         if (!user.id) {
-            throw DefaultHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
+            DefaultHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
         }
 
         request.user = await userService.findById(user.id);

@@ -27,7 +27,7 @@ export class EssayPedagogicalOrigin extends Model {
     static get modifiers() {
         return {
             basePedagogicalOrigin(builder: QueryBuilderType<EssayPedagogicalOrigin>) {
-                builder.select('institution_name');
+                return builder.select('institution_name');
             },
         };
     }

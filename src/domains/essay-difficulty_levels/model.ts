@@ -27,7 +27,7 @@ export class EssayDifficultyLevels extends Model {
     static get modifiers() {
         return {
             baseDifficultyLevel(builder: QueryBuilderType<EssayDifficultyLevels>) {
-                builder.select('level');
+                return builder.select('level');
             },
         };
     }

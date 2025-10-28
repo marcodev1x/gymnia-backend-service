@@ -33,7 +33,7 @@ export async function useAi<T>({
         messages,
         response_format: jsonFormat ? { type: 'json_object' } : undefined,
         temperature: 0.7,
-        max_tokens: 2048,
+        max_completion_tokens: 2048,
     };
 
     for (let attempt = 1; attempt <= retries; attempt++) {

@@ -1,16 +1,16 @@
 import { User, UserWithPermissions } from './model';
 import { removeSensitiveData } from '~/domains/users/helpers';
 
-type findByEmailParams = { userEmail: string, needData?: boolean, getSensitiveData?: boolean };
+type findByEmailParams = { userEmail: string, getSensitiveData?: boolean };
 
 export interface UserRepository {
     createUser(user: Partial<User>): Promise<UserWithPermissions | null>;
-    findByEmail({ userEmail, needData }: findByEmailParams): Promise<UserWithPermissions | undefined>;
+    findByEmail({ userEmail, getSensitiveData }: findByEmailParams): Promise<UserWithPermissions | undefined>;
     findById(id: number): Promise<UserWithPermissions | undefined>;
     userExists(userEmail: string): Promise<boolean | undefined>;
     getUserSecret(userEmail: string): Promise<User | undefined>;
     getUserRole(userEmail: string): Promise<string | undefined>;
-};
+}
 
 export class UserImplementation implements UserRepository {
     async findByEmail({

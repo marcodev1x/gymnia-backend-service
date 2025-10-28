@@ -26,6 +26,10 @@ export function errorMiddlewareSent(
         return;
     }
 
+    if (err instanceof Error) {
+        exception = err.message;
+    }
+
     res.status(statusCode).json({
         error: {
             code,

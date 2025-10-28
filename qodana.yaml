@@ -1,0 +1,31 @@
+version: "1.0"
+
+## Perfil mais rígido
+profile:
+  name: qodana.recommended
+
+plugins:
+    - id: org.jetbrains.plugins.eslint
+
+## Para incluir módulos específicos
+include:
+  - name: UnusedSymbol
+  - name: DuplicatedCode
+  - name: CodeSmell
+
+## Para ignorar módulos específicos
+exclude:
+  - name: ALL
+    paths:
+      - node_modules
+      - dist
+      - .github
+
+## Regras de falha (podemos personalizar com análise em CI)
+failureConditions:
+  severityThresholds:
+    any: 15
+    critical: 3
+    high: 5
+
+linter: jetbrains/qodana-js:2025.2

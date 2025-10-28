@@ -27,7 +27,7 @@ export class EssayCategories extends Model {
     static get modifiers() {
         return {
             baseCategory(builder: QueryBuilderType<EssayCategories>) {
-                builder.select('name');
+                return builder.select('name');
             },
         };
     }
