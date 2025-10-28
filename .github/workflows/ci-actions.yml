@@ -32,12 +32,26 @@ jobs:
     name: Qodana Code Quality
     runs-on: ubuntu-latest
     needs: lint
+    permissions:
+      contents: read
+      pull-requests: write
 
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run Qodana
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2025.2
         with:
-          args: --show-report
+          pr-mode: false
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_647772572 }}
+          QODANA_ENDPOINT: 'https://qodana.cloud'
