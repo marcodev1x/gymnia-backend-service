@@ -19,6 +19,7 @@ export class EssayUserTry extends Model {
     id: number;
     essay_id: number;
     user_id: number;
+    essay_title: string;
     essay: string;
     status: EssayUserTryStatus;
     created_at?: Date;

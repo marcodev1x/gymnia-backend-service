@@ -9,6 +9,7 @@ import { useAi } from '~/domains/useAi';
 import { EssayJsonResult } from '~/types/UseAi';
 
 export type EssayAsyncData = {
+    title: string;
     content: string;
     setAsPending?: boolean;
 }
@@ -26,11 +27,11 @@ export class EssayUserTryService {
         return createTry;
     }
 
-    async getTryById(id: number): Promise<EssayUserTry | undefined> {
+    async getTryById(id: number): Promise<EssayUserTry> {
         const tryById = await this.repository.getTryById(id);
 
         if (!tryById) {
-            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
+            throw SendTryError('UNEXISTENT_ESSAY_TRY');
         }
 
         return tryById;
@@ -44,18 +45,19 @@ export class EssayUserTryService {
         id: number,
         tryData: EssayAsyncData,
         completion?: boolean,
+        userId?: number,
     ): Promise<EssayUserTry> {
+        const { user_id: userTryId } = await this.getTryById(id);
+
+        if (userTryId !== userId) {
+            throw SendTryError('INVALID_TRY_OWNER');
+        }
+
         if (!tryData.content) {
             throw SendTryError('LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY');
         }
 
-        const updateTry = await this.repository.updateTry(id, tryData, completion);
-
-        if (!updateTry) {
-            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
-        }
-
-        return updateTry;
+        return await this.repository.updateTry(id, tryData, completion);
     }
 
     async deleteTry(id: number): Promise<void> {

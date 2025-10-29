@@ -44,6 +44,10 @@ export default class EssayUserTryImplementation implements EssayUserTryRepositor
     ): Promise<EssayUserTry> {
         const updateValues: Partial<EssayUserTry> = {};
 
+        if ('title' in tryData) {
+            updateValues.essay_title = tryData.title;
+        }
+
         if ('content' in tryData) {
             updateValues.essay = tryData.content;
         }

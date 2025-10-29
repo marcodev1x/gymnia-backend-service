@@ -1,11 +1,12 @@
 import { validateRequest } from '~/middlewares/joi';
-import { correctEssaySchema } from '~/domains/essay-themes/schemas';
-import { correctEssay } from '~/domains/essay-user-try/controller';
+import { correctEssaySchema, saveEssayDraftSchema } from '~/domains/essay-user-try/schemas';
+import { correctEssay, getPendingTriesBasedUser, saveEssayDraft } from '~/domains/essay-user-try/controller';
 import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { UserRoles } from '~/domains/permissions/model';
 import { AppRouter } from '~/types/Router';
 import { correctEssaySwagger } from './swagger';
+import { tryLimiter } from '~/middlewares/try-limiter';
 
 // Routes
 export const essayTryRouter = Router();
@@ -24,6 +25,29 @@ const routes: AppRouter[] = [
             }),
         ],
         swagger: correctEssaySwagger,
+    },
+    {
+        toAuthenticated: true,
+        method: 'post',
+        path: '/save-essay-draft',
+        handler: saveEssayDraft,
+        middlewares: [
+            tryLimiter,
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
+            validateRequest({
+                schema: saveEssayDraftSchema,
+                type: 'body',
+            }),
+        ],
+    },
+    {
+        toAuthenticated: true,
+        method: 'get',
+        path: '/get-pending-tries',
+        handler: getPendingTriesBasedUser,
+        middlewares: [
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
+        ],
     },
 ];
 

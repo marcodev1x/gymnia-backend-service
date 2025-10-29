@@ -1,0 +1,30 @@
+stages:
+  - lint
+  - tests
+
+variables:
+  NODE_VERSION: "22"
+
+lint:
+  stage: lint
+  image: node:${NODE_VERSION}
+  before_script:
+    - yarn install --frozen-lockfile
+  script:
+    - yarn lint
+  only:
+    - production
+    - staging
+    - merge_requests
+
+tests:
+  stage: tests
+  image: node:${NODE_VERSION}
+  before_script:
+    - yarn install --frozen-lockfile
+  script:
+    - yarn test:ci
+  only:
+    - production
+    - staging
+    - merge_requests

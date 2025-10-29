@@ -3,16 +3,31 @@ import { HttpError } from '~/generic-errors';
 export enum TryErrors {
     LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY,
     ERROR_TO_CORRECT_ESSAY,
+    UNEXISTENT_ESSAY_TRY,
+    INVALID_TRY_OWNER,
+    DAILY_LIMIT_REACHED,
 }
 
 export const TryErrorsData = {
     LOW_ESSAY_LENGTH_OR_INEXISTENT_ESSAY: {
-        message: 'Redação com tamanho insuficiente ou inexistente',
+        message: 'Essay length is too low or essay is not provided',
         status: 400,
     },
     ERROR_TO_CORRECT_ESSAY: {
-        message: 'Erro ao corrigir redação com inteligência artificial',
+        message: 'Error at correct essay. Please, try again later',
         status: 500,
+    },
+    INVALID_TRY_OWNER: {
+        message: 'Try owner invalid',
+        status: 403,
+    },
+    UNEXISTENT_ESSAY_TRY: {
+        message: 'Essay try not found',
+        status: 404,
+    },
+    DAILY_LIMIT_REACHED: {
+        message: 'Daily limit reached',
+        status: 400,
     },
 };
 

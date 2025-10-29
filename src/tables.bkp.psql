@@ -16,6 +16,7 @@ CREATE TABLE essay_user_try (
     id SERIAL PRIMARY KEY,
     essay_theme_id INT NOT NULL,
     user_id INT NOT NULL,
+    essay_title VARCHAR(255)
     essay TEXT,
     status VARCHAR(20) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
