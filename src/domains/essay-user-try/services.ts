@@ -80,6 +80,9 @@ export class EssayUserTryService {
             systemContent: `${essayRule}\nTema realizado: \nRedação: ${themeDescription}`,
             userContent: JSON.stringify(essay),
             jsonFormat: true,
+            retries: 3,
+            delay: 1000,
+            substituteModels: ['anthropic/claude-3.5-sonnet', 'google/gemini-2.5-pro'],
         });
 
         if (!essayCorrected) throw SendTryError('ERROR_TO_CORRECT_ESSAY');

@@ -1,6 +1,7 @@
 export interface UseAiParams {
  url?: string;
  model?: string;
+ substituteModels?: string[];
  systemContent: string;
  thinking?: {
      type: 'disabled' | 'enabled';
