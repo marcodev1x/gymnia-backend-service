@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { getRedisClient } from '~/redis';
 import { SendTryError } from '~/errors/try-errors';
+import { configParamsService } from "~/domains/config-params/controller";
+import { EssayConfigParamsEnum } from "~/domains/config-params/model";
 
 export async function tryLimiter(
     request: Request,
@@ -21,7 +23,9 @@ export async function tryLimiter(
 
     const counterDiaryLimited = Number(await redisClient.get(keyRedisValue)) || 0;
 
-    if (counterDiaryLimited > 3) {
+    const diaryLimit = await configParamsService.getSpecificConfigParam(EssayConfigParamsEnum.DIARY_ESSAY_LIMIT) || 3;
+
+    if (counterDiaryLimited > Number(diaryLimit.valor_parametro)) {
         throw SendTryError('DAILY_LIMIT_REACHED');
     }
 
