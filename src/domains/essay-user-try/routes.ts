@@ -32,7 +32,7 @@ const routes: AppRouter[] = [
         path: '/save-essay-draft',
         handler: saveEssayDraft,
         middlewares: [
-            tryLimiter,
+            tryLimiter, // remover, apenas teste neste endpoint. Inserir num endpoint de criar tentativa
             permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: saveEssayDraftSchema,
