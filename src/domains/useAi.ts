@@ -4,14 +4,23 @@ import { UseAiParams } from '~/types/UseAi';
 import { OpenAI } from 'openai';
 import { safeJsonParse } from '~/domains/essay-user-try/helpers';
 
+type ExtraOpenRouterCfgs = {
+    models: string[];
+}
+
 const openAI = new OpenAI({
     baseURL: appConfig.aiApiUrl?.replace(/\/chat\/completions$/, ''),
     apiKey: appConfig.aiApiKey!,
     timeout: 15000,
+    defaultHeaders: {
+        'X-Title': 'Pazzei IA',
+        'HTTP-Referer': appConfig.aiDefaultTrackingUrl!,
+    },
 });
 
 export async function useAi<T>({
     model = appConfig.aiApiModel!,
+    substituteModels,
     systemContent,
     userContent,
     jsonFormat,
@@ -27,13 +36,18 @@ export async function useAi<T>({
     if (systemContent) messages.push({ role: 'system', content: systemContent });
     if (userContent) messages.push({ role: 'user', content: userContent });
 
-    const body: OpenAI.Chat.ChatCompletionCreateParamsNonStreaming = {
+    const extraOpenRouterCfgs: ExtraOpenRouterCfgs = {
+        models: substituteModels || [],
+    };
+
+    const body: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming & ExtraOpenRouterCfgs = {
         model,
         n: 1,
         messages,
         response_format: jsonFormat ? { type: 'json_object' } : undefined,
         temperature: 0.7,
-        max_tokens: 2048,
+        max_completion_tokens: 2048,
+        ...extraOpenRouterCfgs,
     };
 
     for (let attempt = 1; attempt <= retries; attempt++) {
