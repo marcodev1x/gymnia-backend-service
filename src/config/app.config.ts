@@ -6,6 +6,7 @@ const {
     AI_API_MODEL,
     BCRYPT_HASH_QUANTITY,
     RENDER_BACKEND_URL,
+    REDIS_URL,
 } = process.env;
 
 export const appConfig = {
@@ -16,4 +17,5 @@ export const appConfig = {
     aiApiModel: AI_API_MODEL,
     bcryptHashQuantity: Number(BCRYPT_HASH_QUANTITY),
     renderBackendUrl: RENDER_BACKEND_URL,
+    redisUrl: REDIS_URL,
 };

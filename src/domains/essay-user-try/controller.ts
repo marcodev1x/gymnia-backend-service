@@ -3,12 +3,15 @@ import { EssayUserTryService } from './services';
 import { NextFunction, Response, Request } from 'express';
 import { essayThemesService } from '~/domains/essay-themes/controller';
 import { essayResultsService } from '~/domains/essay-results/controller';
+import { EssayUserTryStatus } from '~/domains/essay-user-try/model';
 
 const repository = new EssayUserTryImplementation();
 export const essayUserTryService = new EssayUserTryService(repository);
 
 export async function correctEssay(request: Request, response: Response, next: NextFunction) {
     try {
+        const { user } = request;
+
         const {
             try_id,
             theme_id,
@@ -23,6 +26,7 @@ export async function correctEssay(request: Request, response: Response, next: N
             try_id,
             essay,
             true,
+            Number(user?.id),
         );
 
         await essayResultsService.createResult(
@@ -33,6 +37,39 @@ export async function correctEssay(request: Request, response: Response, next: N
 
         response.json(essayCorrected);
     } catch (e) {
+        next(e);
+    }
+}
+
+export async function saveEssayDraft(request: Request, response: Response, next: NextFunction) {
+    try {
+        const { user } = request;
+        const {
+            try_id,
+            essay,
+        } = request.body;
+
+        await essayUserTryService.updateTry(
+            try_id,
+            essay,
+            false,
+            Number(user?.id),
+        );
+
+        response.json({ message: 'Redação salva com sucesso.' });
+    } catch (e) {
+        next(e);
+    }
+}
+
+export async function getPendingTriesBasedUser(request: Request, response: Response, next: NextFunction) {
+    try {
+        const tries = await essayUserTryService.getTryListByUserId(
+            Number(request.user?.id), EssayUserTryStatus.PENDING,
+        );
+
+        response.json(tries);
+    } catch(e) {
         next(e);
     }
 }

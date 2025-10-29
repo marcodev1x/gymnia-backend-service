@@ -2,6 +2,7 @@ import { Model } from 'objection';
 
 export enum EssayConfigParamsEnum {
     REDACAO = 'validate_essay',
+    DIARY_ESSAY_LIMIT = 'diary_essay_limit',
 }
 
 export class EssayConfigParams extends Model {
