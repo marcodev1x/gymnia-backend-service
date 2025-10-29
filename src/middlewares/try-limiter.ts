@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { getRedisClient } from '~/redis';
 import { SendTryError } from '~/errors/try-errors';
-import { configParamsService } from "~/domains/config-params/controller";
-import { EssayConfigParamsEnum } from "~/domains/config-params/model";
+import { configParamsService } from '~/domains/config-params/controller';
+import { EssayConfigParamsEnum } from '~/domains/config-params/model';
 
 export async function tryLimiter(
     request: Request,
