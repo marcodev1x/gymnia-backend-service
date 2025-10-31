@@ -7,6 +7,7 @@ import { configParamsService } from '~/domains/config-params/controller';
 import { EssayConfigParamsEnum } from '~/domains/config-params/model';
 import { useAi } from '~/domains/useAi';
 import { EssayJsonResult } from '~/types/UseAi';
+import { essayThemesService } from '~/domains/essay-themes/controller';
 
 export type EssayAsyncData = {
     title: string;
@@ -17,7 +18,9 @@ export type EssayAsyncData = {
 export class EssayUserTryService {
     constructor(private readonly repository: EssayUserTryImplementation) {}
 
-    async createTry(tryData: EssayUserTry): Promise<EssayUserTry> {
+    async createTry(tryData: Partial<EssayUserTry>): Promise<EssayUserTry> {
+        await essayThemesService.getThemeById(tryData.essay_theme_id!); // Dá erro se não existir o tema
+
         const createTry = await this.repository.createTry(tryData);
 
         if (!createTry) {
@@ -58,14 +61,6 @@ export class EssayUserTryService {
         }
 
         return await this.repository.updateTry(id, tryData, completion);
-    }
-
-    async deleteTry(id: number): Promise<void> {
-        const deleteTry = await this.repository.deleteTry(id);
-
-        if (!deleteTry) {
-            throw DefaultHttpError({ element: 'Try', error: 'NOT_FOUND' });
-        }
     }
 
     async sendEssayToAi(essay: string, theme: EssayThemes) {

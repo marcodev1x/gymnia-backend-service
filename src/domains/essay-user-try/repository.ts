@@ -10,7 +10,7 @@ export interface EssayUserTryRepository {
 }
 
 export default class EssayUserTryImplementation implements EssayUserTryRepository {
-    async createTry(tryData: EssayUserTry): Promise<EssayUserTry> {
+    async createTry(tryData: Partial<EssayUserTry>): Promise<EssayUserTry> {
         return EssayUserTry
             .query()
             .insertAndFetch({ ...tryData, status: EssayUserTryStatus.PENDING });
