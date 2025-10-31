@@ -17,10 +17,10 @@ export class EssayUserTry extends Model {
     }
 
     id: number;
-    essay_id: number;
+    essay_theme_id: number;
     user_id: number;
-    essay_title: string;
-    essay: string;
+    essay_title?: string;
+    essay?: string;
     status: EssayUserTryStatus;
     created_at?: Date;
     updated_at?: Date;
@@ -48,7 +48,7 @@ export class EssayUserTry extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: EssayThemes,
                 join: {
-                    from: 'essay_user_try.essay_id',
+                    from: 'essay_user_try.essay_theme_id',
                     to: 'essay_themes.id',
                 },
             },

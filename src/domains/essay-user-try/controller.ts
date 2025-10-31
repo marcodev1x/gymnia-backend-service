@@ -73,3 +73,18 @@ export async function getPendingTriesBasedUser(request: Request, response: Respo
         next(e);
     }
 }
+
+export async function createUserTry(request: Request, response: Response, next: NextFunction) {
+    try {
+        const { user } = request;
+        const {
+            essay_theme_id,
+        } = request.body;
+
+        const createUserTry = await essayUserTryService.createTry({ essay_theme_id, user_id: Number(user?.id) });
+
+        response.json(createUserTry);
+    } catch(e) {
+        next(e);
+    }
+}

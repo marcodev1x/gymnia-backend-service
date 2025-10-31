@@ -36,3 +36,12 @@ export const saveEssayDraftSchema = Joi.object({
         content: Joi.string().required(),
     }),
 });
+
+export const createEssayTrySchema = Joi.object({
+    essay_theme_id: Joi.number()
+        .positive()
+        .integer()
+        .min(1)
+        .required()
+        .error(new Error('ID do tema inválido.')),
+});

@@ -1,6 +1,11 @@
 import { validateRequest } from '~/middlewares/joi';
-import { correctEssaySchema, saveEssayDraftSchema } from '~/domains/essay-user-try/schemas';
-import { correctEssay, getPendingTriesBasedUser, saveEssayDraft } from '~/domains/essay-user-try/controller';
+import { correctEssaySchema, createEssayTrySchema, saveEssayDraftSchema } from '~/domains/essay-user-try/schemas';
+import {
+    correctEssay,
+    createUserTry,
+    getPendingTriesBasedUser,
+    saveEssayDraft,
+} from '~/domains/essay-user-try/controller';
 import { Router } from 'express';
 import { permissionMiddleware } from '~/middlewares/permission';
 import { UserRoles } from '~/domains/permissions/model';
@@ -18,6 +23,7 @@ const routes: AppRouter[] = [
         path: '/correct-essay',
         handler: correctEssay,
         middlewares: [
+            tryLimiter,
             permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: correctEssaySchema,
@@ -32,7 +38,6 @@ const routes: AppRouter[] = [
         path: '/save-essay-draft',
         handler: saveEssayDraft,
         middlewares: [
-            tryLimiter, // remover, apenas teste neste endpoint. Inserir num endpoint de criar tentativa
             permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
             validateRequest({
                 schema: saveEssayDraftSchema,
@@ -46,6 +51,19 @@ const routes: AppRouter[] = [
         path: '/get-pending-tries',
         handler: getPendingTriesBasedUser,
         middlewares: [
+            permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
+        ],
+    },
+    {
+        toAuthenticated: true,
+        method: 'post',
+        path: '/create-essay-try',
+        handler: createUserTry,
+        middlewares: [
+            validateRequest({
+                schema: createEssayTrySchema,
+                type: 'body',
+            }),
             permissionMiddleware([UserRoles.USER, UserRoles.TRIAL]),
         ],
     },

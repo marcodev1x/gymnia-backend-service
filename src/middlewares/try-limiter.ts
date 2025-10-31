@@ -26,7 +26,7 @@ export async function tryLimiter(
     const diaryLimit = await configParamsService.getSpecificConfigParam(
         EssayConfigParamsEnum.DIARY_ESSAY_LIMIT) || { valor_parametro: 3 };
 
-    if (counterDiaryLimited > Number(diaryLimit.valor_parametro)) {
+    if (counterDiaryLimited >= Number(diaryLimit.valor_parametro)) {
         throw SendTryError('DAILY_LIMIT_REACHED');
     }
 
