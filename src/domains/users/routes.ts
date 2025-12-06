@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createUser } from './controller';
+import { createUser, loginUser } from './controller';
 import { validateRequest } from '~/middlewares/joi';
-import { createUserSchema } from './schemas';
+import { createUserSchema, loginUserSchema } from './schemas';
 import { AppRouter } from '~/types/Router';
 
 export const usersRouter =  Router();
@@ -15,6 +15,17 @@ const routes: AppRouter[] = [
         middlewares: [
             validateRequest({
                 schema: createUserSchema,
+                type: 'body',
+            }),
+        ],
+    },
+    {
+        method: 'post',
+        path: '/login',
+        handler: loginUser,
+        middlewares: [
+            validateRequest({
+                schema: loginUserSchema,
                 type: 'body',
             }),
         ],

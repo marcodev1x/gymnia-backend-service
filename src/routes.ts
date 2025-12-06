@@ -6,6 +6,7 @@ import essayThemesRoutes, { essayThemesRouter } from './domains/essay-themes/rou
 import usersRoutes, { usersRouter } from './domains/users/routes';
 import essayTryRoutes, { essayTryRouter } from './domains/essay-user-try/routes';
 import essayResultsRoutes, { essayResultsRouter } from './domains/essay-results/routes';
+import recoveryPasswordRoutes, { recoveryPasswordRouter } from './domains/recovery-password/routes';
 
 import { AppRouter, UseRoute } from './types/Router';
 import { OpenAPIV3 } from 'openapi-types';
@@ -51,6 +52,7 @@ const useRoutes: Array<UseRoute & { routes?: AppRouter[] }> = [
     { router: usersRouter, routes: usersRoutes },
     { router: essayTryRouter, routes: essayTryRoutes },
     { router: essayResultsRouter, routes: essayResultsRoutes },
+    { router: recoveryPasswordRouter, routes: recoveryPasswordRoutes },
 ];
 
 useRoutes.forEach((u) => {

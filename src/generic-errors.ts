@@ -50,6 +50,7 @@ const TAGS_ERRORS = [
     'VALIDATION_ERROR',
     'FORBIDDEN',
     'INVALID_PAGINATION_PARAMS',
+    'INVALID_ACCESS',
 ] as const;
 
 export type GenericErrorKey = typeof TAGS_ERRORS[number];
@@ -108,6 +109,12 @@ export const GenericErrors = (element: string = 'Element'): GenericErrorsData =>
             message: 'Bad request using pagination params, probably invalid page or limit',
             status: 400,
             code: 'BAD_REQUEST',
+            retryable: false,
+        },
+        INVALID_ACCESS: {
+            message: 'Invalid access',
+            status: 403,
+            code: 'INVALID_ACCESS',
             retryable: false,
         },
     };

@@ -8,6 +8,7 @@ const {
     RENDER_BACKEND_URL,
     REDIS_URL,
     AI_DEFAULT_TRACKING_URL,
+    PRINCIPAL_FRONT_URL,
 } = process.env;
 
 export const appConfig = {
@@ -20,4 +21,5 @@ export const appConfig = {
     renderBackendUrl: RENDER_BACKEND_URL,
     aiDefaultTrackingUrl: AI_DEFAULT_TRACKING_URL,
     redisUrl: REDIS_URL,
+    principalFrontUrl: PRINCIPAL_FRONT_URL,
 };

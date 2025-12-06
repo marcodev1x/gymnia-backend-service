@@ -3,6 +3,7 @@ import { UserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
 import { DefaultHttpError } from '~/generic-errors';
+import { Mailer } from '~/mail/mailer';
 
 interface CreateUserAsync {
     user: User;
@@ -12,11 +13,15 @@ interface CreateUserAsync {
 export class UserService {
     constructor(private userRepository: UserRepository) {}
 
+    email() {
+        return new Mailer();
+    }
+
     async createUser(user: User): Promise<CreateUserAsync | null> {
         const userAlwaysExists = await this.userRepository.userExists(user.email);
 
         if (userAlwaysExists) {
-            throw DefaultHttpError({ element: 'User', error: 'ALREADY_EXISTS' });
+            throw DefaultHttpError({ element: 'User', error: 'INVALID_ACCESS' });
         }
 
         const secretHashed = await User.hashSecret(user.secret);
@@ -45,13 +50,13 @@ export class UserService {
         const user = await this.userRepository.findByEmail({ userEmail: email, getSensitiveData: true });
 
         if (!user) {
-            throw DefaultHttpError({ element: 'User', error: 'NOT_FOUND' });
+            throw DefaultHttpError({ error: 'INVALID_ACCESS' });
         }
 
         const secretValid = await User.confirmSecret(password, user.secret);
 
         if (!secretValid) {
-            throw DefaultHttpError({ error: 'UNAUTHORIZED_INVALID_TOKEN' });
+            throw DefaultHttpError({ error: 'INVALID_ACCESS' });
         }
 
         const payload = {
@@ -61,5 +66,9 @@ export class UserService {
         return {
             token: generateJwtToken(payload),
         };
+    }
+
+    async findByEmail(userEmail: string, needData?: boolean): Promise<UserWithPermissions | undefined> {
+        return await this.userRepository.findByEmail({ userEmail, getSensitiveData: needData });
     }
 }
