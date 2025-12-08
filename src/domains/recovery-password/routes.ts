@@ -1,6 +1,14 @@
 import { AppRouter } from '~/types/Router';
-import { createRecoveryTry } from '~/domains/recovery-password/controller';
-import { createRecoveryTrySchema } from '~/domains/recovery-password/schemas';
+import {
+    createRecoveryTry,
+    finishAndRecoveryPassword,
+    validateRecoveryTry,
+} from '~/domains/recovery-password/controller';
+import {
+    createRecoveryTrySchema,
+    finishRecoveryPasswordSchema,
+    validateRecoveryTrySchema,
+} from '~/domains/recovery-password/schemas';
 import { validateRequest } from '~/middlewares/joi';
 import { Router } from 'express';
 
@@ -15,6 +23,30 @@ const routes: AppRouter[] = [
         middlewares: [
             validateRequest({
                 schema: createRecoveryTrySchema,
+                type: 'body',
+            }),
+        ],
+    },
+    {
+        toAuthenticated: false,
+        method: 'get',
+        path: '/validate-recovery-try',
+        handler: validateRecoveryTry,
+        middlewares: [
+            validateRequest({
+                schema: validateRecoveryTrySchema,
+                type: 'query',
+            }),
+        ],
+    },
+    {
+        toAuthenticated: false,
+        method: 'post',
+        path: '/finish-recovery-password',
+        handler: finishAndRecoveryPassword,
+        middlewares: [
+            validateRequest({
+                schema: finishRecoveryPasswordSchema,
                 type: 'body',
             }),
         ],

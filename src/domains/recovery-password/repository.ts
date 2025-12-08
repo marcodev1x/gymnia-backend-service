@@ -3,6 +3,7 @@ import { RecoveryPassword } from '~/domains/recovery-password/model';
 export interface RecoveryPasswordRepository {
     createRecoveryTry(userId: number, token: string): Promise<RecoveryPassword>;
     getRecoveryTry(token: string): Promise<RecoveryPassword | undefined>;
+    updateRecoveryTry(token: string): Promise<number>;
 }
 
 export class RecoveryPasswordImplementation implements RecoveryPasswordRepository {
@@ -17,5 +18,12 @@ export class RecoveryPasswordImplementation implements RecoveryPasswordRepositor
             .query()
             .where('token', token)
             .first();
+    }
+
+    async updateRecoveryTry(token: string): Promise<number> {
+        return RecoveryPassword
+            .query()
+            .where('token', token)
+            .patch({ used: true });
     }
 }

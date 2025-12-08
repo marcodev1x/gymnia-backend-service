@@ -28,3 +28,15 @@ export async function loginUser(request: Request, response: Response, next: Next
         next(e);
     }
 }
+
+export async function loginWithGoogle(request: Request, response: Response, next: NextFunction) {
+    try {
+        const { id_token } = request.body;
+
+        const login = await userService.loginWithGoogle(id_token);
+
+        response.json(login);
+    } catch (e) {
+        next(e);
+    }
+}

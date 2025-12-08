@@ -51,6 +51,7 @@ const TAGS_ERRORS = [
     'FORBIDDEN',
     'INVALID_PAGINATION_PARAMS',
     'INVALID_ACCESS',
+    'NOT_UPDATED',
 ] as const;
 
 export type GenericErrorKey = typeof TAGS_ERRORS[number];
@@ -116,6 +117,12 @@ export const GenericErrors = (element: string = 'Element'): GenericErrorsData =>
             status: 403,
             code: 'INVALID_ACCESS',
             retryable: false,
+        },
+        NOT_UPDATED: {
+            message: `${element} not updated`,
+            status: 500,
+            code: 'NOT_UPDATED',
+            retryable: true,
         },
     };
 };

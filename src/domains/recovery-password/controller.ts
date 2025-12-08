@@ -21,14 +21,48 @@ export async function createRecoveryTry(request: Request, response: Response, ne
             return;
         }
 
+        if (user?.oauth_provider_id) {
+            return;
+        }
+
         const createdTry = await recoveryPasswordService.createRecoveryTry(user?.id);
 
         await createAndSendHtmlRendered({
             html: RecoveryPasswordEmail,
             props: { name: user?.name, code: createdTry?.token },
-            to: user.email,
+            to: user?.email,
             subject: 'Tema Certo - Recuperação de senha',
         });
+    } catch (e) {
+        next(e);
+    }
+}
+
+export async function validateRecoveryTry(request: Request, response: Response, next: NextFunction) {
+    try {
+        const { token } = request.query;
+
+        await recoveryPasswordService.rulesRecoveryTry(String(token)!);
+
+        response.status(200).json();
+    } catch (e) {
+        next(e);
+    }
+}
+
+export async function finishAndRecoveryPassword(request: Request, response: Response, next: NextFunction) {
+    try {
+        const { token, password } = request.body;
+
+        const parsedToken = String(token);
+
+        const recoverTry = await recoveryPasswordService.rulesRecoveryTry(parsedToken);
+
+        await recoveryPasswordService.updateRecoveryTry(parsedToken);
+
+        await userService.updateUserPassword(recoverTry?.user_id, password);
+
+        response.status(200).json();
     } catch (e) {
         next(e);
     }

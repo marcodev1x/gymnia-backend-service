@@ -3,19 +3,18 @@ import { UserRepository } from '~/domains/users/repository';
 import { generateJwtToken } from '~/middlewares/utils/jwt.utils';
 import { removeSensitiveData } from './helpers';
 import { DefaultHttpError } from '~/generic-errors';
-import { Mailer } from '~/mail/mailer';
+import { OAuth2Client } from 'google-auth-library';
+import { authConfig } from '~/config/auth.config';
 
 interface CreateUserAsync {
     user: User;
     token: string;
 }
 
+const client = new OAuth2Client(authConfig?.googleOauthClientId);
+
 export class UserService {
     constructor(private userRepository: UserRepository) {}
-
-    email() {
-        return new Mailer();
-    }
 
     async createUser(user: User): Promise<CreateUserAsync | null> {
         const userAlwaysExists = await this.userRepository.userExists(user.email);
@@ -24,7 +23,7 @@ export class UserService {
             throw DefaultHttpError({ element: 'User', error: 'INVALID_ACCESS' });
         }
 
-        const secretHashed = await User.hashSecret(user.secret);
+        const secretHashed = await User.hashSecret(user.secret!);
 
         const userCreated = await this
             .userRepository
@@ -53,7 +52,7 @@ export class UserService {
             throw DefaultHttpError({ error: 'INVALID_ACCESS' });
         }
 
-        const secretValid = await User.confirmSecret(password, user.secret);
+        const secretValid = await User.confirmSecret(password, user.secret!);
 
         if (!secretValid) {
             throw DefaultHttpError({ error: 'INVALID_ACCESS' });
@@ -70,5 +69,44 @@ export class UserService {
 
     async findByEmail(userEmail: string, needData?: boolean): Promise<UserWithPermissions | undefined> {
         return await this.userRepository.findByEmail({ userEmail, getSensitiveData: needData });
+    }
+
+    async updateUserPassword(userId: number, password: string): Promise<true | undefined> {
+        const convertedPassword = await User.hashSecret(password);
+
+        const updatedUserPwd = await this.userRepository.updateUserPassword(userId, convertedPassword);
+
+        if (!updatedUserPwd) {
+            throw DefaultHttpError({ element: 'User', error: 'NOT_UPDATED' });
+        }
+
+        return true;
+    }
+
+    async loginWithGoogle(idToken: string): Promise<{ token: string }> {
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: authConfig?.googleOauthClientId,
+        });
+
+        const payload = ticket.getPayload();
+
+        if (!payload) {
+            throw DefaultHttpError({ error: 'INVALID_ACCESS' });
+        }
+
+        const user = await this.userRepository.findOrCreateOauthUser({
+            email: payload.email!,
+            providerId: payload.sub,
+            name: payload.name!,
+        });
+
+        if (!user) {
+            throw DefaultHttpError({ error: 'INVALID_ACCESS' });
+        }
+
+        return {
+            token: generateJwtToken({ id: user.id }),
+        };
     }
 }

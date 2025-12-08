@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createUser, loginUser } from './controller';
+import { createUser, loginUser, loginWithGoogle } from './controller';
 import { validateRequest } from '~/middlewares/joi';
-import { createUserSchema, loginUserSchema } from './schemas';
+import { createUserSchema, loginUserSchema, loginWithGoogleSchema } from './schemas';
 import { AppRouter } from '~/types/Router';
 
 export const usersRouter =  Router();
@@ -26,6 +26,17 @@ const routes: AppRouter[] = [
         middlewares: [
             validateRequest({
                 schema: loginUserSchema,
+                type: 'body',
+            }),
+        ],
+    },
+    {
+        method: 'post',
+        path: '/login-oauth',
+        handler: loginWithGoogle,
+        middlewares: [
+            validateRequest({
+                schema: loginWithGoogleSchema,
                 type: 'body',
             }),
         ],

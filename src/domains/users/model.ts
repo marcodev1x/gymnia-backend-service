@@ -27,12 +27,14 @@ export class User extends Model {
     id: number;
     name: string;
     email: string;
-    secret: string;
+    secret: string | null;
     deleted: boolean;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
     user_role_id: number;
+    oauth_provider: string;
+    oauth_provider_id: string;
 
     $beforeInsert() {
         this.created_at = new Date();
