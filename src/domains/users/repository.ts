@@ -32,6 +32,7 @@ export class UserImplementation implements UserRepository {
             .modifyGraph('permissions', builder => {
                 builder.select('role_name');
             })
+            .withGraphFetched('permissions')
             .first();
 
         if (!user) return undefined;
