@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, loginUser, loginWithGoogle } from './controller';
+import { createUser, getUserInfo, loginUser, loginWithGoogle } from './controller';
 import { validateRequest } from '~/middlewares/joi';
 import { createUserSchema, loginUserSchema, loginWithGoogleSchema } from './schemas';
 import { AppRouter } from '~/types/Router';
@@ -40,6 +40,12 @@ const routes: AppRouter[] = [
                 type: 'body',
             }),
         ],
+    },
+    {
+        toAuthenticated: true,
+        method: 'get',
+        path: '/user-info',
+        handler: getUserInfo,
     },
 ];
 

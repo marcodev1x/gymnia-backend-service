@@ -67,8 +67,14 @@ export class UserService {
         };
     }
 
-    async findByEmail(userEmail: string, needData?: boolean): Promise<UserWithPermissions | undefined> {
-        return await this.userRepository.findByEmail({ userEmail, getSensitiveData: needData });
+    async findByEmail(userEmail: string, needData?: boolean): Promise<UserWithPermissions> {
+        const user =  await this.userRepository.findByEmail({ userEmail, getSensitiveData: needData });
+
+        if (!user) {
+            throw DefaultHttpError({ error: 'NOT_FOUND' });
+        }
+
+        return user;
     }
 
     async updateUserPassword(userId: number, password: string): Promise<true | undefined> {
